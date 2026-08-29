@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # resume-project <name>
 # Opens a registered project in a new Windows Terminal tab (WSL), attached to its tmux session,
-# creating the session with the manager in window 0 if it does not exist.
+# creating the session with the manager in window 0 (cwd = project root) if it does not exist.
 set -euo pipefail
 
 name="${1:-}"
@@ -11,30 +11,29 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 registry="$repo_root/portfolio/projects.yaml"
 [[ -f "$registry" ]] || { echo "registry not found: $registry" >&2; exit 1; }
 
-# Minimal YAML lookup: entries are "- name: X" blocks with flat keys.
-path="$(awk -v n="$name" '
-  /^- name:/ { cur=$3 }
-  cur==n && /^  path:/ { print $2; exit }
+# Minimal YAML lookup over "- name: X" blocks with flat keys (root, tmux).
+root="$(awk -v n="$name" '
+  /^  - name:/ { cur=$3 }
+  cur==n && /^    root:/ { print $2; exit }
 ' "$registry")"
 tmux_name="$(awk -v n="$name" '
-  /^- name:/ { cur=$3 }
-  cur==n && /^  tmux:/ { print $2; exit }
+  /^  - name:/ { cur=$3 }
+  cur==n && /^    tmux:/ { print $2; exit }
 ' "$registry")"
-[[ -n "$path" ]] || { echo "project not registered: $name" >&2; exit 1; }
+[[ -n "$root" ]] || { echo "project not registered: $name" >&2; exit 1; }
 tmux_name="${tmux_name:-$name}"
-[[ -d "$path" ]] || { echo "path does not exist: $path" >&2; exit 1; }
+[[ -d "$root" ]] || { echo "root does not exist: $root" >&2; exit 1; }
 
 distro="${WSL_DISTRO_NAME:-Ubuntu}"
 
 if ! tmux has-session -t "$tmux_name" 2>/dev/null; then
-  tmux new-session -d -s "$tmux_name" -c "$path" -n manager \
+  tmux new-session -d -s "$tmux_name" -c "$root" -n manager \
     "claude --agent manager -n ${name}-manager"
 fi
 
 if command -v wt.exe >/dev/null 2>&1; then
   wt.exe -w 0 new-tab --title "$name" \
-    wsl.exe -d "$distro" --cd "$path" -- tmux attach -t "$tmux_name"
+    wsl.exe -d "$distro" --cd "$root" -- tmux attach -t "$tmux_name"
 else
-  # Not under Windows Terminal: attach or switch in place.
   if [[ -n "${TMUX:-}" ]]; then tmux switch-client -t "$tmux_name"; else tmux attach -t "$tmux_name"; fi
 fi

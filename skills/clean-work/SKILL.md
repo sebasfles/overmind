@@ -25,7 +25,7 @@ Continue on failure; collect the error.
 
 Report, without deleting:
 
-- Orphan worktrees under `.claude/worktrees/` with no task folder.
+- Orphan workspaces under `.workspaces/` with no task folder.
 - Local branches with the task prefixes whose remote is gone (`git branch -vv | grep ': gone]'`).
 - Stopped Claude sessions (`claude agents --all`) for tasks already `done`.
 

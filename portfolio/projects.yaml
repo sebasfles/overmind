@@ -1,6 +1,17 @@
 projects: []
-# - name: diy
-#   path: /home/fless/dev/designli/projects/diy
-#   base_branch: develop
-#   tmux: diy
-#   status: active        # active | paused
+#  - name: diy
+#    root: /home/fless/dev/designli/projects/diy
+#    tmux: diy
+#    status: active        # active | paused
+#    repos:
+#      - name: diy-platform
+#        base_branch: develop
+#      - name: diy-infra
+#        base_branch: main
+#  - name: backend-school
+#    root: /home/fless/dev/designli/projects/backend-school
+#    tmux: backend-school
+#    status: active
+#    repos:
+#      - name: .
+#        base_branch: main

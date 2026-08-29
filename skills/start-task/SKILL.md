@@ -10,23 +10,24 @@ disable-model-invocation: false
 
 # start-task
 
-Input: the task folder (worktree copy from here on) and, if the task has phases, the phase number.
+Input: the task folder (root worktree copy inside the workspace) and, if the task has phases, the phase number.
 Output: a running `task-{{id}}-developer` (or `task-{{id}}-developer-phase-{{n}}`) that has received `context ready, start`.
 
 Set:
 
 ```
 TASK      = {{id}}_{{title}}
-WORKTREE  = your cwd
+WORKSPACE = your cwd ({{ROOT}}/.workspaces/{{TASK}})
+ROOT_WT   = the root's worktree inside it (the code worktree in single and mono)
 WINDOW    = task-{{id}}
 DEV       = task-{{id}}-developer            or task-{{id}}-developer-phase-{{n}}
 PROJECT   = the tmux session this window belongs to
-TASK_DIR  = {{WORKTREE}}/docs/tasks/{{TASK}}
+TASK_DIR  = {{ROOT_WT}}/docs/tasks/{{TASK}}
 ```
 
 ## 1. Preconditions
 
-- The worktree branch is rebased on `origin/{{base}}` and contains `{{TASK_DIR}}` with `Context & decisions` written.
+- `{{TASK_DIR}}` exists with `Context & decisions` written (the root worktree was rebased by `delegate-task`).
   If it is missing, the manager skipped the rebase; message the manager `task {{id}}: worktree has no task folder, rebase needed` and stop.
 - No developer session for this task is running (`claude agents`, or a live pane in `{{WINDOW}}`).
   If one is, do not launch another; message it `context ready, start` and finish.
@@ -36,16 +37,16 @@ TASK_DIR  = {{WORKTREE}}/docs/tasks/{{TASK}}
 Primary form (`--bg` + `attach`):
 
 ```
-cd {{WORKTREE}}
-claude --bg --agent developer -n {{DEV}} "task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md"
-tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKTREE}}
+cd {{WORKSPACE}}
+claude --bg --agent developer -n {{DEV}} "task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md workspace: {{WORKSPACE}}"
+tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude attach {{bg-id}}" Enter
 ```
 
 Fallback form (direct session):
 
 ```
-tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKTREE}}
+tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude --agent developer -n {{DEV}} 'task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md'" Enter
 ```
 

@@ -65,7 +65,7 @@ Type / Modules
 Scope         what is in
 Out of scope  what is explicitly not in, and deferred ideas
 Acceptance    numbered, observable, testable criteria
-Approach      module and layers touched, entities, endpoints, tables, key decisions
+Approach      repos or apps touched, module and layers, entities, endpoints, tables, key decisions
               each decision with the alternative rejected and the reason (these become ARD entries)
 Database      tables owned or referenced, migrations expected, invariants (or "none")
 Infra         resources, env vars, secrets, IAM, CI/CD changes, per environment (or "none")

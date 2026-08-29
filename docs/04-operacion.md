@@ -44,17 +44,23 @@ Archivo `portfolio/projects.yaml` en el repo `overmind`:
 ```yaml
 projects:
   - name: diy
-    path: /home/fless/dev/designli/projects/diy
-    base_branch: develop
+    root: /home/fless/dev/designli/projects/diy
     tmux: diy
     status: active        # active | paused
+    repos:
+      - name: diy-platform
+        base_branch: develop
+      - name: diy-infra
+        base_branch: main
 ```
+
+Ver [05-layouts.md](05-layouts.md) para `root` y `repos` en single repo, monorepo y multirepo.
 
 ## Skills del overmind
 
 | Skill | Qué hace |
 |---|---|
-| `add-project` | Registra un proyecto en `portfolio.yaml`. Verifica que cumpla la convención del punto 1 y, si no, ofrece correr `setup`. |
+| `add-project` | Registra un proyecto (`root`, `repos`) en `projects.yaml`; en multirepo convierte la carpeta en repo de docs (`{{name}}-docs`). Verifica la convención del punto 1 y, si no, ofrece correr `setup` desde su manager. |
 | `pause-project` / `remove-project` | Lo saca del tablero sin borrar nada. |
 | `resume-project` | Abre una pestaña nueva de Windows Terminal, en WSL, en la raíz del proyecto, dentro de su sesión de tmux, con el manager corriendo. |
 | `check-portfolio` | Tabla por proyecto: tasks en delegación, en progreso, en PR esperando a Sebastian, ejecutores ociosos, deriva de docs, basura acumulada. |
@@ -72,8 +78,8 @@ Sebastian ya trabaja con una sesión de tmux por proyecto (`diy`, `auvral`, `dri
 
 Comportamiento:
 
-1. Lee `portfolio.yaml` para obtener `path` y `tmux`.
-2. Si la sesión de tmux no existe, la crea con la primera ventana `manager` corriendo `claude --agent manager -n {{name}}-manager`.
+1. Lee `projects.yaml` para obtener `root` y `tmux`.
+2. Si la sesión de tmux no existe, la crea con cwd en `root` y la primera ventana `manager` corriendo `claude --agent manager -n {{name}}-manager`.
 3. Abre la pestaña en la ventana actual de Windows Terminal y se engancha a la sesión.
 
 ```bash

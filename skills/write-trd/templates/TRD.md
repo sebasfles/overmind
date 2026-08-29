@@ -5,51 +5,40 @@ source: setup
 
 # Technical Requirements Document
 
-## Stack
+Describes the whole application. One section per repo or app under "Components".
 
-- Language and runtime: {{...}}
-- Frameworks: {{...}}
-- Package manager: {{...}}
+## Components
 
-## Layout
+| Component | Kind | Path | Base branch | Stack |
+|---|---|---|---|---|
+| {{diy-platform}} | repo | `{{diy-platform/}}` | `{{develop}}` | {{NestJS, Prisma}} |
+| {{backend}} | app | `{{./apps/backend}}` | (same repo) | {{...}} |
 
-| Path | What lives here |
-|---|---|
-| `{{path}}` | {{...}} |
+### {{Component}}
+
+- Stack: {{language, runtime, frameworks, package manager}}
+- Layout: {{top-level folders, one line each}}
+- Install: `{{pnpm install --frozen-lockfile}}`
+- Workspace files: {{`.env`, `.env.test`, other untracked files a fresh worktree needs}}
+- API spec: {{how generated, where it lands, or none}}
+- Data: {{engine, ORM or migrations, migrate command}}
+- Delivery: {{environments, how deploys happen, IaC location}}
+
+## Verification targets
+
+`verify-task` reads this table literally. One row per component. Commands run one at a time, serial flags included.
+
+| Target | Path | lint | typecheck | unit | e2e |
+|---|---|---|---|---|---|
+| {{diy-platform}} | `{{diy-platform/}}` | `{{cmd}}` | `{{cmd or n/a}}` | `{{cmd}} --runInBand` | `{{cmd or n/a}}` |
 
 ## Modules
 
-| Module | Purpose | Docs |
-|---|---|---|
-| {{name}} | {{one line}} | [README](modules/{{name}}/README.md) |
+Modules belong to the application and may span components.
 
-## Verification
-
-Run one at a time, in this order. `verify-task` reads this section literally.
-
-| Step | Command | Notes |
-|---|---|---|
-| lint | `{{cmd}}` | |
-| typecheck | `{{cmd or n/a}}` | |
-| unit | `{{cmd}} --runInBand` | |
-| e2e | `{{cmd or n/a}} --runInBand` | |
-
-## API spec
-
-{{How it is generated and where it lands, or "none".}}
-
-## Data
-
-- Engine: {{...}}
-- ORM or migrations: {{...}}
-- Run migrations: `{{cmd}}`
-
-## Environments and delivery
-
-- Base branch: `{{develop}}`
-- Environments: {{local, dev, staging, prod}}
-- Deploy: {{how}}
-- IaC: {{path or none}}
+| Module | Purpose | Components | Docs |
+|---|---|---|---|
+| {{billing}} | {{one line}} | {{diy-platform, web}} | [README](modules/{{billing}}/README.md) |
 
 ## Conventions
 

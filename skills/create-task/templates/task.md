@@ -4,6 +4,7 @@ title: {{title}}
 type: {{feature | bug | docs | chore | refactor}}
 branch: {{prefix}}/{{id}}_{{title}}
 modules: [{{primary}}, {{other}}]
+repos: [{{repo}}]
 phases: 0
 depends_on: []
 ticket:

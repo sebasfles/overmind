@@ -24,6 +24,7 @@ If the folder does not exist, create it and add `docs/tasks/_drafts/` to `.gitig
 
 - `id`: four digits, sequential per project. Read every folder name in `docs/tasks/`, take the highest id, add one. Start at `0001`.
 - `title`: snake_case, two to four words, from the Goal. Example: `badge_wall`, `fix_login_redirect`.
+- `repos`: from the plan's Approach; in single and mono always `["."]`. In multirepo, if the plan does not say, ask; never default to all.
 - Folder: `docs/tasks/{{id}}_{{title}}/`. Example: `docs/tasks/0142_badge_wall/`.
 
 ## 3. Write `task.md`
@@ -37,6 +38,7 @@ title: badge_wall
 type: feature            # feature | bug | docs | chore | refactor
 branch: feat/0142_badge_wall     # empty when the task has phases
 modules: [billing, notifications]   # primary first
+repos: [diy-platform, diy-infra]     # repos the task touches; ["."] in single and mono
 phases: 0                # number of phases, 0 if none
 depends_on: []           # ids of tasks that must be done first
 ticket:                  # external reference, optional

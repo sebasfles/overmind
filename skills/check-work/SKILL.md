@@ -16,7 +16,7 @@ Output: a short board, one line per task, grouped by state in this order: `in_re
 
 - Every folder under `docs/tasks/` except `_drafts/`: run `check-task` on each.
 - `docs/tasks/_drafts/*.md`: list by name as `draft`.
-- `git worktree list`: any worktree under `.claude/worktrees/` with no matching task folder is `orphan worktree`.
+- `ls .workspaces/`: any workspace with no matching task folder is `orphan workspace`.
 - `gh pr list --state open --json headRefName`: any open PR on a `feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/` branch with no task folder is `untracked PR`.
 
 ## 2. Print

@@ -2,6 +2,7 @@
 
 Estado: acordado el 2026-08-28.
 Depende de: [01-documentacion.md](01-documentacion.md).
+El documento [05-layouts.md](05-layouts.md) generaliza worktrees, docs y PRs a single repo, monorepo y multirepo; donde este documento diga `.claude/worktrees/{{task}}/`, léase `.workspaces/{{task}}/{{repo}}/`, y donde diga "el worktree", léase "el workspace".
 
 ## Objetivo
 
@@ -79,7 +80,7 @@ Se distinguen por tres identificadores, todos fijados por el manager al lanzarlo
 | Identificador | Ejemplo | Uso |
 |---|---|---|
 | Nombre de sesión (`-n`) | `task-0142-reviewer`, `task-0142-developer`, o `task-0142-developer-phase-2` si hay fases | Dirección para `SendMessage`. |
-| Directorio de trabajo (worktree) | `{{repo}}/.claude/worktrees/0142_badge_wall/` | Aísla el código y agrupa el historial de sesiones de la task en su propia carpeta. |
+| Directorio de trabajo (worktree) | `{{root}}/.workspaces/0142_badge_wall/` | Aísla el código y agrupa el historial de sesiones de la task en su propia carpeta. |
 | ID de sesión | UUID | Para `claude attach {{id}}` o `claude -r {{id}}`. |
 
 La convención `task-{{id}}-{{rol}}` hace el direccionamiento determinista: el reviewer sabe a quién hablarle porque conoce su propio id de task.
@@ -219,7 +220,7 @@ Reglas:
 
 ### Worktree
 
-`{{repo}}/.claude/worktrees/{{id}}_{{title}}/`.
+`{{root}}/.workspaces/{{id}}_{{title}}/{{repo}}/`, un worktree por repo tocado (ver [05-layouts.md](05-layouts.md)).
 Lo crea el manager en `consolidate-task` con `git worktree add -b {{rama}} {{ruta}} origin/{{base}}` para controlar el nombre de la rama, y lanza al reviewer con ese cwd.
 La rama nace sin la carpeta de la task; la recibe en el rebase de `delegate-task`, después del push `planned`.
 Se crea en la consolidación y no en la delegación porque una sesión de Claude Code tiene cwd fijo y el reviewer necesita vivir dentro del worktree para correr lint y tests.
@@ -265,7 +266,7 @@ Con `--bg`:
 ```
 claude rm {{id-reviewer}}                                  # sesión (y worktree cuando es seguro)
 claude rm {{id-developer}}                                  # uno por fase si las hubo
-git worktree remove {{repo}}/.claude/worktrees/0142_badge_wall    # si claude rm no lo eliminó
+git -C {{root}}/{{repo}} worktree remove {{root}}/.workspaces/0142_badge_wall/{{repo}}   # por cada repo; luego rmdir del workspace
 git branch -d feat/0142_badge_wall
 tmux kill-window -t task-0142
 ```
@@ -273,8 +274,8 @@ tmux kill-window -t task-0142
 Con la forma alternativa (sesiones directas):
 
 ```
-claude project purge {{repo}}/.claude/worktrees/0142_badge_wall   # transcripts, tasks, historial y config de ese directorio
-git worktree remove {{repo}}/.claude/worktrees/0142_badge_wall
+claude project purge {{root}}/.workspaces/0142_badge_wall   # transcripts, tasks, historial y config de ese directorio
+git -C {{root}}/{{repo}} worktree remove {{root}}/.workspaces/0142_badge_wall/{{repo}}   # por cada repo
 git branch -d feat/0142_badge_wall
 tmux kill-window -t task-0142
 ```

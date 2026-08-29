@@ -135,9 +135,10 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 
 - The project's tmux session has the same name as the project; you run in its first window.
 - The base branch is declared in `docs/TRD.md` (fallback: the repository's default branch).
-- One worktree per task at `{{repo}}/.claude/worktrees/{{id}}_{{title}}/`, created with `git worktree add -b {{branch}} {{path}} origin/{{base}}`.
-  Phases are branches inside that worktree: `feat/{{id}}_{{title}}-phase-{{n}}`.
-- The main checkout always sits on the base branch; sync it with `origin/{{base}}` before any skill acts.
+- One workspace per task at `{{root}}/.workspaces/{{id}}_{{title}}/`, with a worktree per repo the task touches (plus the root's in multirepo), created by `consolidate-task`. See `docs/05-layouts.md` of the overmind repo for single, mono and multirepo.
+  Phases are branches inside those worktrees: `feat/{{id}}_{{title}}-phase-{{n}}`.
+- The shell does not keep `cd` between commands: absolute paths or `git -C` always.
+- You run in the project root: the repo itself (single, mono) or the docs repo (multirepo). It always sits on its base branch; sync it before any skill acts.
 
 ## Judgment
 

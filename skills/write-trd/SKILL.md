@@ -20,12 +20,14 @@ It says where things are, how they are organized, and how to operate them.
 
 ## General `docs/TRD.md`
 
-Read `templates/TRD.md` and fill every section from evidence in the repo:
+The TRD describes the whole application; in monorepos and multirepos it has one component section per app or repo.
+Read `templates/TRD.md` and fill every section from evidence:
 
 1. Stack: languages, frameworks, package manager, runtime versions, from manifests (`package.json`, `Gemfile`, `pubspec.yaml`, `go.mod`, lockfiles, `.nvmrc`, `.ruby-version`).
 2. Layout: top-level folders and what lives in each; monorepo packages or apps if any.
 3. Modules: the list of modules with one line each and a link to `docs/modules/{{module}}/README.md`. A module is a bounded area of the domain the code already groups (a NestJS module, a Rails engine or namespace, a feature folder); do not invent boundaries the code does not have.
-4. Verification: the exact commands for lint, typecheck, unit tests and e2e tests, each with the serial flag (`--runInBand` or equivalent), and the order to run them. `verify-task` reads this section literally; if a command is unknown, write `unknown` rather than guessing, and the manager will ask Sebastian.
+4. Verification targets: one row per component with path and the exact commands for lint, typecheck, unit and e2e, each with its serial flag. `verify-task` reads this table literally; write `unknown` rather than guessing.
+   Workspace files and install command per component: what a fresh worktree needs before anything runs (`.env*`, generated files, `pnpm install`). `consolidate-task` reads this to bootstrap workspaces.
 5. API spec: how the OpenAPI or GraphQL schema is generated and where it lands (`@nestjs/swagger`, rswag, `graphql-schema`), or `none`.
 6. Data: database engine, ORM or migration tool, how migrations run.
 7. Environments and delivery: base branch, environments, how deploys happen, IaC location if any.
@@ -35,7 +37,7 @@ Read `templates/TRD.md` and fill every section from evidence in the repo:
 
 Read `templates/module-trd.md` and fill it:
 
-1. Structure: the folders and key files of the module, one line each.
+1. Structure: the folders and key files of the module, one line each, grouped by component when the module spans several repos or apps.
 2. Endpoints owned: one line per endpoint or job, method, route, purpose, link to the generated spec. Nothing about payloads.
 3. Depends on: other modules and external services it calls.
 4. Depended on by: modules that call it, if discoverable.

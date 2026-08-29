@@ -25,18 +25,20 @@ docs/
   tasks/  (_drafts/ ignored)
 ```
 
-Run in the main checkout, on the base branch, synced with `origin/{{base}}`.
+Run in the project root (see `docs/05-layouts.md`): the repo itself for single and mono, the docs repo for multirepo.
+Components are the repos (multirepo) or apps (monorepo) the TRD will describe; in a single repo there is one.
 
 ## 1. Detect
 
 Without writing anything:
 
-- Stack, from manifests and lockfiles.
+- Layout: single, mono or multirepo, from `.git` at the root and child repos or apps. Components and their paths.
+- Stack per component, from manifests and lockfiles.
 - Base branch, from the remote's default or the existing TRD.
-- Candidate modules: the bounded areas the code already groups (NestJS modules, Rails engines or namespaces, feature folders, packages in a monorepo). List them with their root path and a one-line guess of purpose.
+- Candidate modules: the bounded areas the code already groups (NestJS modules, Rails engines or namespaces, feature folders). Modules belong to the application and may span components; propose the mapping folder(s) -> module across components, with a one-line guess of purpose.
 - State of `docs/`: which files exist, their `updated` date, and for each module folder whether the code under it changed after that date (`git log -1 --format=%cs -- {{module path}}` vs `updated`). Stale means code newer than docs.
 - `CLAUDE.md`: exists, and is it the short form (points to `docs/`, under 40 lines)?
-- `.gitignore` has `docs/tasks/_drafts/`.
+- `.gitignore` has `docs/tasks/_drafts/` and, in single and mono, `.workspaces/`; in multirepo, the root `.gitignore` lists every code repo folder and `.workspaces/`.
 
 ## 2. Report the gap
 
@@ -56,7 +58,7 @@ In `check` mode, stop here.
 
 Order matters because later documents index earlier ones.
 
-1. General TRD: run `write-trd general`. It needs the confirmed module list and produces the verification commands. If any verification command comes out `unknown`, ask Sebastian now.
+1. General TRD: run `write-trd general`. It needs the confirmed components and modules, and produces the verification targets and workspace files per component. If anything comes out `unknown`, ask Sebastian now.
 2. Modules, in parallel: one `setup-worker` subagent per module, each with a clean context and this brief:
    - module name and root path, the confirmed module list, the base branch.
    - run `write-trd {{module}}`, `write-prd {{module}}` (pass overview and designs if given), `write-ard {{module}}`.
@@ -66,7 +68,7 @@ Order matters because later documents index earlier ones.
 3. General PRD: run `write-prd general`, now that module `prd.md` files exist to link.
 4. General ARD: run `write-ard general`; it rebuilds the debt index from the module ARDs.
 5. `CLAUDE.md`: write or rewrite it from `templates/CLAUDE.md`, under 40 lines. If a long one exists, move anything that is not a rule into the TRD and keep the rules.
-6. `.gitignore`: add `docs/tasks/_drafts/` and create `docs/tasks/.gitkeep`.
+6. `.gitignore`: add `docs/tasks/_drafts/` and `.workspaces/` (multirepo: also every code repo folder), and create `docs/tasks/.gitkeep`.
 
 On a partial repo, skip files that exist and are not stale; refresh stale ones; create missing ones.
 Never delete documentation you did not write.

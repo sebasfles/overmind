@@ -1,44 +1,45 @@
 ---
 name: verify-task
 description: >-
-  Run the project's lint, typecheck and tests, one command at a time and with --runInBand, following
-  the commands declared in docs/TRD.md, and append the result to the task's verify.log with the commit
-  it ran on. Shared by developer and reviewer. Never fixes anything.
+  Run lint, typecheck and tests for every verification target of the task (one per repo or app,
+  declared in docs/TRD.md), one command at a time and with --runInBand, and append one block per target
+  to the task's verify.log with the commit it ran on. Shared by developer and reviewer. Never fixes anything.
 disable-model-invocation: false
 ---
 
 # verify-task
 
-Input: the worktree at its current commit.
-Output: green or red per step, and one appended block in `docs/tasks/{{id}}_{{title}}/verify.log` (worktree copy).
+Input: the workspace at its current commits.
+Output: green or red per target and step, and one appended block per target in `{{ROOT_WT}}/docs/tasks/{{TASK}}/verify.log`.
 
-## 1. Commands
+## 1. Targets
 
-Read `docs/TRD.md`, section on verification, for the exact commands and their order.
-Fallback when the TRD does not declare them: `references/{{stack}}.md` of this skill, chosen by the stack the TRD names.
-If neither exists, stop and report `verify-task: no commands declared in TRD`; do not guess.
+Read `docs/TRD.md` (root worktree copy), section `Verification targets`.
+Each target has a name, a path relative to the workspace (`{{repo}}/` or `{{repo}}/apps/backend/`), and commands for lint, typecheck, unit and e2e with their serial flags.
+Verify only the targets whose repo is in the task's `repos`, plus any target whose path the diff touched.
+If the TRD declares no targets, fall back to `references/{{stack}}.md` of this skill by the stack the TRD names; if neither exists, stop and report `verify-task: no verification targets in TRD`. Do not guess.
 
 Skip tests for `type: docs`; run only Markdown lint if the project has one.
 
 ## 2. Run, one at a time
 
-In this order, each command alone, waiting for it to finish before the next:
+Per target, in this order, each command alone, absolute path with `cd {{WORKSPACE}}/{{target path}} &&`:
 
 1. lint
-2. typecheck (if the stack has one)
-3. unit tests, with `--runInBand` or the stack's equivalent serial flag
-4. integration or e2e tests, with `--runInBand`, if the TRD lists them for this project
+2. typecheck (if declared)
+3. unit tests, `--runInBand` or the stack's serial flag
+4. integration or e2e tests, `--runInBand`, if declared
 
-Never run test suites in parallel; the machine runs several tasks at once and memory is the constraint.
+Never run two targets or two suites in parallel; several tasks share the machine and memory is the constraint.
 Never pass `--watch`.
-Capture exit code and the last relevant lines of output per step.
+Capture the exit code and the last relevant lines per step.
 
 ## 3. Log
 
-Append to `verify.log`:
+Append per target:
 
 ```
-## {{ISO timestamp}} by {{developer | reviewer}} on {{sha}}
+## {{ISO timestamp}} by {{developer | reviewer}} target {{name}} on {{sha of that repo}}
 - lint: {{pass | fail}} ({{command}})
 - typecheck: {{pass | fail | n/a}} ({{command}})
 - unit: {{pass | fail}} ({{n}} tests, {{command}})
@@ -47,15 +48,14 @@ Append to `verify.log`:
 ```
 
 Never rewrite earlier blocks.
-The reviewer reads the last block by the developer and expects it to be at the developer's final commit and fully green.
 
 ## 4. Report
 
-Return the per-step result to the caller.
-Red: stop at the first failing step and report it; the caller decides (developer fixes, reviewer files a finding).
+Return the per-target, per-step result to the caller.
+Red: stop at the first failing step of that target, report it, continue with the next target only if the caller asked for a full run.
 
 ## Rules
 
 - Never modify code, tests or configuration.
-- Never skip a step the TRD declares.
+- Never skip a declared step.
 - Never parallelize.

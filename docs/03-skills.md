@@ -46,7 +46,7 @@ Depende de: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-
 | `analyze-task` | Nace la sesión | Lee la carpeta de la task y `docs/` de los módulos. Si `Context & decisions` está vacío, hace el ping-pong con manager y Sebastian una sola vez y lo escribe en la copia del checkout principal (la única que se escribe antes de la delegación); puede ajustar `Scope`, `Acceptance` y las fases. Si ya está escrito (solo pasa cuando la sesión original se perdió), lo lee y no vuelve a preguntar. Si hay `retakes.md` nuevo, lo incorpora. Avisa al manager "consolidated" y espera "delegated, start". |
 | `start-task` | Mensaje del manager "delegated, start" | Abre el pane derecho de la ventana de tmux, lanza `task-{{id}}-developer` (o `-developer-phase-1`) con cwd en el worktree y le manda "context ready, start". |
 | `review-task` | Mensaje "ronda N" del developer | Corre el Pipeline sobre el worktree: intent, rebase, `verify-task`, review, documentation. Si hay issues, los manda al developer con archivo:línea, error y lo esperado. Si no hay issues, corre `publish-task`. |
-| `publish-task` | `review-task` sin issues | Push de la rama, abre el PR si no existe, escribe o actualiza el único comentario con Intent, What changed, Decisions, Risk assessment y Pipeline. No escribe ningún estado; avisa al manager "PR #{{n}} ready". |
+| `publish-task` | `review-task` sin issues | Push de cada rama del workspace, un PR por repo tocado (más el del root en multirepo), y el único comentario resumen en el PR del root con Intent, What changed (con links a cada PR), Decisions (incluido orden de merge), Risk assessment y Pipeline por target. No escribe ningún estado; avisa al manager "PRs ready". |
 | `next-phase` | Mensaje del manager "phase N merged, continue" | Mata la sesión del developer de la fase N, crea la rama de la fase N+1 desde `origin/{{base}}` en el worktree, escribe `Result` de la fase N en `phase_N.md` (viaja en el PR de la fase N+1) y corre `start-task`. |
 
 El reviewer nunca modifica código.
@@ -69,7 +69,7 @@ Nunca habla con el manager ni con Sebastian.
 
 | Skill | Quién | Qué hace |
 |---|---|---|
-| `verify-task` | Reviewer y developer | Lee del TRD los comandos del stack. Corre lint → typecheck → tests, uno a uno y con `--runInBand`. Para `type: docs` no corre tests. Deja registro en `docs/tasks/{{id}}_{{title}}/verify.log`: qué corrió, cuándo, resultado y sobre qué commit. |
+| `verify-task` | Reviewer y developer | Itera los `Verification targets` del TRD (uno por repo o app que la task toca). Corre lint → typecheck → tests, uno a uno y con `--runInBand`. Para `type: docs` no corre tests. Un bloque por target en `verify.log`: qué corrió, cuándo, resultado y sobre qué commit. |
 
 El registro de `verify-task` es lo que permite al reviewer comprobar que lint y tests corrieron después del último fix.
 El reviewer además la re-corre sobre el commit final, lo que hace irrelevante el orden en que la corrió el developer.
