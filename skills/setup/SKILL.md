@@ -49,9 +49,21 @@ Offer Sebastian the option before anything else: make the folder a docs-only rep
 With his yes: `git init`, write `.gitignore`, first commit `docs: init project root`, add the remote he gives.
 With his no: stop; `setup` needs a versioned root. See `docs/05-layouts.md` of the overmind repo.
 
-## 2. Inventory what is already documented
+## 2. Discovery per component
 
-Before reading code, read what people already wrote, in the root and in every component:
+Discovery is read-only and independent per component (repo or app), so it runs in parallel.
+With more than one component, run it as a Workflow (load `workflow-authoring` first; this skill is the opt-in): `parallel` over components, concurrency 4, each step an `agent()` with the `om-setup-worker` brief in `discover` mode and this schema:
+
+```
+{ component, stack, base_branch, docs_found: [{path, covers, freshness}],
+  layout: [{path, what}], candidate_modules: [{name, paths, purpose_guess}],
+  debt_evidence: [{path, line, text}], verify_commands: {lint, typecheck, unit, e2e, install, workspace_files} }
+```
+
+Fallback without the Workflow tool: `Agent(om-setup-worker)` subagents, at most four at a time.
+With a single component, do the discovery in this session.
+
+Each worker reads, in its component, what people already wrote before reading code:
 
 - `README*`, `CONTRIBUTING*`, `ARCHITECTURE*`, `CHANGELOG*`.
 - `docs/`, `doc/`, `wiki/`, `adr/`, `decisions/`, `rfcs/` folders and anything `.md` outside `node_modules` and vendor folders.
@@ -61,13 +73,19 @@ Before reading code, read what people already wrote, in the root and in every co
 
 Documentation can be anywhere and in any shape: a `NOTES.md` at the root, a Confluence export in `docs/legacy/`, a `docs/` in one repo and nothing in the others, a wiki checked in as a submodule.
 Read all of it; do not skip a source because it is not where the convention would put it.
-Build a short inventory: path, what it covers, how current it looks.
-This is the primary source for PRD intent and ARD reasons; code is the primary source for the TRD.
+Then the code: structure, entrypoints, how the code already groups itself (NestJS modules, Rails engines, feature folders), manifests and scripts for the verification commands.
+
+The main session merges the results into one inventory (path, what it covers, how current it looks) and one list of candidate modules.
+Modules of the application often span components (`billing` in api, web and mobile): the merge is where they appear, by matching names, shared entities and call paths across the per-component candidates.
+That merge is your work with Sebastian, never a worker's.
+The inventory is the primary source for PRD intent and ARD reasons; code is the primary source for the TRD.
 Nothing of what exists is deleted or moved; it is read, cited and, when a fact is confirmed, folded into the convention with its source noted.
+Discovery is the first Workflow of `setup`; the module documentation in step 4 is the second.
+They are separate because Sebastian's confirmation of the modules sits between them, and a Workflow cannot stop to ask.
 
 ## 3. Report and confirm modules
 
-One screen, to Sebastian:
+From the merged discovery, one screen to Sebastian:
 
 ```
 Stack        NestJS 10, Prisma, pnpm          base: develop
@@ -88,10 +106,10 @@ Every document is written from three sources in this order: the inventory, the c
 Before writing each document, ask him in one batch what neither the inventory nor the code can tell (for whom the product is, what is deliberately out, why a choice was made, what the environments are).
 Do not ask what the inventory or the code already answers.
 
-1. Modules, in parallel, as a Workflow.
+1. Modules, in parallel, as the second Workflow.
    The per-module documentation is N independent jobs with clean context: run them with the Workflow tool (load the `workflow-authoring` skill first).
    This skill instructing you to use Workflow is the opt-in; Sebastian does not need to say "ultracode".
-   Script shape: `parallel` over the confirmed modules with concurrency 4, each step an `agent()` with the `om-setup-worker` brief and a schema `{module, files_written: [...], inferidos: [{file, line, text}]}`; return the union.
+   Script shape: `parallel` over the confirmed modules with concurrency 4, each step an `agent()` with the `om-setup-worker` brief in `document` mode and a schema `{module, files_written: [...], inferidos: [{file, line, text}]}`; return the union.
    If a module fails, fix the brief and resume the run with `resumeFromRunId`; finished modules come back from cache.
    If the Workflow tool is not available in the session, fall back to `Agent(om-setup-worker)` subagents, at most four at a time.
    Brief per module, in both cases:
@@ -99,7 +117,7 @@ Do not ask what the inventory or the code already answers.
    - run `write-trd {{module}}`, `write-prd {{module}}`, `write-ard {{module}}`.
    - write `README.md` from `templates/module-README.md` and `database.md` from `templates/module-database.md`; `flows.md` from `templates/module-flows.md` only if the module has a flow worth a diagram.
    - return the `[inferido]` items it wrote, with file and line.
-   The interactive parts of `setup` (inventory, module confirmation, interviews) stay in this session; only the fan-out runs as a Workflow.
+   The interactive parts of `setup` (merging the inventory, module confirmation, interviews) stay in this session; only the two fan-outs run as Workflows.
 2. General TRD: run `write-trd general`. The module docs give it the Modules table; the detection gives it components, verification targets and workspace files. If any command comes out `unknown`, ask Sebastian.
 3. General PRD: run `write-prd general` with the inventory's product documents and Sebastian's answers; it links the module `prd.md` files.
 4. General ARD: run `write-ard general`. Optional in substance: on a new repo with no history, create it with the template header and an empty log, so `document-task` has where to append; do not invent entries. On an existing repo, record only decisions with evidence and rebuild the debt index.

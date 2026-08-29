@@ -39,3 +39,12 @@ Las decisiones de diseño originales están en `01` a `05`; aquí van los cambio
 - Debt created: la skill instruye escribir el script del Workflow en tiempo de ejecución; conviene guardar un script de referencia en `skills/setup/references/` tras el piloto.
 - Revisit when: el piloto muestre que el Workflow agrega fricción frente a los subagentes.
 - Files: skills/setup/SKILL.md, docs/03-skills.md.
+
+## 2026-08-29: `setup` con dos fan-outs: discovery por componente y documentación por módulo
+
+- Decision: el discovery corre en paralelo por componente (repo o app) con `om-setup-worker` en modo `discover` (solo lectura, salida con schema); la sesión principal fusiona, propone el mapa carpetas → módulos y lo confirma con Sebastian; luego la documentación corre en paralelo por módulo con el mismo agente en modo `document`. Son dos Workflows separados.
+- Alternatives rejected: un solo Workflow (no puede parar a preguntar); discovery secuencial en la sesión principal (en `hux` son 10 repos y llena el contexto antes de escribir nada).
+- Reason: los módulos no existen hasta que termina el discovery y Sebastian los confirma; y los módulos que cruzan componentes solo aparecen en la fusión, que es trabajo humano más sesión principal, no de un worker.
+- Debt created: none.
+- Revisit when: el piloto en un multirepo muestre que la fusión de candidatos necesita más estructura en el schema.
+- Files: skills/setup/SKILL.md, agents/om-setup-worker.md, docs/03-skills.md.

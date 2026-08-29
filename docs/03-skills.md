@@ -27,7 +27,7 @@ Depende de: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-
 
 | Skill | Qué hace |
 |---|---|
-| `setup` | Extrae la documentación de un proyecto, esté donde esté (READMEs, wikis, ADRs, comentarios, código, Sebastian), hacia la convención del punto 1. No la espera como entrada: es su salida. Inventaría, confirma módulos contigo, documenta módulos en paralelo como Workflow (`om-setup-worker`), luego TRD, PRD y ARD (vacío si no hay historia), `CLAUDE.md` corto. Idempotente. |
+| `setup` | Extrae la documentación de un proyecto, esté donde esté (READMEs, wikis, ADRs, comentarios, código, Sebastian), hacia la convención del punto 1. No la espera como entrada: es su salida. Dos Workflows con `om-setup-worker`: discovery por componente (solo lectura) y documentación por módulo, con la confirmación de módulos contigo en medio; luego TRD, PRD y ARD (vacío si no hay historia), `CLAUDE.md` corto. Idempotente. |
 | `write-prd` / `write-trd` / `write-ard` | Producen o actualizan cada documento. Los usa `setup`; `document-task` los reutiliza a nivel de módulo. |
 | `plan-task` | Conversación de planning con Sebastian siguiendo la ruta de lectura de `docs/`. Termina ofreciendo `create-task`. |
 | `create-task` | Crea la carpeta `docs/tasks/{{id}}_{{title}}/` en el checkout principal con `task.md` (`type`, `Goal`, `Scope`, `Acceptance`), `replication.md` si es bug y, en el raro caso de fases, un `phase_N.md` por fase. No commitea. Termina ofreciendo `consolidate-task`. |
