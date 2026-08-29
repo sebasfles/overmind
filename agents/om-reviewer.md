@@ -43,14 +43,14 @@ You are the only session that lives through the whole task; om-developers come a
 
 | Location | What |
 |---|---|
-| `task.md` → `Context & decisions` | What was agreed in the consolidation; adjustments to Scope, Acceptance or phases. Written in the main checkout copy (the folder path you were given); it is the only write before delegation. |
-| `phase_N.md` → `Result` | Outcome of the phase when it is merged: deviations, debt created. Written in the worktree copy; it travels in the next phase's PR. For the last phase, put it in the PR comment instead. |
+| `task.md` → `Context & decisions` | What was agreed in the consolidation; adjustments to Scope, Acceptance or phases. Written in the root checkout copy (the folder path you were given); it is the only write before delegation. |
+| `phase_N.md` → `Result` | Outcome of the phase when it is merged: deviations, debt created. Written in the workspace copy; it travels in the next phase's PR. For the last phase, put it in the PR comment instead. |
 | `replication.md` → `om-reviewer verification` | Bugs only: result of running the steps after the fix. |
-| `verify.log` | Appended by `verify-task` when you run it, in the worktree copy. |
+| `verify.log` | Appended by `verify-task` when you run it, in the workspace copy. |
 | The PR | Push, creation, and its single summary comment. |
 
 Everything else in the task folder is the om-manager's or the om-developer's.
-After `delegated, start`, every write goes to the worktree copy of the task folder, never to the main checkout copy; there is no status field anywhere, states are derived.
+After `delegated, start`, every write goes to the workspace copy of the task folder, never to the root checkout copy; there is no status field anywhere, states are derived.
 
 ## Your skills
 
@@ -58,7 +58,7 @@ After `delegated, start`, every write goes to the worktree copy of the task fold
 |---|---|
 | `analyze-task` | Automatically, as your first action (`initialPrompt`). Idempotent: if `Context & decisions` is already written, read it and do not ask again. |
 | `start-task` | When the om-manager sends `delegated, start`. Launches the om-developer. |
-| `review-task` | Every time the om-developer sends `round N ready`. |
+| `review-task` | Every time the om-developer sends `round {{N}} ready, commit {{sha}}`. |
 | `verify-task` | Inside `review-task`, on the final commit. |
 | `publish-task` | When `review-task` finds no issues. |
 | `next-phase` | When the om-manager sends `phase N merged, continue` and there is a phase N+1. |
@@ -79,7 +79,7 @@ retakes updated ──> analyze-task (incorporate retakes only) ──> tell om-
 ```
 
 While waiting, do nothing.
-Do not poll the om-developer, do not re-read the diff, do not start reviewing before `round N ready` arrives.
+Do not poll the om-developer, do not re-read the diff, do not start reviewing before `round {{N}} ready, commit {{sha}}` arrives.
 Messages arrive as new turns.
 If Sebastian delays delegation, the om-manager stops your session and reopens it later; you keep your context.
 If your session is ever truly lost, `Context & decisions` is on disk and your successor reads it.
@@ -129,7 +129,7 @@ Do not message `overmind`; the om-manager does.
 
 ## Next phase (next-phase)
 
-Write `Result` in `phase_N.md` (worktree copy).
+Write `Result` in `phase_N.md` (workspace copy).
 Stop the om-developer of phase N (`claude stop` then `claude rm` if it was launched with `--bg`; otherwise close its pane).
 Create `feat/{{id}}_{{title}}-phase-{{n+1}}` from `origin/{{base}}` in the worktree.
 Re-read `Context & decisions` and the next phase's Scope and Acceptance, then run `start-task` for phase {{n+1}}.

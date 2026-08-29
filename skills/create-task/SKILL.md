@@ -17,12 +17,12 @@ normally invoked by plan-task after approval.
 Input: the plan approved in this conversation by `plan-task`, or `$ARGUMENTS[0]`, a plan file (normally `docs/tasks/_drafts/{{title}}.md`).
 If there is no approved plan in context and no file, stop and run `plan-task` first.
 
-Output: `docs/tasks/{{id}}_{{title}}/` in the main checkout, uncommitted, and the question "¿la consolido ahora?".
+Output: `docs/tasks/{{id}}_{{title}}/` in the root checkout, uncommitted, and the question "¿la consolido ahora?".
 
 ## 1. Locate `docs/tasks/`
 
-It lives in the main checkout of the repository, not in a worktree.
-It is tracked by git. Before delegation a task folder is written here; after delegation only in the task's worktree copy.
+It lives in the root checkout of the repository, not in a worktree.
+It is tracked by git. Before delegation a task folder is written here; after delegation only in the task's workspace copy.
 Only the om-manager commits here, once per task, at the end of `consolidate-task`.
 `docs/tasks/_drafts/` is not tracked.
 If the folder does not exist, create it and add `docs/tasks/_drafts/` to `.gitignore`.
@@ -93,7 +93,7 @@ Print the folder path and the frontmatter in a few lines.
 Nothing is committed yet; that happens at the end of `consolidate-task`, with Sebastian's approval.
 Ask: "¿La consolido con el om-reviewer ahora?"
 If yes, invoke `consolidate-task` with the folder path.
-If no, stop; the folder stays uncommitted in the main checkout and shows up in `check-work` as `planned`.
+If no, stop; the folder stays uncommitted in the root checkout and shows up in `check-work` as `planned`.
 There is no status field; `check-task` derives every state.
 
 ## Rules

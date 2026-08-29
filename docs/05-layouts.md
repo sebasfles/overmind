@@ -14,6 +14,14 @@ Un solo flujo para los tres layouts que Sebastian tiene:
 
 Los tres se describen con la misma abstracción, y single y mono son casos con listas de un elemento.
 
+## Glosario
+
+- Root checkout: el clon del root donde corre el om-manager, siempre en su rama base.
+- Workspace: `{{root}}/.workspaces/{{task}}/`, cwd de om-reviewer y om-developer, con un worktree por repo tocado.
+- Root worktree: el worktree del root dentro del workspace; en single y mono es el mismo worktree del código.
+- Root checkout copy: la carpeta de la task en el root checkout; se escribe solo antes de `delegate-task`.
+- Workspace copy: la carpeta de la task en el root worktree del workspace; se escribe solo después de `delegate-task`.
+
 ## Abstracción
 
 Un proyecto tiene `root`, `repos` y workspaces.

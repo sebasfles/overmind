@@ -11,11 +11,11 @@ disable-model-invocation: true
 ## Purpose
 
 Send a published task back for another round with Sebastian's PR comments: record them dated in retakes.md of
-the worktree copy, make sure om-reviewer and om-developer are running, and tell the om-reviewer "retakes updated".
+the workspace copy, make sure om-reviewer and om-developer are running, and tell the om-reviewer "retakes updated".
 om-manager only; Sebastian invokes it.
 
 Input: a task id or folder, and Sebastian's comments (inline, or "read the PR" to pull review comments with `gh`).
-Output: `retakes.md` updated in the worktree copy, om-reviewer notified.
+Output: `retakes.md` updated in the workspace copy, om-reviewer notified.
 
 ## 1. Preconditions
 
@@ -40,7 +40,7 @@ Source: PR #{{number}}, {{inline | review comments}}
 - ...
 ```
 
-Worktree copy only; the task is delegated.
+Workspace copy only; the task is delegated.
 
 ## 4. Sessions
 

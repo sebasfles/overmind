@@ -73,7 +73,7 @@ Ver [05-layouts.md](05-layouts.md) para `root` y `repos` en single repo, monorep
 | Skill | Qué hace |
 |---|---|
 | `add-project` | Registra un proyecto (`root`, `repos`) en `projects.yaml`; en multirepo convierte la carpeta en repo de docs (`{{name}}-docs`). Verifica la convención del punto 1 y, si no, ofrece correr `setup` desde su om-manager. |
-| `pause-project` / `remove-project` | Lo saca del tablero sin borrar nada. |
+| `add-project {{name}} pause` / `add-project {{name}} remove` | Lo saca del tablero sin borrar nada. |
 | `resume-project` | Abre una pestaña nueva de Windows Terminal, en WSL, en la raíz del proyecto, dentro de su sesión de tmux, con el om-manager corriendo. |
 | `check-portfolio` | Tabla por proyecto: tasks en delegación, en progreso, en PR esperando a Sebastian, ejecutores ociosos, deriva de docs, basura acumulada. |
 | `clean-portfolio` | `clean-work` en todos los proyectos activos. |

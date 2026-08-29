@@ -18,7 +18,7 @@ Output: green or red per target and step, and one appended block per target in `
 
 ## 1. Targets
 
-Read `docs/TRD.md` (root worktree copy), section `Verification targets`.
+Read `docs/TRD.md` (root workspace copy), section `Verification targets`.
 Each target has a name, a path relative to the workspace (`{{repo}}/` or `{{repo}}/apps/backend/`), and commands for lint, typecheck, unit and e2e with their serial flags.
 Verify only the targets whose repo is in the task's `repos`, plus any target whose path the diff touched.
 If the TRD declares no targets, fall back to `references/{{stack}}.md` of this skill by the stack the TRD names; if neither exists, stop and report `verify-task: no verification targets in TRD`. Do not guess.

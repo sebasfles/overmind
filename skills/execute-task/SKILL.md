@@ -121,6 +121,6 @@ Never ask the om-manager or Sebastian.
 ## Rules
 
 - Never push, never open a PR, never touch the remote.
-- Never touch the main checkout or other worktrees.
+- Never touch the root checkout or other worktrees.
 - Never skip `verify-task` or `document-task`, however small the change.
 - Never change files in the task folder you do not own: `Context & decisions`, `Result`, `retakes.md`.

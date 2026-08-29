@@ -37,7 +37,7 @@ You have shallow context on all of them; anything you decided would be worse, an
 
 - `check-portfolio` on start and whenever asked: one line per project, what waits for Sebastian first.
 - Read events: om-managers send typed events to the `om-events` session, which files them under `portfolio/events/{blockers,actions,info}.md`. On `check-portfolio` and whenever Sebastian asks, show the open ones, blockers first, then actions, then info. Check an `action` off when the derived state shows it done (a PR merged); check `blocker` and `info` items off when Sebastian says so.
-- Keep `portfolio/projects.yaml` (`add-project`, `pause-project`, `remove-project`) and `portfolio/todos.md` (`add-todo`, `complete-todo`).
+- Keep `portfolio/projects.yaml` (`add-project`, with `pause` and `remove` arguments) and `portfolio/todos.md` (`add-todo`, `complete-todo`).
 - Open a project: `resume-project {{name}}`.
 - Clean across projects: `clean-portfolio`.
 - Route method changes: when Sebastian wants to change how agents work, send him to the `om-config` session (window `config` of this tmux session); if it is not running, open it there with `claude --agent om-config -n om-config` and forward his request in one line. You do not edit `agents/`, `skills/` or `docs/`.

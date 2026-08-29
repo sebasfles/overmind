@@ -14,8 +14,8 @@ Cada task la resuelve un par de sesiones (om-reviewer + om-developer) con contex
 
 | Nivel | Sesión | Vida | Contexto que carga | Skills |
 |---|---|---|---|---|
-| om-manager | Una por proyecto | Larga, se reanuda | `docs/` general, conversación con Sebastian, estado de las tasks | `plan-task`, `create-task`, `delegate-task`, `reiterate-task`, `check-*`, `clean-*` |
-| om-reviewer | Una por task | La task | Archivo de la task, `docs/` del módulo, diff y PR | `analyze-task`, `review-task`, `publish-task` |
+| om-manager | Una por proyecto | Larga, se reanuda | `docs/` general, conversación con Sebastian, estado de las tasks | `setup`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-*`, `clean-*` |
+| om-reviewer | Una por task | La task | Archivo de la task, `docs/` del módulo, diff y PR | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
 | om-developer | Una por task | La task | Archivo de la task, `docs/` del módulo, código | `execute-task`, `document-task` |
 
 Los tres contextos son disjuntos a propósito.
@@ -133,16 +133,16 @@ Cualquier sesión nueva puede retomarla leyéndola; las sesiones vivas son un ac
 Decidido el 2026-08-28: `docs/tasks/` está trackeada por git; solo `docs/tasks/_drafts/` va en `.gitignore`.
 La carpeta de una task se escribe en un solo lugar en cada momento, y el punto de traspaso es la delegación:
 
-- Antes de `delegate-task`, en el checkout principal (rama base).
+- Antes de `delegate-task`, en el root checkout (rama base).
   Ahí la escriben `create-task` (plan) y el om-reviewer durante la consolidación (`Context & decisions`).
 - `consolidate-task` termina con el único commit de docs de toda la task, en la rama base y con aprobación de Sebastian: `docs(tasks): {{id}}_{{title}} planned`.
   Contiene el plan y `Context & decisions`: exactamente lo que Sebastian aprobó.
 - `delegate-task` empieza con `git rebase origin/{{base}}` en el worktree; la rama recibe la carpeta completa.
-- Después de `delegate-task`, solo en la copia del worktree: `om-developer notes`, `verify.log`, `Result`, `retakes.md`.
+- Después de `delegate-task`, solo en la copia del workspace: `om-developer notes`, `verify.log`, `Result`, `retakes.md`.
   Viajan en el PR y llegan a la rama base con el merge.
-  Nadie vuelve a escribir la copia del checkout principal; se actualiza sola con `git pull`.
+  Nadie vuelve a escribir la copia del root checkout; se actualiza sola con `git pull`.
 - `clean-task` no commitea nada.
-- El checkout principal vive siempre en la rama base; cada skill del om-manager lo sincroniza con `origin/{{base}}` antes de actuar.
+- El root checkout vive siempre en la rama base; cada skill del om-manager lo sincroniza con `origin/{{base}}` antes de actuar.
   Si un proyecto prohíbe pushes directos a la rama base, el commit `planned` queda local y se decide por proyecto cómo publicarlo.
 
 ### task.md
@@ -215,7 +215,7 @@ Reglas:
 - La fase N+1 arranca solo cuando el PR de la fase N está mergeado.
   Cuando Sebastian mergea, se lo dice al om-manager y el om-manager le avisa al om-reviewer que continúe.
   No se usan PRs apilados: son más rápidos pero traen rebases en cascada.
-- Al terminar su trabajo el om-developer deja una nota de cierre en `phase_N.md` (qué hizo, qué dejó pendiente); el om-reviewer escribe `Result` al saber del merge, en la copia del worktree, y viaja en el PR de la fase siguiente.
+- Al terminar su trabajo el om-developer deja una nota de cierre en `phase_N.md` (qué hizo, qué dejó pendiente); el om-reviewer escribe `Result` al saber del merge, en la copia del workspace, y viaja en el PR de la fase siguiente.
   Para la última fase no hay PR siguiente: su resultado va en el comentario del PR.
   Así un om-reviewer de reemplazo puede retomar desde disco.
 - Al pasar a la fase N+1 el om-reviewer mata la sesión del om-developer de la fase N y levanta uno nuevo sin contexto.
@@ -235,10 +235,10 @@ om-reviewer y om-developer comparten el worktree.
 1. Sebastian al om-manager: "quiero X".
 2. `plan-task` (om-manager + Sebastian): lee `docs/` siguiendo la ruta de lectura del punto 1 y planea.
    Output: la idea cerrada, y `docs/tasks/_drafts/{{title}}.md` si la conversación creció.
-3. `create-task` (om-manager + Sebastian): escribe la carpeta `docs/tasks/{{id}}_{{title}}/` en el checkout principal con `task.md`, `replication.md` si es bug y `phase_N.md` si hay fases.
+3. `create-task` (om-manager + Sebastian): escribe la carpeta `docs/tasks/{{id}}_{{title}}/` en el root checkout con `task.md`, `replication.md` si es bug y `phase_N.md` si hay fases.
    Nada se commitea todavía.
 4. `consolidate-task` (om-manager): sincroniza la rama base, crea worktree y rama según `type` desde `origin/{{base}}`, abre la ventana de tmux `task-{{id}}` y lanza `om-{{id}}-reviewer` dentro del worktree, sin om-developer.
-   El om-reviewer corre `analyze-task`: lee la carpeta (en el checkout principal) y los docs de los módulos, y le cuenta sus dudas al om-manager; el om-manager y Sebastian las resuelven; el om-reviewer escribe `Context & decisions` en la copia del checkout principal.
+   El om-reviewer corre `analyze-task`: lee la carpeta (en el root checkout) y los docs de los módulos, y le cuenta sus dudas al om-manager; el om-manager y Sebastian las resuelven; el om-reviewer escribe `Context & decisions` en la copia del root checkout.
    Cuando el om-reviewer avisa "consolidated", el om-manager le pide a Sebastian aprobación y commitea y pushea `docs(tasks): {{id}}_{{title}} planned` en la rama base: plan más decisiones, el único commit de docs de la task.
    Luego pregunta: ¿delegar ahora?
    Si no: detiene la sesión del om-reviewer (conservando su conversación) y cierra la ventana de tmux. Worktree y rama se quedan. La task aparece `consolidated` en `check-work`.
@@ -246,9 +246,9 @@ om-reviewer y om-developer comparten el worktree.
    Si el om-reviewer está detenido, reabre la ventana de tmux y la misma sesión (`claude attach` o `claude -r`); solo si la sesión se perdió lanza un om-reviewer nuevo, cuyo `analyze-task` es idempotente.
    Hace `git fetch` y `git rebase origin/{{base}}` en el worktree: la rama recibe la carpeta con las decisiones.
    Manda "delegated, start" al om-reviewer.
-   Desde aquí todo lo que se escribe en la carpeta va a la copia del worktree, y el om-manager no interviene hasta que el om-reviewer publique.
+   Desde aquí todo lo que se escribe en la carpeta va a la copia del workspace, y el om-manager no interviene hasta que el om-reviewer publique.
 6. El om-reviewer lanza `om-{{id}}-developer` (o `-developer-phase-1`) en el pane derecho, con cwd en el worktree, y le manda "context ready, start".
-7. om-developer: `execute-task` → rebase desde `origin/{{base}}` → (bug: reproducir con `replication.md`) → implementa → `verify-task` → `document-task` → aplasta en un commit → `om-developer notes` → `SendMessage` al om-reviewer: "round 1 ready".
+7. om-developer: `execute-task` → rebase desde `origin/{{base}}` → (bug: reproducir con `replication.md`) → implementa → `verify-task` → `document-task` → aplasta en un commit → `om-developer notes` → `SendMessage` al om-reviewer: `round 1 ready, commit {{sha}}`.
 8. om-reviewer corre `review-task` (ver Pipeline) sobre el worktree.
    Si hay hallazgos, se los manda al om-developer; el om-developer corrige, re-corre `verify-task`, aplasta, avisa "round 2".
    Se repite hasta que no haya hallazgos.
@@ -283,12 +283,12 @@ tmux kill-window -t task-0142
 ```
 
 En ambos casos el om-manager no commitea nada: la carpeta final llegó a la rama base con el merge del PR, y sin worktree la task se deriva como `done`.
-Antes de limpiar, el om-manager hace `git pull` en el checkout principal para traer ese estado final.
+Antes de limpiar, el om-manager hace `git pull` en el root checkout para traer ese estado final.
 Sebastian también puede pedirle al om-manager que limpie todas las ramas ya mergeadas de una vez.
 
 ### reiterate-task
 
-El om-manager anota los comentarios de Sebastian, fechados, en `retakes.md` de la copia del worktree (la task ya está delegada).
+El om-manager anota los comentarios de Sebastian, fechados, en `retakes.md` de la copia del workspace (la task ya está delegada).
 Vuelve a levantar el par om-reviewer + om-developer sobre el mismo branch, worktree y PR.
 Si el par sigue vivo, les avisa; si no, los relanza.
 El om-reviewer corre `analyze-task` incorporando los retakes (es lo único que vuelve a preguntar) y el ciclo continúa desde el paso 7.
@@ -352,8 +352,9 @@ Nivel (Low / Medium / High) y una frase de justificación.
 ## Escalamiento
 
 Solo existe en la fase de consolidación.
-Después, el om-reviewer decide todo dentro del alcance de la task y lo documenta en `Decisions`.
+Después, el om-reviewer decide todo dentro del alcance de la task y lo documenta en `Decisions` del PR.
 El único camino de vuelta es `reiterate-task` desde Sebastian a través del om-manager.
+La única excepción que sube toda la cadena (om-developer → om-reviewer → om-manager → `om-events`) es un bloqueo por falta de permisos, credenciales, entorno o herramientas, tipado `blocker`; ver [04-operacion.md](04-operacion.md).
 
 ## Paralelismo
 

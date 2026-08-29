@@ -12,7 +12,7 @@ disable-model-invocation: false
 
 Run the Pipeline on the om-developer's latest round in the worktree: intent, rebase, verify-task on the final
 commit, code review, documentation, and for bugs the replication steps. Sends findings to the om-developer or,
-when clean, runs publish-task. om-reviewer only; runs on every "round N ready".
+when clean, runs publish-task. om-reviewer only; runs on every `round {{N}} ready, commit {{sha}}`.
 
 Input: the om-developer's message `round {{N}} ready, commit {{sha}}`.
 Output: either one findings message to the om-developer, or `publish-task`.
@@ -73,7 +73,7 @@ Missing or stale docs are findings.
 
 Run `replication.md` steps end-to-end as a user would, on `{{sha}}`.
 The observed behavior must now match Expected.
-Record date, commit and result under `om-reviewer verification` in `replication.md` (worktree copy).
+Record date, commit and result under `om-reviewer verification` in `replication.md` (workspace copy).
 A fix that does not make the steps pass is a finding.
 
 ## 7. Outcome
@@ -95,4 +95,4 @@ No findings: run `publish-task`.
 - Never fix anything yourself.
 - Never soften a finding because the round count is high.
 - Never trust the om-developer's report of lint, tests or docs; check.
-- Never review before `round N ready` arrives; never review a commit other than the one named.
+- Never review before `round {{N}} ready, commit {{sha}}` arrives; never review a commit other than the one named.

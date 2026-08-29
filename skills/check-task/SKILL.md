@@ -27,7 +27,7 @@ Repos to inspect: `repos` plus the root in multirepo.
 |---|---|
 | folder | task folder exists in the root checkout |
 | workspace | `WORKSPACE` exists |
-| context | `Context & decisions` non-empty (root worktree copy if the workspace exists, else root checkout copy) |
+| context | `Context & decisions` non-empty (root workspace copy if the workspace exists, else root checkout copy) |
 | ahead | any repo: `git -C {{WORKSPACE}}/{{name}} rev-list --count origin/{{base}}..HEAD` > 0 |
 | om-developer | `claude agents` or panes of `task-{{id}}` show `om-{{id}}-developer*` |
 | prs | per repo: `gh -R {{owner/repo}} pr list --head {{branch}} --state all --json number,state,mergedAt,url` |

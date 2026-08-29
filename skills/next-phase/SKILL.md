@@ -42,7 +42,7 @@ git checkout -b {{prefix}}/{{id}}_{{title}}-phase-{{N+1}} origin/{{base}}
 
 ## 4. Write `Result` of phase N
 
-In `docs/tasks/{{id}}_{{title}}/phase_{{N}}.md` (worktree copy, now on the new branch), fill `Result`: outcome, deviations from the plan, debt created, anything phase N+1 must know.
+In `docs/tasks/{{id}}_{{title}}/phase_{{N}}.md` (workspace copy, now on the new branch), fill `Result`: outcome, deviations from the plan, debt created, anything phase N+1 must know.
 It travels in phase N+1's PR.
 If N+1 is the last phase, remember its own `Result` will have no PR to travel in: put it in that PR's comment instead.
 

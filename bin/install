@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# install: link the global roles, the skills and the scripts into ~/.claude and ~/bin. Idempotent.
+set -euo pipefail
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+mkdir -p ~/.claude/agents ~/.claude/skills ~/bin
+
+link() { # link <target> <linkpath>
+  if [[ -L "$2" ]]; then
+    [[ "$(readlink -f "$2")" == "$(readlink -f "$1")" ]] && { echo "ok      $2"; return; }
+    rm "$2"
+  elif [[ -e "$2" ]]; then
+    echo "SKIP    $2 exists and is not a symlink" >&2; return
+  fi
+  ln -s "$1" "$2" && echo "linked  $2 -> $1"
+}
+
+for a in "$root"/agents/*.md; do link "$a" ~/.claude/agents/"$(basename "$a")"; done
+for s in "$root"/skills/*/; do s="${s%/}"; link "$s" ~/.claude/skills/"$(basename "$s")"; done
+for b in resume-project resume-overmind; do link "$root/bin/$b" ~/bin/"$b"; done
+
+case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac
+echo "done. Cockpit agents (overmind, om-events, om-config) stay project-scoped in $root/.claude/agents."

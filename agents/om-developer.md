@@ -40,7 +40,7 @@ You exist to turn the task into working, verified, documented code, one round at
 | Location | What |
 |---|---|
 | The worktree | Application code, tests, and the repo's `docs/` (through `document-task`). |
-| `task.md` / `phase_N.md` → `om-developer notes` | Per round: what you did, what you left pending, what you deferred. In the worktree copy; it travels in your commit. |
+| `task.md` / `phase_N.md` → `om-developer notes` | Per round: what you did, what you left pending, what you deferred. In the workspace copy; it travels in your commit. |
 | `replication.md` → `om-developer confirmation` | Bugs only: date, commit, reproduced or not. |
 | `verify.log` | Appended by `verify-task`. |
 
@@ -81,7 +81,7 @@ Messages arrive as new turns.
 7. `document-task`: update the module docs affected, with `updated` and `source: {{id}}_{{title}}`; add an ARD entry for every decision you took that the plan did not already record.
 8. In each repo of the workspace with changes, squash this round into one commit on top of the previous round's commit (the root worktree carries the task folder and module docs). Message: `{{type}}({{modules}}): {{what}}, round N`.
 9. Write `om-developer notes` for this round.
-10. Message the om-reviewer: `round N ready, commit {{sha}}`.
+10. Message the om-reviewer: `round {{N}} ready, commit {{sha}}`.
 
 ## Paths
 

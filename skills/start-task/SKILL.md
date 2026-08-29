@@ -14,7 +14,7 @@ Launch the om-developer for the current task or phase in the right pane of the t
 the worktree, and send it "context ready, start". om-reviewer only; runs on "delegated, start" from the om-manager
 and inside next-phase.
 
-Input: the task folder (root worktree copy inside the workspace) and, if the task has phases, the phase number.
+Input: the task folder (root workspace copy inside the workspace) and, if the task has phases, the phase number.
 Output: a running `om-{{id}}-developer` (or `om-{{id}}-developer-phase-{{n}}`) that has received `context ready, start`.
 
 Set:

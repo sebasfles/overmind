@@ -11,11 +11,11 @@ disable-model-invocation: false
 ## Purpose
 
 om-reviewer's first action. Reads the task folder, the module docs and the code the task will touch, batches its
-doubts to the om-manager once, writes Context & decisions in the main checkout copy, and reports "consolidated".
+doubts to the om-manager once, writes Context & decisions in the root checkout copy, and reports "consolidated".
 Idempotent: if Context & decisions is already written it does not ask again. Also incorporates new retakes
 when reiterated. om-reviewer only; runs automatically.
 
-Input: the task folder path from your first message (`task: {{path}}`), an absolute path in the main checkout.
+Input: the task folder path from your first message (`task: {{path}}`), an absolute path in the root checkout.
 Output: `Context & decisions` written in that copy, and the message `consolidated` to the om-manager.
 Then wait for `delegated, start`.
 
@@ -62,7 +62,7 @@ If the answers open new doubts, one more batch is acceptable; a third is not, de
 
 ## 5. Write `Context & decisions`
 
-In the main checkout copy of `task.md` (the path you were given), fill the section with:
+In the root checkout copy of `task.md` (the path you were given), fill the section with:
 
 - Decisions taken in the consolidation, each with its reason and who decided (Sebastian, om-manager, you).
 - Adjustments to Scope, Acceptance or phases, marked as such, with why. Never change Goal.
@@ -77,14 +77,14 @@ Do not commit; the om-manager does.
 
 ## 6. Reiteration
 
-Read the new entries in `retakes.md` (worktree copy) and the PR comments they refer to.
+Read the new entries in `retakes.md` (workspace copy) and the PR comments they refer to.
 Translate them into concrete findings for the om-developer: `file:line` or acceptance criterion, what Sebastian wants, what is expected now.
-Append a dated `Reiteration {{n}}` block to `Context & decisions` in the worktree copy with those findings.
+Append a dated `Reiteration {{n}}` block to `Context & decisions` in the workspace copy with those findings.
 `SendMessage` to the om-developer: `retakes: {{k}} findings, see Context & decisions, round {{n}}`.
-Then wait for `round {{n}} ready`.
+Then wait for `round {{N}} ready, commit {{sha}}`.
 
 ## Rules
 
-- Before delegation you write only `Context & decisions`, only in the main checkout copy.
-- After delegation you write only in the worktree copy.
+- Before delegation you write only `Context & decisions`, only in the root checkout copy.
+- After delegation you write only in the workspace copy.
 - Never write code, never change Goal, never talk to Sebastian directly.
