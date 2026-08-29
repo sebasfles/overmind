@@ -116,7 +116,7 @@ Nombres definitivos, que reemplazan a los usados provisionalmente en conversacio
 | `implement-specs-{nestjs,nextjs,rails,react-native}` | Se absorben en `execute-task` con `references/{{stack}}.md`. |
 | `pr-reviews` | Se absorbe en `review-task`. |
 | `address-pr-comments-nestjs` | Se absorbe en `reiterate-task` + `execute-task` (modo corregir). |
-| `ds-write-prd`, `ds-write-trd` | Pasan a `write-prd`, `write-trd`. `ds-write-trd` hay que reescribirlo (hoy es copia del PRD). |
+| `ds-write-prd`, `ds-write-trd` | Reemplazadas por `write-prd`, `write-trd`, escritas de cero. |
 
 ## Pendientes derivados
 
@@ -139,3 +139,5 @@ Todas escritas como borrador en `skills/`, pendientes de piloto.
 Agentes en `agents/`: `overmind`, `manager`, `reviewer`, `developer`, `setup-worker` (subagente que `setup` usa para documentar un módulo con contexto limpio).
 
 Pendiente de contenido: `references/{{stack}}.md` de `execute-task` y `verify-task` (nestjs, nextjs, rails, react-native).
+Se escriben cuando el primer proyecto de cada stack pase por `setup`; el TRD del proyecto es la fuente y el reference solo el fallback.
+Las skills previas de `~/.claude/skills/` fueron eliminadas por Sebastian el 2026-08-29 por no usarse.

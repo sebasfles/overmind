@@ -10,4 +10,4 @@ Planned:
 - `rails.md`
 - `react-native.md`
 
-Content comes from the current `implement-specs-*` skills, trimmed to what is stack-specific.
+Written when the first project of each stack goes through `setup`; the project's `docs/TRD.md` is the source, the reference is the fallback for projects that lack a section.
