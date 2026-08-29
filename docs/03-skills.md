@@ -123,3 +123,19 @@ Nombres definitivos, que reemplazan a los usados provisionalmente en conversacio
 - Escribir `~/.claude/agents/manager.md`, `reviewer.md` y `developer.md` con la lista de skills permitidas y la máquina de estado de cada rol.
 - Definir el formato exacto de `verify.log`.
 - Definir el formato del mensaje de hallazgos del reviewer al developer.
+
+## Inventario (2026-08-29)
+
+Todas escritas como borrador en `skills/`, pendientes de piloto.
+
+| Rol | Skills |
+|---|---|
+| Manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work` |
+| Reviewer | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
+| Developer | `execute-task`, `document-task` |
+| Compartida | `verify-task` |
+| Overmind | `add-project` (con `pause` y `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
+
+Agentes en `agents/`: `overmind`, `manager`, `reviewer`, `developer`, `setup-worker` (subagente que `setup` usa para documentar un módulo con contexto limpio).
+
+Pendiente de contenido: `references/{{stack}}.md` de `execute-task` y `verify-task` (nestjs, nextjs, rails, react-native).

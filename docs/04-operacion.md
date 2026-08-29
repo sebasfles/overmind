@@ -64,7 +64,7 @@ projects:
 
 ### resume-project
 
-Es un script de shell determinista; la skill es un envoltorio fino que lo llama con el nombre del proyecto.
+Es un script de shell determinista (`bin/resume-project`); la skill es un envoltorio fino que lo llama con el nombre del proyecto.
 Funciona también como comando directo, sin la cabina.
 
 Entorno verificado el 2026-08-28: Windows Terminal (`WT_SESSION` definido), `wt.exe` invocable desde WSL, distro `Ubuntu`, tmux 3.4.
@@ -119,7 +119,8 @@ Almacenamiento: `portfolio/todos.md`, Markdown plano, legible y editable sin el 
 
 ### Contenido de los agentes
 
-`~/.claude/agents/manager.md`, `reviewer.md`, `developer.md`, `overmind.md`.
+`agents/manager.md`, `reviewer.md`, `developer.md`, `overmind.md` y `setup-worker.md`, en el repo `overmind`, con symlinks desde `~/.claude/agents/`.
+Escritos como borrador el 2026-08-29; ver `03-skills.md`.
 Cada uno con: descripción del rol, skills permitidas, herramientas permitidas, modo de permisos, máquina de estado (para reviewer y developer), y reglas de qué nunca hace.
 
 ### `~/OPINIONS.md`: descartado
