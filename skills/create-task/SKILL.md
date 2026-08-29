@@ -1,6 +1,6 @@
 ---
 name: create-task
-description: Write an approved plan as a task folder under docs/tasks/. Manager; runs after plan-task is approved.
+description: Write an approved plan as a task folder under docs/tasks/. om-manager; runs after plan-task is approved.
 argument-hint: "[PLAN_FILE]"
 disable-model-invocation: false
 ---
@@ -10,7 +10,7 @@ disable-model-invocation: false
 ## Purpose
 
 Write an approved plan to disk as a task folder under docs/tasks/{{id}}_{{title}}/ with task.md,
-replication.md for bugs and one phase_N.md per phase, uncommitted. Then offer consolidate-task. Manager only;
+replication.md for bugs and one phase_N.md per phase, uncommitted. Then offer consolidate-task. om-manager only;
 normally invoked by plan-task after approval.
 
 Input: the plan approved in this conversation by `plan-task`, or `$ARGUMENTS[0]`, a plan file (normally `docs/tasks/_drafts/{{title}}.md`).
@@ -22,7 +22,7 @@ Output: `docs/tasks/{{id}}_{{title}}/` in the main checkout, uncommitted, and th
 
 It lives in the main checkout of the repository, not in a worktree.
 It is tracked by git. Before delegation a task folder is written here; after delegation only in the task's worktree copy.
-Only the manager commits here, once per task, at the end of `consolidate-task`.
+Only the om-manager commits here, once per task, at the end of `consolidate-task`.
 `docs/tasks/_drafts/` is not tracked.
 If the folder does not exist, create it and add `docs/tasks/_drafts/` to `.gitignore`.
 
@@ -55,14 +55,14 @@ updated: 2026-08-28
 Branch prefix by type: `feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/`.
 
 Body sections, in this order, from the plan: Goal, Scope, Out of scope, Acceptance, Approach, Database, Infra, Design, Risks, Depends on.
-Then two empty sections the reviewer and the developer will own: `Context & decisions` and `Developer notes`.
+Then two empty sections the om-reviewer and the om-developer will own: `Context & decisions` and `om-developer notes`.
 Do not fill those two.
 
 ## 4. Write `replication.md` for bugs
 
 Only when `type: bug`.
 Read `templates/replication.md` and fill it from the plan's Replication section: preconditions, exact steps, expected, observed, environment, evidence.
-The developer runs these steps before touching code; the reviewer verifies the fix against them.
+The om-developer runs these steps before touching code; the om-reviewer verifies the fix against them.
 
 ## 5. Write phases, if any
 
@@ -74,7 +74,7 @@ branch: feat/0142_badge_wall-phase-1
 updated: 2026-08-28
 ```
 
-Body: Scope, Acceptance, then empty `Developer notes` and `Result`.
+Body: Scope, Acceptance, then empty `om-developer notes` and `Result`.
 When there are phases, `task.md` keeps `branch` empty and `phases` set to the count.
 
 ## 6. Check overlaps
@@ -90,7 +90,7 @@ If the plan came from `docs/tasks/_drafts/{{title}}.md`, delete that file now; t
 
 Print the folder path and the frontmatter in a few lines.
 Nothing is committed yet; that happens at the end of `consolidate-task`, with Sebastian's approval.
-Ask: "¿La consolido con el reviewer ahora?"
+Ask: "¿La consolido con el om-reviewer ahora?"
 If yes, invoke `consolidate-task` with the folder path.
 If no, stop; the folder stays uncommitted in the main checkout and shows up in `check-work` as `planned`.
 There is no status field; `check-task` derives every state.
@@ -99,6 +99,6 @@ There is no status field; `check-task` derives every state.
 
 - Never write anything outside `docs/tasks/{{id}}_{{title}}/`, `docs/tasks/_drafts/` and `.gitignore`.
 - Never commit; `consolidate-task` does.
-- Never change an existing task folder; that is `reiterate-task` or the reviewer's job.
+- Never change an existing task folder; that is `reiterate-task` or the om-reviewer's job.
 - Copy the plan faithfully; do not add, drop or reinterpret anything Sebastian approved.
 - Files are in English.

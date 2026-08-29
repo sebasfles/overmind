@@ -1,6 +1,6 @@
 ---
 name: write-prd
-description: Write or update the product requirements (general PRD.md or a module's prd.md). Used by setup and setup-worker.
+description: Write or update the product requirements (general PRD.md or a module's prd.md). Used by setup and om-setup-worker.
 argument-hint: "[general | MODULE_NAME] [OVERVIEW_FILE] [DESIGN_FOLDER]"
 disable-model-invocation: false
 ---
@@ -12,7 +12,7 @@ disable-model-invocation: false
 Write or update the Product Requirements Document: the general docs/PRD.md (what the product is, for whom, its
 modules as capabilities) and per-module prd.md (what the module does for the user and why). No engineering
 detail. Sources: an overview document, designs, the code's user-facing surface. Edits in place. Used by setup;
-manager scope.
+om-manager scope.
 
 Input: `general` or a module name; optionally an overview document (`overview.md` or similar) and a folder of design images.
 Output: `docs/PRD.md` or `docs/modules/{{module}}/prd.md`, written or updated in place, with `updated` and `source` frontmatter.

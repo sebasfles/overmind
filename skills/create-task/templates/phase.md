@@ -14,10 +14,10 @@ updated: {{YYYY-MM-DD}}
 
 1. {{observable, testable criterion for this phase}}
 
-## Developer notes
+## om-developer notes
 
-{{Owned by the developer. What was done, what was left pending, per round.}}
+{{Owned by the om-developer. What was done, what was left pending, per round.}}
 
 ## Result
 
-{{Owned by the reviewer. Written when the phase is merged: outcome, deviations from plan, debt created.}}
+{{Owned by the om-reviewer. Written when the phase is merged: outcome, deviations from plan, debt created.}}

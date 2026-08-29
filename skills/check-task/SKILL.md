@@ -1,6 +1,6 @@
 ---
 name: check-task
-description: Derive one task's state from disk, git and gh. Manager; when Sebastian asks about a task.
+description: Derive one task's state from disk, git and gh. om-manager; when Sebastian asks about a task.
 argument-hint: "[TASK_ID_OR_FOLDER]"
 disable-model-invocation: false
 ---
@@ -11,7 +11,7 @@ disable-model-invocation: false
 
 Derive the state of one task from disk, git and gh without asking any session: planned, consolidating,
 consolidated, in_progress, in_review, merged or done, across every repo the task touches, per phase when the
-task has phases. Manager only; may run on its own when Sebastian asks about a task.
+task has phases. om-manager only; may run on its own when Sebastian asks about a task.
 
 Input: a task id (`0142`) or a task folder path.
 Output: one line per task (or per phase), nothing else.
@@ -28,7 +28,7 @@ Repos to inspect: `repos` plus the root in multirepo.
 | workspace | `WORKSPACE` exists |
 | context | `Context & decisions` non-empty (root worktree copy if the workspace exists, else root checkout copy) |
 | ahead | any repo: `git -C {{WORKSPACE}}/{{name}} rev-list --count origin/{{base}}..HEAD` > 0 |
-| developer | `claude agents` or panes of `task-{{id}}` show `task-{{id}}-developer*` |
+| om-developer | `claude agents` or panes of `task-{{id}}` show `om-{{id}}-developer*` |
 | prs | per repo: `gh -R {{owner/repo}} pr list --head {{branch}} --state all --json number,state,mergedAt,url` |
 
 With phases, evaluate `ahead` and `prs` per phase branch; the current phase is the first without all PRs merged.
@@ -42,7 +42,7 @@ First match wins:
 | every expected PR merged (code repos touched, plus root in multirepo) and no workspace | `done` |
 | every expected PR merged and workspace exists | `merged` (pending `clean-task`) |
 | any PR open | `in_review` |
-| ahead or developer | `in_progress` |
+| ahead or om-developer | `in_progress` |
 | workspace and context | `consolidated` |
 | workspace and no context | `consolidating` |
 | folder only | `planned` |

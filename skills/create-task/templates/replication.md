@@ -27,10 +27,10 @@
 
 - {{ logs, screenshots, request ids, links }}
 
-## Developer confirmation
+## om-developer confirmation
 
-{{ Owned by the developer. Date and result of running the steps before the fix: reproduced or not, and on which commit. }}
+{{ Owned by the om-developer. Date and result of running the steps before the fix: reproduced or not, and on which commit. }}
 
-## Reviewer verification
+## om-reviewer verification
 
-{{ Owned by the reviewer. Date and result of running the steps after the fix. }}
+{{ Owned by the om-reviewer. Date and result of running the steps after the fix. }}

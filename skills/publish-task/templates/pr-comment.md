@@ -10,7 +10,7 @@
 
 ## Decisions
 
-- {{decision taken by the reviewer after consolidation}}: {{reason}}
+- {{decision taken by the om-reviewer after consolidation}}: {{reason}}
 - Let pass: {{questionable thing}}: {{why it is acceptable}}
 
 ## Risk assessment

@@ -65,8 +65,8 @@ updated: {{YYYY-MM-DD}}
 
 ## Context & decisions
 
-{{Owned by the reviewer. Written during analyze-task, before the developer starts.}}
+{{Owned by the om-reviewer. Written during analyze-task, before the om-developer starts.}}
 
-## Developer notes
+## om-developer notes
 
-{{Owned by the developer. What was done, what was left pending, per round.}}
+{{Owned by the om-developer. What was done, what was left pending, per round.}}

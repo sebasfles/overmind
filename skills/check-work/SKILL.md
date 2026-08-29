@@ -1,6 +1,6 @@
 ---
 name: check-work
-description: "The project's task board: every task, grouped by state. Manager; at session start and when Sebastian asks how things are."
+description: "The project's task board: every task, grouped by state. om-manager; at session start and when Sebastian asks how things are."
 disable-model-invocation: false
 ---
 
@@ -9,7 +9,7 @@ disable-model-invocation: false
 ## Purpose
 
 The project's task board: check-task over every task folder, grouped by state, one line per task. Also lists
-drafts and stale worktrees. Manager only; runs at session start via initialPrompt and whenever Sebastian asks
+drafts and stale worktrees. om-manager only; runs at session start via initialPrompt and whenever Sebastian asks
 how things are.
 
 Input: none.

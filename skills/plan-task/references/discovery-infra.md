@@ -18,7 +18,7 @@ Infra changes are often part of a feature task (a new queue, a bucket, a secret)
 ## Configuration and secrets
 
 - New env vars and where each environment gets its value.
-- Secrets: created in the secrets manager, never in the repo or in tfvars committed to git.
+- Secrets: created in the secrets om-manager, never in the repo or in tfvars committed to git.
 - Rotation and who can read them.
 
 ## Access and network

@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Create or reconcile the project's documentation convention (docs/, CLAUDE.md). Manager; Sebastian invokes it on new or undocumented projects.
+description: Create or reconcile the project's documentation convention (docs/, CLAUDE.md). om-manager; Sebastian invokes it on new or undocumented projects.
 argument-hint: "[check | fill] [OVERVIEW_FILE] [DESIGN_FOLDER]"
 disable-model-invocation: true
 ---
@@ -10,10 +10,10 @@ disable-model-invocation: true
 ## Purpose
 
 Create or reconcile the documentation convention in a project: detect stack, modules and the state of docs/,
-report the gap between ideal and actual, fill it (general TRD, then every module in parallel with setup-worker
+report the gap between ideal and actual, fill it (general TRD, then every module in parallel with om-setup-worker
 subagents, then general PRD and ARD), write the short CLAUDE.md, collect every [inferido] for Sebastian, and
 commit with his approval. Idempotent: works on an empty repo, an old one without docs, or a partial one.
-Manager only; Sebastian invokes it.
+om-manager only; Sebastian invokes it.
 
 Input: optional mode (`check` only reports; `fill` reports and then fills, the default), and optionally an overview document and a design folder for the PRD.
 Output: `docs/` matching the convention, `CLAUDE.md` short, a list of `[inferido]` items for Sebastian, one commit on the base branch.
@@ -69,7 +69,7 @@ In `check` mode, stop here.
 Order matters because later documents index earlier ones.
 
 1. General TRD: run `write-trd general`. It needs the confirmed components and modules, and produces the verification targets and workspace files per component. If anything comes out `unknown`, ask Sebastian now.
-2. Modules, in parallel: one `setup-worker` subagent per module, each with a clean context and this brief:
+2. Modules, in parallel: one `om-setup-worker` subagent per module, each with a clean context and this brief:
    - module name and root path, the confirmed module list, the base branch.
    - run `write-trd {{module}}`, `write-prd {{module}}` (pass overview and designs if given), `write-ard {{module}}`.
    - write `README.md` from `templates/module-README.md` and `database.md` from `templates/module-database.md`; write `flows.md` from `templates/module-flows.md` only if the module has a flow worth a state or sequence diagram.

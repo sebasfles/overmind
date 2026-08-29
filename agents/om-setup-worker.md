@@ -1,5 +1,5 @@
 ---
-name: setup-worker
+name: om-setup-worker
 description: "Subagent of setup: documents one module of a project with a clean context and returns its [inferido] items."
 model: opus
 effort: high

@@ -1,6 +1,6 @@
 ---
 name: analyze-task
-description: Read the task, ask the manager once, write Context & decisions. Reviewer; runs automatically at session start and on retakes.
+description: Read the task, ask the om-manager once, write Context & decisions. om-reviewer; runs automatically at session start and on retakes.
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
 ---
@@ -9,19 +9,19 @@ disable-model-invocation: false
 
 ## Purpose
 
-Reviewer's first action. Reads the task folder, the module docs and the code the task will touch, batches its
-doubts to the manager once, writes Context & decisions in the main checkout copy, and reports "consolidated".
+om-reviewer's first action. Reads the task folder, the module docs and the code the task will touch, batches its
+doubts to the om-manager once, writes Context & decisions in the main checkout copy, and reports "consolidated".
 Idempotent: if Context & decisions is already written it does not ask again. Also incorporates new retakes
-when reiterated. Reviewer only; runs automatically.
+when reiterated. om-reviewer only; runs automatically.
 
 Input: the task folder path from your first message (`task: {{path}}`), an absolute path in the main checkout.
-Output: `Context & decisions` written in that copy, and the message `consolidated` to the manager.
+Output: `Context & decisions` written in that copy, and the message `consolidated` to the om-manager.
 Then wait for `delegated, start`.
 
 ## 0. Which mode
 
 - `Context & decisions` empty and no `retakes.md`: consolidation. Steps 1 to 5.
-- `Context & decisions` written and no new retakes: relaunch after a lost session. Steps 1 and 2, then confirm to the manager `consolidated (context already on disk)` and stop.
+- `Context & decisions` written and no new retakes: relaunch after a lost session. Steps 1 and 2, then confirm to the om-manager `consolidated (context already on disk)` and stop.
 - `retakes.md` has entries newer than your last round: reiteration. Steps 1, 2 and 6.
 
 ## 1. Read the task
@@ -52,9 +52,9 @@ Look for, in this order:
 Do not ask what the docs or the code already answer.
 Do not ask about implementation details you can decide yourself later.
 
-## 4. One batched message to the manager
+## 4. One batched message to the om-manager
 
-`SendMessage` to `{{project}}-manager`, once, with all your doubts grouped by topic, each with your recommendation.
+`SendMessage` to `om-{{project}}-manager`, once, with all your doubts grouped by topic, each with your recommendation.
 Pointers, not content: cite `task.md#Acceptance 3` or `docs/modules/billing/ard.md`, do not paste them.
 Wait for the answers.
 If the answers open new doubts, one more batch is acceptable; a third is not, decide yourself and record it.
@@ -63,23 +63,23 @@ If the answers open new doubts, one more batch is acceptable; a third is not, de
 
 In the main checkout copy of `task.md` (the path you were given), fill the section with:
 
-- Decisions taken in the consolidation, each with its reason and who decided (Sebastian, manager, you).
+- Decisions taken in the consolidation, each with its reason and who decided (Sebastian, om-manager, you).
 - Adjustments to Scope, Acceptance or phases, marked as such, with why. Never change Goal.
-- Constraints from `ard.md` and `trd.md` the developer must respect, cited by path.
+- Constraints from `ard.md` and `trd.md` the om-developer must respect, cited by path.
 - What you will check in `review-task` beyond the Pipeline, if anything specific.
 - For bugs: any correction to `replication.md` preconditions or steps.
 
 Keep it under 40 lines.
-Then `SendMessage` to the manager: `consolidated`.
+Then `SendMessage` to the om-manager: `consolidated`.
 Do not touch any other file.
-Do not commit; the manager does.
+Do not commit; the om-manager does.
 
 ## 6. Reiteration
 
 Read the new entries in `retakes.md` (worktree copy) and the PR comments they refer to.
-Translate them into concrete findings for the developer: `file:line` or acceptance criterion, what Sebastian wants, what is expected now.
+Translate them into concrete findings for the om-developer: `file:line` or acceptance criterion, what Sebastian wants, what is expected now.
 Append a dated `Reiteration {{n}}` block to `Context & decisions` in the worktree copy with those findings.
-`SendMessage` to the developer: `retakes: {{k}} findings, see Context & decisions, round {{n}}`.
+`SendMessage` to the om-developer: `retakes: {{k}} findings, see Context & decisions, round {{n}}`.
 Then wait for `round {{n}} ready`.
 
 ## Rules

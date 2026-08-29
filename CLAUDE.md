@@ -6,7 +6,7 @@ Method and state live together here; `~/.claude` only holds symlinks into this r
 ## Layout
 
 - `docs/`: the plan and its decisions. Start with `docs/01-documentacion.md`, then `02`, `03`, `04`.
-- `agents/`: role definitions (`overmind`, `manager`, `reviewer`, `developer`). Symlinked from `~/.claude/agents/`.
+- `agents/`: role definitions (`overmind`, `om-manager`, `om-reviewer`, `om-developer`). Symlinked from `~/.claude/agents/`.
 - `skills/`: one folder per skill. Symlinked from `~/.claude/skills/`.
 - `bin/`: deterministic scripts (`resume-project`). Symlinked from `~/bin/`.
 - `portfolio/`: state. `projects.yaml` is the project registry, `todos.md` the quick-capture list.

@@ -1,6 +1,6 @@
 ---
 name: document-task
-description: Update the module docs affected by the round, with updated and source. Developer; at the end of every execute-task round.
+description: Update the module docs affected by the round, with updated and source. om-developer; at the end of every execute-task round.
 disable-model-invocation: false
 ---
 
@@ -10,7 +10,7 @@ disable-model-invocation: false
 
 Update the module documentation affected by the current round: prd.md, trd.md, ard.md, database.md, flows.md
 of each module touched, with updated and source frontmatter, and one ARD entry per decision not already
-recorded. Developer only; runs at the end of every execute-task round.
+recorded. om-developer only; runs at the end of every execute-task round.
 
 Input: the diff of the current round against `origin/{{base}}` and the task folder.
 Output: `docs/modules/{{module}}/*.md` updated for every module the round touched, in the worktree.
@@ -21,7 +21,7 @@ Derivable facts (columns, types, request and response shapes) are generated else
 ## 1. Which modules
 
 `modules` from `task.md`, plus any module whose code the diff touched that the plan did not list.
-If the diff touches a module with no `docs/modules/{{module}}/` folder, create it from `templates/` and say so in `Developer notes`; the plan missed it.
+If the diff touches a module with no `docs/modules/{{module}}/` folder, create it from `templates/` and say so in `om-developer notes`; the plan missed it.
 
 ## 2. Per module, per file
 
@@ -63,16 +63,16 @@ Read `templates/ard-entry.md` and fill it:
 - Source: {{id}}_{{title}}
 ```
 
-If a decision changes a global one in `docs/ARD.md`, do not edit `docs/ARD.md`; add the module entry and flag it in `Developer notes` for the reviewer.
+If a decision changes a global one in `docs/ARD.md`, do not edit `docs/ARD.md`; add the module entry and flag it in `om-developer notes` for the om-reviewer.
 
 ## 4. Check
 
-Every module in the diff has its docs touched or a one-line justification in `Developer notes` of why nothing changed.
+Every module in the diff has its docs touched or a one-line justification in `om-developer notes` of why nothing changed.
 `updated` and `source` are set on every file you edited.
 Nothing in the docs restates code.
 
 ## Rules
 
-- Only files under `docs/modules/`; the general `docs/PRD.md`, `TRD.md`, `ARD.md` are `setup`'s and the manager's.
+- Only files under `docs/modules/`; the general `docs/PRD.md`, `TRD.md`, `ARD.md` are `setup`'s and the om-manager's.
 - Never touch `docs/tasks/`; that is not documentation.
 - Files are in English.

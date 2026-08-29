@@ -1,6 +1,6 @@
 ---
 name: review-task
-description: "Run the Pipeline on the developer's round and send findings or publish. Reviewer; on every \"round N ready\"."
+description: "Run the Pipeline on the om-developer's round and send findings or publish. om-reviewer; on every \"round N ready\"."
 argument-hint: "[ROUND]"
 disable-model-invocation: false
 ---
@@ -9,12 +9,12 @@ disable-model-invocation: false
 
 ## Purpose
 
-Run the Pipeline on the developer's latest round in the worktree: intent, rebase, verify-task on the final
-commit, code review, documentation, and for bugs the replication steps. Sends findings to the developer or,
-when clean, runs publish-task. Reviewer only; runs on every "round N ready".
+Run the Pipeline on the om-developer's latest round in the worktree: intent, rebase, verify-task on the final
+commit, code review, documentation, and for bugs the replication steps. Sends findings to the om-developer or,
+when clean, runs publish-task. om-reviewer only; runs on every "round N ready".
 
-Input: the developer's message `round {{N}} ready, commit {{sha}}`.
-Output: either one findings message to the developer, or `publish-task`.
+Input: the om-developer's message `round {{N}} ready, commit {{sha}}`.
+Output: either one findings message to the om-developer, or `publish-task`.
 
 You review the worktree at `{{sha}}`.
 You never modify code.
@@ -40,7 +40,7 @@ If false, finding: `rebase on origin/{{base}} required`.
 
 Run `verify-task` yourself on `{{sha}}`; it appends to `verify.log`.
 Any red result is a finding with the failing command and the first relevant error lines.
-Also open `verify.log` and check the developer's last entry is at `{{sha}}` and green; if the developer did not run it after its last change, that is a finding on its own.
+Also open `verify.log` and check the om-developer's last entry is at `{{sha}}` and green; if the om-developer did not run it after its last change, that is a finding on its own.
 
 ## 4. Review the code
 
@@ -64,7 +64,7 @@ For each module in `modules`:
 
 - `docs/modules/{{module}}/*.md` touched by `document-task` have `updated` today and `source: {{id}}_{{title}}`.
 - `trd.md` reflects new or changed endpoints; `database.md` reflects new tables, columns or invariants; `flows.md` if a complex flow changed.
-- `ard.md` has an entry for every decision the developer took that `Approach` and `Context & decisions` did not already record.
+- `ard.md` has an entry for every decision the om-developer took that `Approach` and `Context & decisions` did not already record.
 
 Missing or stale docs are findings.
 
@@ -72,12 +72,12 @@ Missing or stale docs are findings.
 
 Run `replication.md` steps end-to-end as a user would, on `{{sha}}`.
 The observed behavior must now match Expected.
-Record date, commit and result under `Reviewer verification` in `replication.md` (worktree copy).
+Record date, commit and result under `om-reviewer verification` in `replication.md` (worktree copy).
 A fix that does not make the steps pass is a finding.
 
 ## 7. Outcome
 
-Findings: one `SendMessage` to the developer:
+Findings: one `SendMessage` to the om-developer:
 
 ```
 round {{N}} findings: {{k}}
@@ -93,5 +93,5 @@ No findings: run `publish-task`.
 
 - Never fix anything yourself.
 - Never soften a finding because the round count is high.
-- Never trust the developer's report of lint, tests or docs; check.
+- Never trust the om-developer's report of lint, tests or docs; check.
 - Never review before `round N ready` arrives; never review a commit other than the one named.

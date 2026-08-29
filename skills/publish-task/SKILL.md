@@ -1,6 +1,6 @@
 ---
 name: publish-task
-description: Push, open one PR per repo and write the summary comment on the root PR. Reviewer; when review-task finds no issues.
+description: Push, open one PR per repo and write the summary comment on the root PR. om-reviewer; when review-task finds no issues.
 disable-model-invocation: false
 ---
 
@@ -10,11 +10,11 @@ disable-model-invocation: false
 
 Push every branch of the task workspace, open one PR per repo touched (plus the root docs repo in multirepo
 projects), and write or update the single summary comment on the root repo's PR (Intent, What changed with
-links to each code PR, Decisions, Risk assessment, Pipeline per target). Notifies the manager. Reviewer only;
+links to each code PR, Decisions, Risk assessment, Pipeline per target). Notifies the om-manager. om-reviewer only;
 runs when review-task finds no issues.
 
 Input: a clean `review-task` on the workspace's current commits.
-Output: all branches pushed, one PR per repo, one summary comment on the root PR, manager notified.
+Output: all branches pushed, one PR per repo, one summary comment on the root PR, om-manager notified.
 
 `ROOT_WT` as in `delegate-task`.
 In single and mono the root PR is the code PR; there is only one.
@@ -59,8 +59,8 @@ Otherwise `gh pr comment {{number}} --body-file`.
 
 ## 4. Notify
 
-`SendMessage` to `{{project}}-manager`: `task {{id}}: PRs ready, summary at {{root PR url}} (phase {{k}} of {{m}})`.
-Do not message `overmind`; the manager does.
+`SendMessage` to `om-{{project}}-manager`: `task {{id}}: PRs ready, summary at {{root PR url}} (phase {{k}} of {{m}})`.
+Do not message `overmind`; the om-manager does.
 Do not write any state; `in_review` is derived from the open PRs.
 Then wait: for `retakes updated`, `phase N merged, continue`, or cleanup.
 

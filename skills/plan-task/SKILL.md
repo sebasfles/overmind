@@ -1,6 +1,6 @@
 ---
 name: plan-task
-description: Plan a piece of work with Sebastian into an approved plan. Manager; Sebastian invokes it before create-task.
+description: Plan a piece of work with Sebastian into an approved plan. om-manager; Sebastian invokes it before create-task.
 argument-hint: "[DESCRIPTION_OR_TICKET]"
 disable-model-invocation: true
 effort: high
@@ -12,7 +12,7 @@ effort: high
 
 Plan a piece of work with Sebastian for this project. Reads the project docs following the reading route, asks
 only what the docs cannot answer, and produces an approved plan (goal, scope, acceptance, approach, phases).
-Ends by offering create-task. Manager only; Sebastian invokes it.
+Ends by offering create-task. om-manager only; Sebastian invokes it.
 
 Input: `$ARGUMENTS`, a free-text description from Sebastian, a ticket reference, or nothing (then ask what he wants to build).
 
@@ -42,7 +42,7 @@ Decide and state:
 - platform track(s): backend, frontend, mobile, infra. The TRD tells you. Infra is usually an extra track on top of a platform one.
 
 For `type: bug`, the plan must include a replication section: exact steps to reproduce end-to-end as a user would, expected vs observed, environment, evidence (logs, screenshots, ids).
-`create-task` writes it to `replication.md`; the developer must reproduce it before touching code and the reviewer verifies the fix against it.
+`create-task` writes it to `replication.md`; the om-developer must reproduce it before touching code and the om-reviewer verifies the fix against it.
 For `type: refactor`, acceptance is "behavior identical", stated as what must not change.
 
 ## 3. Discover, in batches
@@ -59,7 +59,7 @@ Load the track that applies from `references/` and use it as a checklist, not a 
 - `references/discovery-mobile.md`
 - `references/discovery-infra.md` (add it whenever the work touches IaC, environments, secrets, networking or CI/CD)
 
-If the description or ticket links a Figma file, note the link for the plan; the developer will pull design context from it.
+If the description or ticket links a Figma file, note the link for the plan; the om-developer will pull design context from it.
 
 ## 4. Draft the plan
 

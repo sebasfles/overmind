@@ -1,6 +1,6 @@
 ---
 name: complete-todo
-description: Move a todo from Open to Done in portfolio/todos.md. Overmind; Sebastian invokes it.
+description: Move a todo from Open to Done in portfolio/todos.md. overmind; Sebastian invokes it.
 argument-hint: "[TEXT_OR_NUMBER]"
 disable-model-invocation: true
 ---
@@ -10,7 +10,7 @@ disable-model-invocation: true
 ## Purpose
 
 Strike a todo: move the matching line from Open to Done in portfolio/todos.md with today's date, and commit.
-Overmind only; Sebastian invokes it.
+overmind only; Sebastian invokes it.
 
 Input: enough of the todo's text to match one line, or its position in the Open list as printed by `check-portfolio`.
 Output: the line moved to `## Done`, marked `[x]` with the completion date, committed.

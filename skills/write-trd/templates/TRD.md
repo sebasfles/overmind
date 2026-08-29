@@ -16,7 +16,7 @@ Describes the whole application. One section per repo or app under "Components".
 
 ### {{Component}}
 
-- Stack: {{language, runtime, frameworks, package manager}}
+- Stack: {{language, runtime, frameworks, package om-manager}}
 - Layout: {{top-level folders, one line each}}
 - Install: `{{pnpm install --frozen-lockfile}}`
 - Workspace files: {{`.env`, `.env.test`, other untracked files a fresh worktree needs}}

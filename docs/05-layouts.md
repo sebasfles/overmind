@@ -20,7 +20,7 @@ Un proyecto tiene `root`, `repos` y workspaces.
 
 | Concepto | Single | Monorepo | Multirepo |
 |---|---|---|---|
-| `root`: cwd del manager, dueño de `docs/`, siempre un repo git | el repo | el repo | la carpeta del proyecto, convertida en repo git de docs con los clones ignorados |
+| `root`: cwd del om-manager, dueño de `docs/`, siempre un repo git | el repo | el repo | la carpeta del proyecto, convertida en repo git de docs con los clones ignorados |
 | `repos`: repos de código | `[.]` | `[.]` | `[diy-platform, diy-infra, ...]` |
 | Workspace de una task | `.workspaces/{{task}}/{{repo}}/` | idem | `.workspaces/{{task}}/{{repo}}/` por repo tocado, más `.workspaces/{{task}}/{{root}}/` |
 | `docs/` y `docs/tasks/` | en el root | en el root | en el root |
@@ -49,7 +49,7 @@ En single y mono no aplica: el repo de código ya es el root.
 
 ## Workspaces
 
-`{{root}}/.workspaces/{{id}}_{{title}}/` es el cwd del reviewer y del developer de la task.
+`{{root}}/.workspaces/{{id}}_{{title}}/` es el cwd del om-reviewer y del om-developer de la task.
 Contiene un worktree por repo tocado, todos en la misma rama `{{prefix}}/{{id}}_{{title}}`, y en multirepo además el worktree del root.
 Reemplaza a `{{repo}}/.claude/worktrees/`.
 
@@ -129,4 +129,4 @@ projects:
 - `03`: `verify-task` por targets; `publish-task` PR por repo con resumen en el root.
 - `04`: registro con `root` y `repos`; `resume-project` abre el root.
 - Skills: `add-project`, `resume-project`, `setup`, `write-trd`, `create-task`, `consolidate-task`, `delegate-task`, `start-task`, `verify-task`, `publish-task`, `check-task`, `clean-task`.
-- Agentes: regla de rutas absolutas en `manager`, `reviewer`, `developer`; cwd del workspace en `reviewer` y `developer`.
+- Agentes: regla de rutas absolutas en `om-manager`, `om-reviewer`, `om-developer`; cwd del workspace en `om-reviewer` y `om-developer`.

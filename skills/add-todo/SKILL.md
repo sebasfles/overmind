@@ -1,6 +1,6 @@
 ---
 name: add-todo
-description: Append a quick-capture todo to portfolio/todos.md. Overmind; Sebastian invokes it.
+description: Append a quick-capture todo to portfolio/todos.md. overmind; Sebastian invokes it.
 argument-hint: "[TEXT] [@project]"
 disable-model-invocation: true
 ---
@@ -10,7 +10,7 @@ disable-model-invocation: true
 ## Purpose
 
 Quick capture: append one line to portfolio/todos.md under Open, optionally tagged with a project, and commit.
-Overmind only; Sebastian invokes it.
+overmind only; Sebastian invokes it.
 
 Input: free text; an optional `@{{project}}` anywhere in it tags the todo.
 Output: one line appended under `## Open` in `portfolio/todos.md`, committed.
@@ -26,5 +26,5 @@ Commit: `portfolio: add todo`.
 
 ## Rules
 
-- Never turn a todo into a task; Sebastian does that with the project's manager.
+- Never turn a todo into a task; Sebastian does that with the project's om-manager.
 - Never reorder or edit existing todos.

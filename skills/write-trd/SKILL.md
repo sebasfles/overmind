@@ -1,6 +1,6 @@
 ---
 name: write-trd
-description: Write or update the technical requirements (general TRD.md or a module's trd.md). Used by setup and setup-worker.
+description: Write or update the technical requirements (general TRD.md or a module's trd.md). Used by setup and om-setup-worker.
 argument-hint: "[general | MODULE_NAME]"
 disable-model-invocation: false
 ---
@@ -11,7 +11,7 @@ disable-model-invocation: false
 
 Write or update the Technical Requirements Document: the general docs/TRD.md (stack, layout, module list,
 verification commands, API spec generation, base branch) and per-module trd.md (structure, owned endpoints,
-integrations). Derives from the code; marks anything inferred. Edits in place. Used by setup; manager scope.
+integrations). Derives from the code; marks anything inferred. Edits in place. Used by setup; om-manager scope.
 
 Input: `general`, or a module name.
 Output: `docs/TRD.md` or `docs/modules/{{module}}/trd.md`, written or updated in place, with `updated` and `source` frontmatter.
@@ -25,7 +25,7 @@ It says where things are, how they are organized, and how to operate them.
 The TRD describes the whole application; in monorepos and multirepos it has one component section per app or repo.
 Read `templates/TRD.md` and fill every section from evidence:
 
-1. Stack: languages, frameworks, package manager, runtime versions, from manifests (`package.json`, `Gemfile`, `pubspec.yaml`, `go.mod`, lockfiles, `.nvmrc`, `.ruby-version`).
+1. Stack: languages, frameworks, package om-manager, runtime versions, from manifests (`package.json`, `Gemfile`, `pubspec.yaml`, `go.mod`, lockfiles, `.nvmrc`, `.ruby-version`).
 2. Layout: top-level folders and what lives in each; monorepo packages or apps if any.
 3. Modules: the list of modules with one line each and a link to `docs/modules/{{module}}/README.md`. A module is a bounded area of the domain the code already groups (a NestJS module, a Rails engine or namespace, a feature folder); do not invent boundaries the code does not have.
 4. Verification targets: one row per component with path and the exact commands for lint, typecheck, unit and e2e, each with its serial flag. `verify-task` reads this table literally; write `unknown` rather than guessing.

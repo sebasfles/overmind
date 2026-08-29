@@ -1,6 +1,6 @@
 ---
 name: add-project
-description: Register a project (root, repos) in the portfolio; also pause or remove. Overmind; Sebastian invokes it.
+description: Register a project (root, repos) in the portfolio; also pause or remove. overmind; Sebastian invokes it.
 argument-hint: "[PATH_OR_NAME] [pause | remove]"
 disable-model-invocation: true
 ---
@@ -11,7 +11,7 @@ disable-model-invocation: true
 
 Register a project in portfolio/projects.yaml with its root and repos (single repo, monorepo or a multirepo
 folder), make the root a git repo when it is a multirepo folder, check the documentation convention, and offer
-to run setup in its manager. Also pause-project and remove-project by argument. Overmind only.
+to run setup in its om-manager. Also pause-project and remove-project by argument. overmind only.
 
 Input: a path (to add), or a registered name with `pause` or `remove`.
 Output: `portfolio/projects.yaml` updated and committed.
@@ -43,7 +43,7 @@ Output: `portfolio/projects.yaml` updated and committed.
          base_branch: main
    ```
 6. Convention check, read-only: `CLAUDE.md` short and pointing to `docs/`? `docs/PRD.md`, `TRD.md`, `ARD.md`? `docs/modules/` non-empty? `docs/tasks/`?
-   One line per item; if anything is missing: `run setup from its manager: resume-project {{name}}`.
+   One line per item; if anything is missing: `run setup from its om-manager: resume-project {{name}}`.
 7. Commit: `portfolio: add project {{name}}`.
 
 ## Pause
@@ -56,5 +56,5 @@ Delete the entry; nothing on disk is touched. Commit `portfolio: remove {{name}}
 
 ## Rules
 
-- Never run `setup` or any manager skill.
+- Never run `setup` or any om-manager skill.
 - Never commit inside a code repo.

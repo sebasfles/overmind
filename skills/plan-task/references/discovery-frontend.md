@@ -12,7 +12,7 @@ Use as a checklist. Ask only what the docs and code do not answer.
 - Components reused vs created; check the component library first.
 - Step-by-step flow from the user's perspective. Happy path, error paths, edge cases.
 - Loading, success, error and empty states.
-- Figma link if it exists; the developer pulls design context from it.
+- Figma link if it exists; the om-developer pulls design context from it.
 
 ## Data
 

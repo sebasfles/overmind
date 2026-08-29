@@ -1,6 +1,6 @@
 ---
 name: write-ard
-description: Append architecture decisions and debt (general ARD.md or a module's ard.md). Used by setup and setup-worker.
+description: Append architecture decisions and debt (general ARD.md or a module's ard.md). Used by setup and om-setup-worker.
 argument-hint: "[general | MODULE_NAME]"
 disable-model-invocation: false
 ---
@@ -12,7 +12,7 @@ disable-model-invocation: false
 Write or update the Architecture and Debt Record: the general docs/ARD.md (global decisions and the debt
 index) and per-module ard.md. It is a dated log: entries are appended, never rewritten. When reverse-
 engineering an existing repo, records decisions visible in the code and marks the reasoning as inferred. Used
-by setup; manager scope.
+by setup; om-manager scope.
 
 Input: `general`, or a module name.
 Output: `docs/ARD.md` or `docs/modules/{{module}}/ard.md`, created or appended, never rewritten.
@@ -49,7 +49,7 @@ Two parts:
 
 ## Module `docs/modules/{{module}}/ard.md`
 
-Decisions scoped to the module: data model choices, sync vs async, caching, validation strategy, external provider, anything a developer would otherwise ask "why is it like this".
+Decisions scoped to the module: data model choices, sync vs async, caching, validation strategy, external provider, anything an om-developer would otherwise ask "why is it like this".
 
 ## Reverse engineering an existing repo
 
