@@ -1,14 +1,17 @@
 ---
 name: check-task
-description: >-
-  Derive the state of one task from disk, git and gh without asking any session: planned, consolidating,
-  consolidated, in_progress, in_review, merged or done, across every repo the task touches, per phase
-  when the task has phases. Manager only; may run on its own when Sebastian asks about a task.
+description: Derive one task's state from disk, git and gh. Manager; when Sebastian asks about a task.
 argument-hint: "[TASK_ID_OR_FOLDER]"
 disable-model-invocation: false
 ---
 
 # check-task
+
+## Purpose
+
+Derive the state of one task from disk, git and gh without asking any session: planned, consolidating,
+consolidated, in_progress, in_review, merged or done, across every repo the task touches, per phase when the
+task has phases. Manager only; may run on its own when Sebastian asks about a task.
 
 Input: a task id (`0142`) or a task folder path.
 Output: one line per task (or per phase), nothing else.

@@ -1,12 +1,15 @@
 ---
 name: clean-work
-description: >-
-  Run clean-task for every task in state merged, and report orphan worktrees and stale branches
-  that clean-task cannot claim. Manager only; Sebastian invokes it.
+description: Run clean-task for every merged task and report leftovers. Manager; Sebastian invokes it.
 disable-model-invocation: true
 ---
 
 # clean-work
+
+## Purpose
+
+Run clean-task for every task in state merged, and report orphan worktrees and stale branches that clean-task
+cannot claim. Manager only; Sebastian invokes it.
 
 Input: none.
 Output: one line per task cleaned, then leftovers.

@@ -1,12 +1,15 @@
 ---
 name: clean-portfolio
-description: >-
-  Run the project's clean-work in every active project that has merged tasks, by asking its manager,
-  and report leftovers across projects. Overmind only; Sebastian invokes it.
+description: Ask every project's manager to run clean-work and report leftovers. Overmind; Sebastian invokes it.
 disable-model-invocation: true
 ---
 
 # clean-portfolio
+
+## Purpose
+
+Run the project's clean-work in every active project that has merged tasks, by asking its manager, and report
+leftovers across projects. Overmind only; Sebastian invokes it.
 
 Input: none.
 Output: one line per project cleaned, leftovers listed.

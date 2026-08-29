@@ -1,14 +1,17 @@
 ---
 name: execute-task
-description: >-
-  Implement the task (or the current phase) in the worktree, one round at a time: reproduce bugs first,
-  rebase, implement with tests, verify-task, document-task, squash to one commit, write Developer notes,
-  report "round N ready" to the reviewer. Also applies the reviewer's findings on later rounds.
-  Developer only; runs on "context ready, start" and on every findings message.
+description: "Implement the task or apply findings, verify, document, one commit per round. Developer; on \"context ready, start\" and on findings."
 disable-model-invocation: false
 ---
 
 # execute-task
+
+## Purpose
+
+Implement the task (or the current phase) in the worktree, one round at a time: reproduce bugs first, rebase,
+implement with tests, verify-task, document-task, squash to one commit, write Developer notes, report "round N
+ready" to the reviewer. Also applies the reviewer's findings on later rounds. Developer only; runs on "context
+ready, start" and on every findings message.
 
 Input: `context ready, start` from the reviewer (round 1), or a findings message `round N findings: k ...` (round N+1), or `retakes: k findings ...` (reiteration).
 Output: one squashed commit on the task branch in the worktree, `Developer notes` updated, and the message `round {{N}} ready, commit {{sha}}` to the reviewer.

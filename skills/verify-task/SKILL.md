@@ -1,13 +1,16 @@
 ---
 name: verify-task
-description: >-
-  Run lint, typecheck and tests for every verification target of the task (one per repo or app,
-  declared in docs/TRD.md), one command at a time and with --runInBand, and append one block per target
-  to the task's verify.log with the commit it ran on. Shared by developer and reviewer. Never fixes anything.
+description: Run lint, typecheck and tests per verification target, serially, and log to verify.log. Developer and reviewer; before every round and in review.
 disable-model-invocation: false
 ---
 
 # verify-task
+
+## Purpose
+
+Run lint, typecheck and tests for every verification target of the task (one per repo or app, declared in
+docs/TRD.md), one command at a time and with --runInBand, and append one block per target to the task's
+verify.log with the commit it ran on. Shared by developer and reviewer. Never fixes anything.
 
 Input: the workspace at its current commits.
 Output: green or red per target and step, and one appended block per target in `{{ROOT_WT}}/docs/tasks/{{TASK}}/verify.log`.

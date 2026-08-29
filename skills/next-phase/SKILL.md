@@ -1,14 +1,17 @@
 ---
 name: next-phase
-description: >-
-  Move a phased task to its next phase after the manager reports the current phase merged: write
-  Result, stop the current developer, create the next phase branch from origin/base in the same
-  worktree, and run start-task. Reviewer only; runs on "phase N merged, continue".
+description: "Close phase N and start phase N+1 with a fresh developer. Reviewer; on \"phase N merged, continue\"."
 argument-hint: "[PHASE_N]"
 disable-model-invocation: false
 ---
 
 # next-phase
+
+## Purpose
+
+Move a phased task to its next phase after the manager reports the current phase merged: write Result, stop
+the current developer, create the next phase branch from origin/base in the same worktree, and run start-task.
+Reviewer only; runs on "phase N merged, continue".
 
 Input: the manager's message `phase {{N}} merged, continue`.
 Output: the worktree on `{{prefix}}/{{id}}_{{title}}-phase-{{N+1}}`, a fresh developer started on it.

@@ -1,13 +1,16 @@
 ---
 name: check-work
-description: >-
-  The project's task board: check-task over every task folder, grouped by state, one line per task.
-  Also lists drafts and stale worktrees. Manager only; runs at session start via initialPrompt and
-  whenever Sebastian asks how things are.
+description: "The project's task board: every task, grouped by state. Manager; at session start and when Sebastian asks how things are."
 disable-model-invocation: false
 ---
 
 # check-work
+
+## Purpose
+
+The project's task board: check-task over every task folder, grouped by state, one line per task. Also lists
+drafts and stale worktrees. Manager only; runs at session start via initialPrompt and whenever Sebastian asks
+how things are.
 
 Input: none.
 Output: a short board, one line per task, grouped by state in this order: `in_review`, `merged`, `in_progress`, `consolidated`, `consolidating`, `planned`, then `done` collapsed to a count.

@@ -1,15 +1,17 @@
 ---
 name: add-project
-description: >-
-  Register a project in portfolio/projects.yaml with its root and repos (single repo, monorepo or a
-  multirepo folder), make the root a git repo when it is a multirepo folder, check the documentation
-  convention, and offer to run setup in its manager. Also pause-project and remove-project by argument.
-  Overmind only.
+description: Register a project (root, repos) in the portfolio; also pause or remove. Overmind; Sebastian invokes it.
 argument-hint: "[PATH_OR_NAME] [pause | remove]"
 disable-model-invocation: true
 ---
 
 # add-project
+
+## Purpose
+
+Register a project in portfolio/projects.yaml with its root and repos (single repo, monorepo or a multirepo
+folder), make the root a git repo when it is a multirepo folder, check the documentation convention, and offer
+to run setup in its manager. Also pause-project and remove-project by argument. Overmind only.
 
 Input: a path (to add), or a registered name with `pause` or `remove`.
 Output: `portfolio/projects.yaml` updated and committed.

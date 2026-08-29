@@ -1,15 +1,18 @@
 ---
 name: clean-task
-description: >-
-  Clean up a task whose PRs are all merged: pull the root's base branch, stop and remove the reviewer
-  and developer sessions, remove every worktree of the workspace and the workspace folder, delete local
-  and remote branches in every repo, close the tmux window. No commit; without a workspace the task
-  derives as done. Manager only; Sebastian invokes it.
+description: "Remove everything of a merged task: sessions, workspace, branches, tmux window. Manager; Sebastian invokes it."
 argument-hint: "[TASK_ID_OR_FOLDER]"
 disable-model-invocation: true
 ---
 
 # clean-task
+
+## Purpose
+
+Clean up a task whose PRs are all merged: pull the root's base branch, stop and remove the reviewer and
+developer sessions, remove every worktree of the workspace and the workspace folder, delete local and remote
+branches in every repo, close the tmux window. No commit; without a workspace the task derives as done.
+Manager only; Sebastian invokes it.
 
 Input: a task id or folder.
 Output: nothing left of the task but its folder on the root's base branch and the merged PRs.

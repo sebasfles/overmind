@@ -1,15 +1,18 @@
 ---
 name: delegate-task
-description: >-
-  Hand a consolidated task to its reviewer. Checks depends_on, makes sure the reviewer session is running
-  (reopening the stopped one with its context intact), rebases the root worktree so the workspace
-  receives the task folder with its decisions, and sends "delegated, start". The reviewer launches the
-  developer. Manager only; Sebastian invokes it, or consolidate-task chains into it.
+description: "Hand a consolidated task to its reviewer with \"delegated, start\". Manager; Sebastian invokes it, or consolidate-task chains into it."
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
 ---
 
 # delegate-task
+
+## Purpose
+
+Hand a consolidated task to its reviewer. Checks depends_on, makes sure the reviewer session is running
+(reopening the stopped one with its context intact), rebases the root worktree so the workspace receives the
+task folder with its decisions, and sends "delegated, start". The reviewer launches the developer. Manager
+only; Sebastian invokes it, or consolidate-task chains into it.
 
 Input: `$ARGUMENTS[0]`, a consolidated task folder in the root checkout: committed as `planned`, workspace present, `Context & decisions` written.
 If any is missing, stop: the task needs `consolidate-task` first.

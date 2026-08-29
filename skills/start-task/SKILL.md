@@ -1,14 +1,17 @@
 ---
 name: start-task
-description: >-
-  Launch the developer for the current task or phase in the right pane of the task's tmux window,
-  with cwd in the worktree, and send it "context ready, start". Reviewer only; runs on
-  "delegated, start" from the manager and inside next-phase.
+description: "Launch the developer for the current task or phase in the workspace. Reviewer; on \"delegated, start\" and inside next-phase."
 argument-hint: "[TASK_FOLDER] [PHASE_N]"
 disable-model-invocation: false
 ---
 
 # start-task
+
+## Purpose
+
+Launch the developer for the current task or phase in the right pane of the task's tmux window, with cwd in
+the worktree, and send it "context ready, start". Reviewer only; runs on "delegated, start" from the manager
+and inside next-phase.
 
 Input: the task folder (root worktree copy inside the workspace) and, if the task has phases, the phase number.
 Output: a running `task-{{id}}-developer` (or `task-{{id}}-developer-phase-{{n}}`) that has received `context ready, start`.

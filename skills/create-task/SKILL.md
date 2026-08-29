@@ -1,11 +1,17 @@
 ---
 name: create-task
-description: Write an approved plan to disk as a task folder under docs/tasks/{{id}}_{{title}}/ with task.md, replication.md for bugs and one phase_N.md per phase, uncommitted. Then offer consolidate-task. Manager only; normally invoked by plan-task after approval.
+description: Write an approved plan as a task folder under docs/tasks/. Manager; runs after plan-task is approved.
 argument-hint: "[PLAN_FILE]"
 disable-model-invocation: false
 ---
 
 # create-task
+
+## Purpose
+
+Write an approved plan to disk as a task folder under docs/tasks/{{id}}_{{title}}/ with task.md,
+replication.md for bugs and one phase_N.md per phase, uncommitted. Then offer consolidate-task. Manager only;
+normally invoked by plan-task after approval.
 
 Input: the plan approved in this conversation by `plan-task`, or `$ARGUMENTS[0]`, a plan file (normally `docs/tasks/_drafts/{{title}}.md`).
 If there is no approved plan in context and no file, stop and run `plan-task` first.

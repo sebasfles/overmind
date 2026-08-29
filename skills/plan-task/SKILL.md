@@ -1,12 +1,18 @@
 ---
 name: plan-task
-description: Plan a piece of work with Sebastian for this project. Reads the project docs following the reading route, asks only what the docs cannot answer, and produces an approved plan (goal, scope, acceptance, approach, phases). Ends by offering create-task. Manager only; Sebastian invokes it.
+description: Plan a piece of work with Sebastian into an approved plan. Manager; Sebastian invokes it before create-task.
 argument-hint: "[DESCRIPTION_OR_TICKET]"
 disable-model-invocation: true
 effort: high
 ---
 
 # plan-task
+
+## Purpose
+
+Plan a piece of work with Sebastian for this project. Reads the project docs following the reading route, asks
+only what the docs cannot answer, and produces an approved plan (goal, scope, acceptance, approach, phases).
+Ends by offering create-task. Manager only; Sebastian invokes it.
 
 Input: `$ARGUMENTS`, a free-text description from Sebastian, a ticket reference, or nothing (then ask what he wants to build).
 

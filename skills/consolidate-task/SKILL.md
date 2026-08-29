@@ -1,16 +1,19 @@
 ---
 name: consolidate-task
-description: >-
-  Take a created task from disk to consolidated. Creates the task workspace (one worktree per repo the
-  task touches, plus the root repo's worktree in multirepo projects), bootstraps each worktree, opens
-  the tmux window, launches the reviewer alone inside the workspace, relays the reviewer's questions to
-  Sebastian until Context & decisions is written, then commits and pushes the task folder as planned
-  with Sebastian's approval. Ends by asking whether to delegate now. Manager only; Sebastian invokes it.
+description: Create the task workspace, launch the reviewer and commit the task as planned. Manager; Sebastian invokes it after create-task.
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: true
 ---
 
 # consolidate-task
+
+## Purpose
+
+Take a created task from disk to consolidated. Creates the task workspace (one worktree per repo the task
+touches, plus the root repo's worktree in multirepo projects), bootstraps each worktree, opens the tmux
+window, launches the reviewer alone inside the workspace, relays the reviewer's questions to Sebastian until
+Context & decisions is written, then commits and pushes the task folder as planned with Sebastian's approval.
+Ends by asking whether to delegate now. Manager only; Sebastian invokes it.
 
 Input: `$ARGUMENTS[0]`, the absolute path of a task folder under `{{ROOT}}/docs/tasks/`, uncommitted, with no workspace yet.
 If the folder is missing or a workspace already exists, stop and say so.

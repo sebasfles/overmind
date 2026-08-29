@@ -1,15 +1,18 @@
 ---
 name: analyze-task
-description: >-
-  Reviewer's first action. Reads the task folder, the module docs and the code the task will touch,
-  batches its doubts to the manager once, writes Context & decisions in the main checkout copy, and
-  reports "consolidated". Idempotent: if Context & decisions is already written it does not ask again.
-  Also incorporates new retakes when reiterated. Reviewer only; runs automatically.
+description: Read the task, ask the manager once, write Context & decisions. Reviewer; runs automatically at session start and on retakes.
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
 ---
 
 # analyze-task
+
+## Purpose
+
+Reviewer's first action. Reads the task folder, the module docs and the code the task will touch, batches its
+doubts to the manager once, writes Context & decisions in the main checkout copy, and reports "consolidated".
+Idempotent: if Context & decisions is already written it does not ask again. Also incorporates new retakes
+when reiterated. Reviewer only; runs automatically.
 
 Input: the task folder path from your first message (`task: {{path}}`), an absolute path in the main checkout.
 Output: `Context & decisions` written in that copy, and the message `consolidated` to the manager.

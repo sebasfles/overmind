@@ -1,14 +1,16 @@
 ---
 name: resume-project
-description: >-
-  Open a registered project in a new Windows Terminal tab, inside WSL, at the repo root, attached to
-  its tmux session, with its manager running in the first window. Thin wrapper over bin/resume-project.
-  Overmind only.
+description: Open a registered project in a new terminal tab with its manager. Overmind; Sebastian invokes it.
 argument-hint: "[NAME]"
 disable-model-invocation: true
 ---
 
 # resume-project
+
+## Purpose
+
+Open a registered project in a new Windows Terminal tab, inside WSL, at the repo root, attached to its tmux
+session, with its manager running in the first window. Thin wrapper over bin/resume-project. Overmind only.
 
 Input: a registered project name.
 Output: a new terminal tab attached to the project's tmux session, manager in window 0.

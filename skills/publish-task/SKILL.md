@@ -1,14 +1,17 @@
 ---
 name: publish-task
-description: >-
-  Push every branch of the task workspace, open one PR per repo touched (plus the root docs repo in
-  multirepo projects), and write or update the single summary comment on the root repo's PR (Intent,
-  What changed with links to each code PR, Decisions, Risk assessment, Pipeline per target). Notifies
-  the manager. Reviewer only; runs when review-task finds no issues.
+description: Push, open one PR per repo and write the summary comment on the root PR. Reviewer; when review-task finds no issues.
 disable-model-invocation: false
 ---
 
 # publish-task
+
+## Purpose
+
+Push every branch of the task workspace, open one PR per repo touched (plus the root docs repo in multirepo
+projects), and write or update the single summary comment on the root repo's PR (Intent, What changed with
+links to each code PR, Decisions, Risk assessment, Pipeline per target). Notifies the manager. Reviewer only;
+runs when review-task finds no issues.
 
 Input: a clean `review-task` on the workspace's current commits.
 Output: all branches pushed, one PR per repo, one summary comment on the root PR, manager notified.

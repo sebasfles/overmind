@@ -1,15 +1,18 @@
 ---
 name: write-ard
-description: >-
-  Write or update the Architecture and Debt Record: the general docs/ARD.md (global decisions and the
-  debt index) and per-module ard.md. It is a dated log: entries are appended, never rewritten.
-  When reverse-engineering an existing repo, records decisions visible in the code and marks the
-  reasoning as inferred. Used by setup; manager scope.
+description: Append architecture decisions and debt (general ARD.md or a module's ard.md). Used by setup and setup-worker.
 argument-hint: "[general | MODULE_NAME]"
 disable-model-invocation: false
 ---
 
 # write-ard
+
+## Purpose
+
+Write or update the Architecture and Debt Record: the general docs/ARD.md (global decisions and the debt
+index) and per-module ard.md. It is a dated log: entries are appended, never rewritten. When reverse-
+engineering an existing repo, records decisions visible in the code and marks the reasoning as inferred. Used
+by setup; manager scope.
 
 Input: `general`, or a module name.
 Output: `docs/ARD.md` or `docs/modules/{{module}}/ard.md`, created or appended, never rewritten.

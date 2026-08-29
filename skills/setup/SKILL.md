@@ -1,16 +1,19 @@
 ---
 name: setup
-description: >-
-  Create or reconcile the documentation convention in a project: detect stack, modules and the state of
-  docs/, report the gap between ideal and actual, fill it (general TRD, then every module in parallel
-  with setup-worker subagents, then general PRD and ARD), write the short CLAUDE.md, collect every
-  [inferido] for Sebastian, and commit with his approval. Idempotent: works on an empty repo, an old one
-  without docs, or a partial one. Manager only; Sebastian invokes it.
+description: Create or reconcile the project's documentation convention (docs/, CLAUDE.md). Manager; Sebastian invokes it on new or undocumented projects.
 argument-hint: "[check | fill] [OVERVIEW_FILE] [DESIGN_FOLDER]"
 disable-model-invocation: true
 ---
 
 # setup
+
+## Purpose
+
+Create or reconcile the documentation convention in a project: detect stack, modules and the state of docs/,
+report the gap between ideal and actual, fill it (general TRD, then every module in parallel with setup-worker
+subagents, then general PRD and ARD), write the short CLAUDE.md, collect every [inferido] for Sebastian, and
+commit with his approval. Idempotent: works on an empty repo, an old one without docs, or a partial one.
+Manager only; Sebastian invokes it.
 
 Input: optional mode (`check` only reports; `fill` reports and then fills, the default), and optionally an overview document and a design folder for the PRD.
 Output: `docs/` matching the convention, `CLAUDE.md` short, a list of `[inferido]` items for Sebastian, one commit on the base branch.
@@ -39,6 +42,13 @@ Without writing anything:
 - State of `docs/`: which files exist, their `updated` date, and for each module folder whether the code under it changed after that date (`git log -1 --format=%cs -- {{module path}}` vs `updated`). Stale means code newer than docs.
 - `CLAUDE.md`: exists, and is it the short form (points to `docs/`, under 40 lines)?
 - `.gitignore` has `docs/tasks/_drafts/` and, in single and mono, `.workspaces/`; in multirepo, the root `.gitignore` lists every code repo folder and `.workspaces/`.
+
+## 1b. Multirepo folder without a root repo
+
+If the root is a folder of repos with no `.git` of its own, the convention cannot hold there yet: `docs/` would be unversioned.
+Offer Sebastian the option before anything else: make the folder a docs-only repo (`{{name}}-docs`, private, on his personal GitHub) whose `.gitignore` lists every code repo folder and `.workspaces/`.
+With his yes: `git init`, write `.gitignore`, first commit `docs: init project root`, add the remote he gives.
+With his no: stop; `setup` needs a versioned root. See `docs/05-layouts.md` of the overmind repo.
 
 ## 2. Report the gap
 

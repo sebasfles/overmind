@@ -1,13 +1,16 @@
 ---
 name: document-task
-description: >-
-  Update the module documentation affected by the current round: prd.md, trd.md, ard.md, database.md,
-  flows.md of each module touched, with updated and source frontmatter, and one ARD entry per decision
-  not already recorded. Developer only; runs at the end of every execute-task round.
+description: Update the module docs affected by the round, with updated and source. Developer; at the end of every execute-task round.
 disable-model-invocation: false
 ---
 
 # document-task
+
+## Purpose
+
+Update the module documentation affected by the current round: prd.md, trd.md, ard.md, database.md, flows.md
+of each module touched, with updated and source frontmatter, and one ARD entry per decision not already
+recorded. Developer only; runs at the end of every execute-task round.
 
 Input: the diff of the current round against `origin/{{base}}` and the task folder.
 Output: `docs/modules/{{module}}/*.md` updated for every module the round touched, in the worktree.

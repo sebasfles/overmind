@@ -1,14 +1,17 @@
 ---
 name: reiterate-task
-description: >-
-  Send a published task back for another round with Sebastian's PR comments: record them dated in
-  retakes.md of the worktree copy, make sure reviewer and developer are running, and tell the reviewer
-  "retakes updated". Manager only; Sebastian invokes it.
+description: Send a published task back for another round with Sebastian's PR comments. Manager; Sebastian invokes it.
 argument-hint: "[TASK_ID_OR_FOLDER] [COMMENTS]"
 disable-model-invocation: true
 ---
 
 # reiterate-task
+
+## Purpose
+
+Send a published task back for another round with Sebastian's PR comments: record them dated in retakes.md of
+the worktree copy, make sure reviewer and developer are running, and tell the reviewer "retakes updated".
+Manager only; Sebastian invokes it.
 
 Input: a task id or folder, and Sebastian's comments (inline, or "read the PR" to pull review comments with `gh`).
 Output: `retakes.md` updated in the worktree copy, reviewer notified.

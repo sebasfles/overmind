@@ -1,13 +1,16 @@
 ---
 name: check-portfolio
-description: >-
-  The board across all active projects: for each, the tasks that wait for Sebastian, what is moving,
-  what is waiting, plus doc drift, leftovers and open todos. One line per item. Overmind only; runs
-  on start via initialPrompt and whenever Sebastian asks.
+description: The board across all active projects, todos and notifications. Overmind; at session start and when Sebastian asks.
 disable-model-invocation: false
 ---
 
 # check-portfolio
+
+## Purpose
+
+The board across all active projects: for each, the tasks that wait for Sebastian, what is moving, what is
+waiting, plus doc drift, leftovers and open todos. One line per item. Overmind only; runs on start via
+initialPrompt and whenever Sebastian asks.
 
 Input: none.
 Output: one screen.

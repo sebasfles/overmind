@@ -1,14 +1,17 @@
 ---
 name: review-task
-description: >-
-  Run the Pipeline on the developer's latest round in the worktree: intent, rebase, verify-task on the
-  final commit, code review, documentation, and for bugs the replication steps. Sends findings to the
-  developer or, when clean, runs publish-task. Reviewer only; runs on every "round N ready".
+description: "Run the Pipeline on the developer's round and send findings or publish. Reviewer; on every \"round N ready\"."
 argument-hint: "[ROUND]"
 disable-model-invocation: false
 ---
 
 # review-task
+
+## Purpose
+
+Run the Pipeline on the developer's latest round in the worktree: intent, rebase, verify-task on the final
+commit, code review, documentation, and for bugs the replication steps. Sends findings to the developer or,
+when clean, runs publish-task. Reviewer only; runs on every "round N ready".
 
 Input: the developer's message `round {{N}} ready, commit {{sha}}`.
 Output: either one findings message to the developer, or `publish-task`.

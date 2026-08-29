@@ -1,15 +1,17 @@
 ---
 name: write-trd
-description: >-
-  Write or update the Technical Requirements Document: the general docs/TRD.md (stack, layout, module
-  list, verification commands, API spec generation, base branch) and per-module trd.md (structure,
-  owned endpoints, integrations). Derives from the code; marks anything inferred. Edits in place.
-  Used by setup; manager scope.
+description: Write or update the technical requirements (general TRD.md or a module's trd.md). Used by setup and setup-worker.
 argument-hint: "[general | MODULE_NAME]"
 disable-model-invocation: false
 ---
 
 # write-trd
+
+## Purpose
+
+Write or update the Technical Requirements Document: the general docs/TRD.md (stack, layout, module list,
+verification commands, API spec generation, base branch) and per-module trd.md (structure, owned endpoints,
+integrations). Derives from the code; marks anything inferred. Edits in place. Used by setup; manager scope.
 
 Input: `general`, or a module name.
 Output: `docs/TRD.md` or `docs/modules/{{module}}/trd.md`, written or updated in place, with `updated` and `source` frontmatter.
