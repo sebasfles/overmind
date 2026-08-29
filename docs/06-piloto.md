@@ -19,7 +19,7 @@ Each failure gets fixed in the skill or agent with `update-method` before moving
 
 ## Order
 
-1. `bin/install`: symlinks. Check that `claude --agent om-manager` starts in any directory and that `/plan-task` appears in `/help`.
+1. `scripts/install`: symlinks. Check that `claude --agent om-manager` starts in any directory and that `/plan-task` appears in `/help`.
 2. `bin/resume-overmind`: the three sessions. Check that `overmind` opens `om-events` if it's missing.
 3. `add-project {{proyecto}}` from `overmind`: layout detection, `{{name}}-docs` repo if multirepo, registration.
 4. `resume-project {{proyecto}}`: tab, tmux, om-manager in window 0 with `check-work` saying "run setup first".
@@ -41,4 +41,4 @@ Each failure gets fixed in the skill or agent with `update-method` before moving
 - Merge skills that were never invoked on their own (candidates: `create-task` into `plan-task`, `start-task` into `analyze-task` and `next-phase`).
 - Save the Workflow script for `setup` in `skills/setup/references/`.
 - Write `references/{{stack}}.md` for `execute-task` and `verify-task` with what the pilot's TRD declared.
-- Create the final symlinks and delete `bin/install` if it's no longer needed, or leave it for the second machine.
+- Create the final symlinks and delete `scripts/install` if it's no longer needed, or leave it for the second machine.

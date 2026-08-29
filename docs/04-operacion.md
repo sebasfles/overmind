@@ -82,7 +82,7 @@ See [05-layouts.md](05-layouts.md) for `root` and `repos` in single repo, monore
 
 ### resume-project
 
-It is a deterministic shell script (`bin/resume-project`); the skill is a thin wrapper that calls it with the project name.
+It is a deterministic shell script (`scripts/resume-project`); the skill is a thin wrapper that calls it with the project name.
 It is not linked into `~/bin`: the `overmind` session runs it from the repo.
 
 Environment verified on 2026-08-28: Windows Terminal (`WT_SESSION` set), `wt.exe` invocable from WSL, `Ubuntu` distro, tmux 3.4.

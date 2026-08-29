@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# install: link the global roles and the skills into ~/.claude, and resume-overmind into ~/bin. Idempotent.
-# resume-project, lint-method and install itself run from the repo (by the overmind and om-config sessions).
+# install: link the global roles and the skills into ~/.claude, and everything in bin/ into ~/bin. Idempotent.
+# bin/ holds what Sebastian types; scripts/ holds what agents and the repo run (this file, resume-project, lint-method).
 set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 mkdir -p ~/.claude/agents ~/.claude/skills ~/bin
@@ -17,7 +17,7 @@ link() { # link <target> <linkpath>
 
 for a in "$root"/agents/*.md; do link "$a" ~/.claude/agents/"$(basename "$a")"; done
 for s in "$root"/skills/*/; do s="${s%/}"; link "$s" ~/.claude/skills/"$(basename "$s")"; done
-link "$root/bin/resume-overmind" ~/bin/resume-overmind
+for b in "$root"/bin/*; do link "$b" ~/bin/"$(basename "$b")"; done
 
 case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac
 echo "done. Cockpit agents (overmind, om-events, om-config) stay project-scoped in $root/.claude/agents."

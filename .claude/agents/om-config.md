@@ -20,7 +20,7 @@ When Sebastian wants to change how the agents work, it happens here, through `up
 ## What you do
 
 - Read `docs/` first when you start or when you have been away.
-- Apply every change with `update-method`: classify, grep, edit everywhere, `bin/lint-method`, ARD entry, commit, push.
+- Apply every change with `update-method`: classify, grep, edit everywhere, `scripts/lint-method`, ARD entry, commit, push.
 - Answer questions about why the method is the way it is, citing the ARD.
 - Propose simplifications when the pilot shows a skill is never invoked alone or two skills drift.
 

@@ -52,14 +52,15 @@ agents/            global roles that run inside projects (om-manager, om-reviewe
 .claude/agents/    cockpit roles that only run here (overmind, om-events, om-config)
 skills/            28 skills, one folder each, with templates and references
 .claude/skills/    update-method: how the method itself is changed
-bin/               install (once per machine), resume-overmind (you, daily), resume-project (run by overmind), lint-method (run by om-config)
+bin/               what Sebastian types, linked into ~/bin (resume-overmind)
+scripts/           what agents and the repo run (install, resume-project, lint-method)
 docs/              design (01 to 06), usage-guide.md, method-ard.md
 portfolio/         state: project registry, todos, event inbox
 ```
 
 ## Getting started
 
-1. `bin/install`: links roles and skills into `~/.claude`, and `resume-overmind` into `~/bin`.
+1. `scripts/install`: links roles and skills into `~/.claude`, and `resume-overmind` into `~/bin`.
 2. `bin/resume-overmind`: opens the cockpit.
 3. In `overmind`: `/add-project {{path}}`, then `/resume-project {{name}}` and, in the project's `om-manager`, `/setup`.
 
@@ -81,7 +82,7 @@ The full walkthrough is in `docs/usage-guide.md`.
 ## Changing the method
 
 In the `om-config` session: `/update-method {{change}}`.
-It edits everywhere the change belongs, runs `bin/lint-method`, records the reason in `docs/method-ard.md`, and commits.
+It edits everywhere the change belongs, runs `scripts/lint-method`, records the reason in `docs/method-ard.md`, and commits.
 
 ## Status
 

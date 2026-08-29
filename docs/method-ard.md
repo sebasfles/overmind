@@ -11,7 +11,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: without a prefix, the three role names read as people in the prose of 27 skills and in the session lists.
 - Debt created: none.
 - Revisit when: never, unless another agent system shows up on the same machine with the same prefix.
-- Files: agents/, skills/, docs/, bin/resume-project.
+- Files: agents/, skills/, docs/, scripts/resume-project.
 
 ## 2026-08-29: Standalone, not a plugin
 
@@ -24,12 +24,12 @@ The original design decisions are in `01` through `05`; here go the later change
 
 ## 2026-08-29: Project skills to maintain the method
 
-- Decision: `update-method` (in this repo's `.claude/skills/`) applies cross-cutting changes, and `bin/lint-method` checks the mechanical parts.
+- Decision: `update-method` (in this repo's `.claude/skills/`) applies cross-cutting changes, and `scripts/lint-method` checks the mechanical parts.
 - Alternatives rejected: separate `update-skill` and `update-agent`; continuing to do the passes by hand.
 - Reason: each change to the method touched between 20 and 44 files; without a procedure and a lint, something ends up half-done.
 - Debt created: none.
 - Revisit when: the lint starts giving false positives that cost more to maintain than what it catches.
-- Files: .claude/skills/update-method/, bin/lint-method, docs/method-ard.md.
+- Files: .claude/skills/update-method/, scripts/lint-method, docs/method-ard.md.
 
 ## 2026-08-29: `setup` extracts, it doesn't wait for the convention; modules as Workflow
 
@@ -65,7 +65,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: every long-lived session needs a single reason to exist; and the separate inbox lets events be seen without interrupting the conversation with the cockpit.
 - Debt created: `bypassPermissions` removes the classifier's safety net from om-reviewer and om-developer; the mitigation is workspace isolation and each agent's hard rules.
 - Revisit when: an om-developer does something destructive outside its workspace, or the inbox needs more than three types.
-- Files: .claude/agents/, agents/om-manager.md, agents/om-reviewer.md, agents/om-developer.md, bin/resume-overmind, bin/lint-method, portfolio/events/, docs/04-operacion.md, docs/03-skills.md, .claude/skills/update-method/SKILL.md, CLAUDE.md.
+- Files: .claude/agents/, agents/om-manager.md, agents/om-reviewer.md, agents/om-developer.md, bin/resume-overmind, scripts/lint-method, portfolio/events/, docs/04-operacion.md, docs/03-skills.md, .claude/skills/update-method/SKILL.md, CLAUDE.md.
 
 ## 2026-08-29: Singleton sessions named after the agent; models and effort per role
 
@@ -78,9 +78,18 @@ The original design decisions are in `01` through `05`; here go the later change
 
 ## 2026-08-29: Only resume-overmind goes into ~/bin
 
-- Decision: `bin/install` links only `resume-overmind` into `~/bin`. `resume-project` is run by the `overmind` session from the repo, `lint-method` by `om-config` through `update-method`, `install` once per machine.
+- Decision: `scripts/install` links only `resume-overmind` into `~/bin`. `resume-project` is run by the `overmind` session from the repo, `lint-method` by `om-config` through `update-method`, `install` once per machine.
 - Alternatives rejected: linking every script (puts commands in the PATH that only agents run).
 - Reason: each script has one operator; the PATH should hold only what Sebastian types.
 - Debt created: none.
 - Revisit when: Sebastian finds himself opening projects without the cockpit often enough to want `resume-project` in the PATH.
-- Files: bin/install, CLAUDE.md, README.md, docs/usage-guide.md, docs/04-operacion.md.
+- Files: scripts/install, CLAUDE.md, README.md, docs/usage-guide.md, docs/04-operacion.md.
+
+## 2026-08-29: bin/ is what gets linked, scripts/ is internal
+
+- Decision: `bin/` holds only commands Sebastian types and `scripts/install` links all of it into `~/bin`; `scripts/` holds `install`, `resume-project` and `lint-method`, run by agents or from the repo.
+- Alternatives rejected: one `bin/` with a hand-kept list of what to link.
+- Reason: one folder per operator; the install script needs no list.
+- Debt created: none.
+- Revisit when: never, unless a script needs both operators.
+- Files: bin/, scripts/, scripts/install, CLAUDE.md, README.md, docs/.

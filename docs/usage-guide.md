@@ -13,7 +13,7 @@ Everything not covered here is in `01` through `06`.
 ## Install
 
 ```
-bin/install
+scripts/install
 ```
 
 Creates symlinks: `agents/*` to `~/.claude/agents/`, `skills/*` to `~/.claude/skills/`, and `resume-overmind` to `~/bin/`.
@@ -173,7 +173,7 @@ In the overmind's `config` window, session `om-config`:
 
 `/update-method rename retakes.md to feedback.md`
 
-It applies the change in every agent, skill and document where it applies, runs `bin/lint-method`, notes why in `docs/method-ard.md`, and commits.
+It applies the change in every agent, skill and document where it applies, runs `scripts/lint-method`, notes why in `docs/method-ard.md`, and commits.
 If you ask for a method change in another session, it sends you here.
 
 ## What you will see in every project

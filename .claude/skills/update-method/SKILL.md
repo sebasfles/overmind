@@ -11,7 +11,7 @@ disable-model-invocation: true
 ## Purpose
 
 Every change to how the agents work touches several files at once: a rename crosses 30 files, a new rule belongs in one agent and three skills, a new skill needs its row in `docs/03-skills.md`.
-This skill applies a change everywhere it belongs, checks the result with `bin/lint-method`, records the reason in `docs/method-ard.md`, and commits.
+This skill applies a change everywhere it belongs, checks the result with `scripts/lint-method`, records the reason in `docs/method-ard.md`, and commits.
 It replaces doing that by hand and forgetting one file.
 
 Where: in the `om-config` session (agent `om-config`), which holds the method's full context and is long-lived.
@@ -43,7 +43,7 @@ List the files before editing; the list goes into the commit message.
 - Renames: exact tokens first (frontmatter `name`, `--agent`, session names, paths), then prose; rerun the grep until it is empty.
 - Rules: in the agent that owns the behavior (`## What you never do`, `## Rules`) and in every skill whose steps it changes; also the row in `docs/03-skills.md` if the skill's contract changed.
 - New skill: folder `skills/{{name}}/SKILL.md` with frontmatter (`name` = folder, `description` under 170 chars saying what and when, `argument-hint` quoted, `disable-model-invocation`), body with `## Purpose`, Input/Output, numbered steps, `## Rules`; templates and references in subfolders; add it to the right agent's skill table and to `docs/03-skills.md`.
-- New agent: `agents/{{name}}.md`; the name must be `overmind` or start with `om-`; add it to `bin/lint-method`'s allowed list and to `docs/04-operacion.md`.
+- New agent: `agents/{{name}}.md`; the name must be `overmind` or start with `om-`; add it to `scripts/lint-method`'s allowed list and to `docs/04-operacion.md`.
 - Removal or merge: delete the folder, move what survives into the target skill, update every reference, add the pair to the name map in `docs/03-skills.md`.
 - Design: edit the document that owns the decision and every skill or agent that implemented the old one.
 
@@ -51,7 +51,7 @@ Writing conventions: English in every file of the repo, including `docs/`; one s
 
 ## 4. Lint
 
-Run `bin/lint-method`.
+Run `scripts/lint-method`.
 Fix every finding; do not commit with findings.
 
 ## 5. Record
