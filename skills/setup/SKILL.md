@@ -1,6 +1,7 @@
 ---
 name: setup
 description: Extract a project's documentation, wherever it is, into the docs/ convention, together with Sebastian. om-manager; Sebastian invokes it on any project joining the system.
+effort: high
 argument-hint: "[check | fill] [OVERVIEW_FILE] [DESIGN_FOLDER]"
 disable-model-invocation: true
 ---
@@ -52,7 +53,7 @@ With his no: stop; `setup` needs a versioned root. See `docs/05-layouts.md` of t
 ## 2. Discovery per component
 
 Discovery is read-only and independent per component (repo or app), so it runs in parallel.
-With more than one component, run it as a Workflow (load `workflow-authoring` first; this skill is the opt-in): `parallel` over components, concurrency 4, each step an `agent()` with the `om-setup-worker` brief in `discover` mode and this schema:
+With more than one component, run it as a Workflow (load `workflow-authoring` first; this skill is the opt-in): `parallel` over components, concurrency 4, each step an `agent()` with the `om-setup-worker` brief in `discover` mode, `model: sonnet` (reading and inventorying does not need more), and this schema:
 
 ```
 { component, stack, base_branch, docs_found: [{path, covers, freshness}],

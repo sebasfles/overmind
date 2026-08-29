@@ -1,6 +1,7 @@
 ---
 name: document-task
 description: Update the module docs affected by the round, with updated and source. om-developer; at the end of every execute-task round.
+effort: medium
 disable-model-invocation: false
 ---
 

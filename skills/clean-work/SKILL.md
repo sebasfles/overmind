@@ -1,6 +1,7 @@
 ---
 name: clean-work
 description: Run clean-task for every merged task and report leftovers. om-manager; Sebastian invokes it.
+effort: low
 disable-model-invocation: true
 ---
 

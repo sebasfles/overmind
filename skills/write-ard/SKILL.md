@@ -1,6 +1,7 @@
 ---
 name: write-ard
 description: Append architecture decisions and debt (general ARD.md or a module's ard.md). Used by setup and om-setup-worker.
+effort: high
 argument-hint: "[general | MODULE_NAME]"
 disable-model-invocation: false
 ---

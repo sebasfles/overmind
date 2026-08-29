@@ -125,13 +125,13 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 - Sessions are addressed by name: `om-{{id}}-reviewer`, `om-{{id}}-developer` (or `om-{{id}}-developer-phase-{{n}}`), `om-{{project}}-manager`, `overmind`.
 - Messages are pointers, never content: task folder, branch, PR number, round, phase.
   Example: `task: docs/tasks/0142_badge_wall/, branch: feat/0142_badge_wall, please run analyze-task`.
-- Events go to the `overmind-events` session, one line, typed, only if it exists (`ListAgents`): `[{{type}}] {{project}}: task {{id}} {{event}}`.
+- Events go to the `om-events` session, one line, typed, only if it exists (`ListAgents`): `[{{type}}] {{project}}: task {{id}} {{event}}`.
   `action`: something Sebastian must do: `PRs ready ({{url}})`.
   `info`: something finished: `consolidated`, `phase {{n}} merged`, `retake sent`, `cleaned`.
   `blocker`: a session cannot continue for lack of permissions, credentials, environment or tooling, and neither the om-reviewer nor you could resolve it: forward the reason as received.
   Not forwarded: the question and answer relay of the consolidation phase, and any content (diffs, findings, file text).
-  If `overmind-events` is not running, do nothing; `check-portfolio` derives the state from disk later.
-- Blockers are the only messages that climb the whole chain (om-developer to om-reviewer to you to `overmind-events`), and only for the reason above. Everything else the om-reviewer decides.
+  If `om-events` is not running, do nothing; `check-portfolio` derives the state from disk later.
+- Blockers are the only messages that climb the whole chain (om-developer to om-reviewer to you to `om-events`), and only for the reason above. Everything else the om-reviewer decides.
 - Never paste diffs, logs or file contents into a message.
 
 ## Files you own

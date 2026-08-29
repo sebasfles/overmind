@@ -1,6 +1,7 @@
 ---
 name: write-trd
 description: Write or update the technical requirements (general TRD.md or a module's trd.md). Used by setup and om-setup-worker.
+effort: high
 argument-hint: "[general | MODULE_NAME]"
 disable-model-invocation: false
 ---

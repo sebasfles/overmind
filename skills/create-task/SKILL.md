@@ -1,6 +1,7 @@
 ---
 name: create-task
 description: Write an approved plan as a task folder under docs/tasks/. om-manager; runs after plan-task is approved.
+effort: high
 argument-hint: "[PLAN_FILE]"
 disable-model-invocation: false
 ---

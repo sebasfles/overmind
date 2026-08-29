@@ -1,6 +1,7 @@
 ---
 name: consolidate-task
 description: Create the task workspace, launch the om-reviewer and commit the task as planned. om-manager; Sebastian invokes it after create-task.
+effort: high
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: true
 ---

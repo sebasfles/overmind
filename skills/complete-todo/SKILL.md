@@ -1,6 +1,7 @@
 ---
 name: complete-todo
 description: Move a todo from Open to Done in portfolio/todos.md. overmind; Sebastian invokes it.
+effort: low
 argument-hint: "[TEXT_OR_NUMBER]"
 disable-model-invocation: true
 ---

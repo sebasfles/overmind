@@ -1,6 +1,7 @@
 ---
 name: write-prd
 description: Write or update the product requirements (general PRD.md or a module's prd.md). Used by setup and om-setup-worker.
+effort: high
 argument-hint: "[general | MODULE_NAME] [OVERVIEW_FILE] [DESIGN_FOLDER]"
 disable-model-invocation: false
 ---

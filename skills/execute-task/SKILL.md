@@ -1,6 +1,7 @@
 ---
 name: execute-task
 description: "Implement the task or apply findings, verify, document, one commit per round. om-developer; on \"context ready, start\" and on findings."
+effort: high
 disable-model-invocation: false
 ---
 

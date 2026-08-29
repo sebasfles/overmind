@@ -1,6 +1,7 @@
 ---
 name: add-todo
 description: Append a quick-capture todo to portfolio/todos.md. overmind; Sebastian invokes it.
+effort: low
 argument-hint: "[TEXT] [@project]"
 disable-model-invocation: true
 ---

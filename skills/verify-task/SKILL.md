@@ -1,6 +1,7 @@
 ---
 name: verify-task
 description: Run lint, typecheck and tests per verification target, serially, and log to verify.log. om-developer and om-reviewer; before every round and in review.
+effort: low
 disable-model-invocation: false
 ---
 

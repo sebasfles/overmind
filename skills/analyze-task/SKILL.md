@@ -1,6 +1,7 @@
 ---
 name: analyze-task
 description: Read the task, ask the om-manager once, write Context & decisions. om-reviewer; runs automatically at session start and on retakes.
+effort: xhigh
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
 ---

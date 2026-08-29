@@ -1,6 +1,7 @@
 ---
 name: clean-portfolio
 description: Ask every project's om-manager to run clean-work and report leftovers. overmind; Sebastian invokes it.
+effort: low
 disable-model-invocation: true
 ---
 

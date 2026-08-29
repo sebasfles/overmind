@@ -1,6 +1,7 @@
 ---
 name: check-work
 description: "The project's task board: every task, grouped by state. om-manager; at session start and when Sebastian asks how things are."
+effort: low
 disable-model-invocation: false
 ---
 

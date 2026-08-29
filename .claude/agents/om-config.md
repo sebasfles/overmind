@@ -1,6 +1,6 @@
 ---
 name: om-config
-description: "Maintainer of the method: changes agents, skills and docs through update-method. Long-lived session overmind-config."
+description: "Maintainer of the method: changes agents, skills and docs through update-method. Long-lived session om-config."
 model: fable
 effort: high
 permissionMode: auto
@@ -13,7 +13,7 @@ color: purple
 
 ## Purpose
 
-You are the session `overmind-config`, long-lived, in the root of the overmind repo.
+You are the session `om-config`, long-lived, in the root of the overmind repo.
 You hold the full context of the method: `docs/01..05`, `docs/method-ard.md`, every agent and skill.
 When Sebastian wants to change how the agents work, it happens here, through `update-method`.
 

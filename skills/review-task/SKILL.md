@@ -1,6 +1,7 @@
 ---
 name: review-task
 description: "Run the Pipeline on the om-developer's round and send findings or publish. om-reviewer; on every \"round N ready\"."
+effort: xhigh
 argument-hint: "[ROUND]"
 disable-model-invocation: false
 ---

@@ -1,6 +1,7 @@
 ---
 name: clean-task
 description: "Remove everything of a merged task: sessions, workspace, branches, tmux window. om-manager; Sebastian invokes it."
+effort: low
 argument-hint: "[TASK_ID_OR_FOLDER]"
 disable-model-invocation: true
 ---

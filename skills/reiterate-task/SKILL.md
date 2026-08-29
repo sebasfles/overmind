@@ -1,6 +1,7 @@
 ---
 name: reiterate-task
 description: Send a published task back for another round with Sebastian's PR comments. om-manager; Sebastian invokes it.
+effort: medium
 argument-hint: "[TASK_ID_OR_FOLDER] [COMMENTS]"
 disable-model-invocation: true
 ---

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # resume-overmind
-# Opens the overmind tmux session (window "overmind": overmind | overmind-events; window "config": overmind-config)
+# Opens the overmind tmux session (window "overmind": overmind | om-events; window "config": om-config)
 # in a new Windows Terminal tab, creating what does not exist.
 set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -8,9 +8,9 @@ distro="${WSL_DISTRO_NAME:-Ubuntu}"
 
 if ! tmux has-session -t overmind 2>/dev/null; then
   tmux new-session -d -s overmind -c "$root" -n overmind "claude --agent overmind -n overmind"
-  tmux split-window -h -t overmind:overmind -c "$root" "claude --agent om-events -n overmind-events"
+  tmux split-window -h -t overmind:overmind -c "$root" "claude --agent om-events -n om-events"
   tmux select-pane -t overmind:overmind.0
-  tmux new-window -t overmind -n config -c "$root" "claude --agent om-config -n overmind-config"
+  tmux new-window -t overmind -n config -c "$root" "claude --agent om-config -n om-config"
   tmux select-window -t overmind:overmind
 fi
 

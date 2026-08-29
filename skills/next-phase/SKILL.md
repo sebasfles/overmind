@@ -1,6 +1,7 @@
 ---
 name: next-phase
 description: "Close phase N and start phase N+1 with a fresh om-developer. om-reviewer; on \"phase N merged, continue\"."
+effort: medium
 argument-hint: "[PHASE_N]"
 disable-model-invocation: false
 ---

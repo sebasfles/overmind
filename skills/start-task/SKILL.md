@@ -1,6 +1,7 @@
 ---
 name: start-task
 description: "Launch the om-developer for the current task or phase in the workspace. om-reviewer; on \"delegated, start\" and inside next-phase."
+effort: low
 argument-hint: "[TASK_FOLDER] [PHASE_N]"
 disable-model-invocation: false
 ---

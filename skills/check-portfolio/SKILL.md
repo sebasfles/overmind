@@ -1,6 +1,7 @@
 ---
 name: check-portfolio
 description: The board across all active projects, todos and notifications. overmind; at session start and when Sebastian asks.
+effort: low
 disable-model-invocation: false
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: delegate-task
 description: "Hand a consolidated task to its om-reviewer with \"delegated, start\". om-manager; Sebastian invokes it, or consolidate-task chains into it."
+effort: medium
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
 ---

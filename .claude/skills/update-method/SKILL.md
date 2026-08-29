@@ -1,6 +1,7 @@
 ---
 name: update-method
 description: Apply a change to the method (skills, agents, docs) consistently, lint it, record why, commit. Project skill of the overmind repo; Sebastian invokes it.
+effort: high
 argument-hint: "[CHANGE]"
 disable-model-invocation: true
 ---
@@ -13,8 +14,8 @@ Every change to how the agents work touches several files at once: a rename cros
 This skill applies a change everywhere it belongs, checks the result with `bin/lint-method`, records the reason in `docs/method-ard.md`, and commits.
 It replaces doing that by hand and forgetting one file.
 
-Where: in the `overmind-config` session (agent `om-config`), which holds the method's full context and is long-lived.
-If invoked from any other session, do not apply the change there: open or resume `overmind-config` (window `config` of the overmind tmux session, `claude --agent om-config -n overmind-config`), forward the request in one line, and stop.
+Where: in the `om-config` session (agent `om-config`), which holds the method's full context and is long-lived.
+If invoked from any other session, do not apply the change there: open or resume `om-config` (window `config` of the overmind tmux session, `claude --agent om-config -n om-config`), forward the request in one line, and stop.
 
 Input: `$ARGUMENTS`, the change in Sebastian's words (a rename, a new or changed rule, a new skill or agent, a removal).
 Output: a lint-clean repo with one commit, and an ARD entry.

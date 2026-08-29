@@ -1,6 +1,7 @@
 ---
 name: publish-task
 description: Push, open one PR per repo and write the summary comment on the root PR. om-reviewer; when review-task finds no issues.
+effort: high
 disable-model-invocation: false
 ---
 

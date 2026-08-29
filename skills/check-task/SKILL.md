@@ -1,6 +1,7 @@
 ---
 name: check-task
 description: Derive one task's state from disk, git and gh. om-manager; when Sebastian asks about a task.
+effort: low
 argument-hint: "[TASK_ID_OR_FOLDER]"
 disable-model-invocation: false
 ---

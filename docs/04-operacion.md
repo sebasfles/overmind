@@ -12,13 +12,13 @@ Es una sesión de tmux `overmind` en la raíz del repo `~/dev/personal/projects/
 | Sesión | Agente | Dónde | Para qué |
 |---|---|---|---|
 | `overmind` | `overmind` | ventana `overmind`, pane izquierdo | cabina: estado de proyectos, todos, eventos; abre proyectos |
-| `overmind-events` | `om-events` (haiku) | ventana `overmind`, pane derecho | buzón: recibe eventos de los om-managers, los archiva en `portfolio/events/`, imprime los contadores apilados |
-| `overmind-config` | `om-config` | ventana `config` | mantener el método con `update-method` |
+| `om-events` | `om-events` (haiku) | ventana `overmind`, pane derecho | buzón: recibe eventos de los om-managers, los archiva en `portfolio/events/`, imprime los contadores apilados |
+| `om-config` | `om-config` | ventana `config` | mantener el método con `update-method` |
 
-`bin/resume-overmind` abre la sesión completa; si `overmind` arranca y `overmind-events` no está corriendo, la abre o la retoma en el pane derecho.
+`bin/resume-overmind` abre la sesión completa; si `overmind` arranca y `om-events` no está corriendo, la abre o la retoma en el pane derecho.
 Los tres agentes viven en `.claude/agents/` del repo (ámbito de proyecto), porque solo corren aquí; los cuatro roles que corren dentro de los proyectos viven en `agents/` con symlink global.
 
-Regla de enrutamiento: preguntas sobre proyectos, estado o notificaciones van a `overmind`; cambios al método van a `overmind-config`.
+Regla de enrutamiento: preguntas sobre proyectos, estado o notificaciones van a `overmind`; cambios al método van a `om-config`.
 Si se pide lo uno en la sesión de lo otro, esa sesión abre o retoma la correcta y reenvía la petición en una línea.
 El nombre es deliberadamente distinto de "om-manager" para que nunca se confunda con el de un proyecto.
 
@@ -41,7 +41,7 @@ El planning con el om-manager es la conversación de mayor valor del flujo y no 
 - Limpieza transversal: `clean-work` en todos los proyectos.
 - Deriva de documentación: compara el `updated` de los docs de cada módulo con los últimos commits que tocaron ese módulo.
   Es el chequeo que se decidió no hacer con hooks; aquí es una lectura, no un bloqueo.
-- Mantener el método: desde `overmind-config`, con `update-method`.
+- Mantener el método: desde `om-config`, con `update-method`.
 
 Más adelante puede vivir aquí la priorización entre proyectos ("¿qué ataco hoy?"), como decisión de Sebastian informada por datos, no del agente.
 
