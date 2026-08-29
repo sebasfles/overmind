@@ -71,7 +71,7 @@ Primary form (`--bg` + `attach`, to be validated in the pilot):
 
 ```
 cd {{WORKSPACE}}
-claude --bg --agent om-reviewer -n {{SESSION}} "task: {{TASK_FOLDER}} root: {{ROOT}} workspace: {{WORKSPACE}}"
+claude --bg --allow-dangerously-skip-permissions --agent om-reviewer -n {{SESSION}} "task: {{TASK_FOLDER}} root: {{ROOT}} workspace: {{WORKSPACE}}"
 tmux new-window -t {{PROJECT}} -n {{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}} "claude attach {{bg-id}}" Enter
 ```

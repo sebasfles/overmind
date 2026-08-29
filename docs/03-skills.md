@@ -136,7 +136,8 @@ Todas escritas como borrador en `skills/`, pendientes de piloto.
 | Compartida | `verify-task` |
 | Overmind | `add-project` (con `pause` y `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
 
-Agentes en `agents/`: `overmind`, `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker` (subagente que `setup` usa para documentar un módulo con contexto limpio).
+Agentes globales en `agents/`: `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker` (subagente de `setup` con modos `discover` y `document`).
+Agentes de este repo en `.claude/agents/`: `overmind`, `om-events`, `om-config`.
 
 Pendiente de contenido: `references/{{stack}}.md` de `execute-task` y `verify-task` (nestjs, nextjs, rails, react-native).
 Se escriben cuando el primer proyecto de cada stack pase por `setup`; el TRD del proyecto es la fuente y el reference solo el fallback.

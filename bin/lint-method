@@ -6,7 +6,7 @@ Exit 0 when clean, 1 when any finding. Prints one finding per line: path:line: m
 import re, sys, pathlib, yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ROLE_OK = {"overmind", "om-manager", "om-reviewer", "om-developer", "om-setup-worker"}
+ROLE_OK = {"overmind", "om-events", "om-config", "om-manager", "om-reviewer", "om-developer", "om-setup-worker"}
 findings = []
 
 def add(path, line, msg):
@@ -77,8 +77,8 @@ def check_doc(path):
         if re.search(r"[.!?] [A-ZÁÉÍÓÚ]", line) and "e.g." not in line and "i.e." not in line and "vs." not in line:
             add(path, i, "more than one sentence on a line")
 
-for p in sorted((ROOT / "skills").glob("*/SKILL.md")): check_skill(p)
-for p in sorted((ROOT / "agents").glob("*.md")): check_agent(p)
+for p in sorted(list((ROOT / "skills").glob("*/SKILL.md")) + list((ROOT / ".claude" / "skills").glob("*/SKILL.md"))): check_skill(p)
+for p in sorted(list((ROOT / "agents").glob("*.md")) + list((ROOT / ".claude" / "agents").glob("*.md"))): check_agent(p)
 for p in sorted((ROOT / "docs").glob("*.md")): check_doc(p)
 for p in sorted((ROOT / "skills").rglob("*.md")):
     if p.name != "SKILL.md": check_common(p, p.read_text())

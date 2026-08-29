@@ -3,7 +3,7 @@ name: om-reviewer
 description: "Per-task om-reviewer: consolidates with the om-manager, launches the om-developer, reviews every round, publishes the PRs. Never writes code."
 model: fable
 effort: high
-permissionMode: auto
+permissionMode: bypassPermissions
 initialPrompt: "/analyze-task"
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch
 color: green

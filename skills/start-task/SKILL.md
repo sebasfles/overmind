@@ -41,7 +41,7 @@ Primary form (`--bg` + `attach`):
 
 ```
 cd {{WORKSPACE}}
-claude --bg --agent om-developer -n {{DEV}} "task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md workspace: {{WORKSPACE}}"
+claude --bg --allow-dangerously-skip-permissions --agent om-developer -n {{DEV}} "task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md workspace: {{WORKSPACE}}"
 tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude attach {{bg-id}}" Enter
 ```

@@ -57,3 +57,12 @@ Las decisiones de diseño originales están en `01` a `05`; aquí van los cambio
 - Debt created: none.
 - Revisit when: la lista de eventos crezca y convenga un formato estructurado en vez de una línea.
 - Files: agents/om-manager.md, agents/overmind.md.
+
+## 2026-08-29: Tres sesiones en el overmind, eventos tipados, escalada única
+
+- Decision: la cabina se divide en `overmind` (estado y proyectos), `overmind-events` (buzón, agente `om-events` en haiku) y `overmind-config` (método, agente `om-config`). Los eventos que mandan los om-managers son tipados (`blocker`, `action`, `info`) y se archivan en `portfolio/events/`, apilándose con contadores. El único mensaje que sube toda la cadena es un bloqueo por permisos, credenciales, entorno o herramientas; om-reviewer y om-developer corren con `bypassPermissions`. Los tres agentes de la cabina son de ámbito de proyecto (`.claude/agents/`); los cuatro roles de proyecto siguen globales.
+- Alternatives rejected: una sola sesión overmind con los tres trabajos (mezcla contexto y hace ruido con los eventos); agentes de cabina globales (aparecerían como subagentes delegables en cada om-manager); eliminar `update-method` al existir `om-config` (el agente es quién, la skill es el procedimiento invocable).
+- Reason: cada sesión long-lived necesita un solo motivo para vivir; y el buzón separado hace que los eventos se vean sin interrumpir la conversación con la cabina.
+- Debt created: `bypassPermissions` quita la red del clasificador a om-reviewer y om-developer; la mitigación es el aislamiento del workspace y las reglas duras de cada agente.
+- Revisit when: un om-developer haga algo destructivo fuera de su workspace, o el buzón necesite más que tres tipos.
+- Files: .claude/agents/, agents/om-manager.md, agents/om-reviewer.md, agents/om-developer.md, bin/resume-overmind, bin/lint-method, portfolio/events/, docs/04-operacion.md, docs/03-skills.md, .claude/skills/update-method/SKILL.md, CLAUDE.md.
