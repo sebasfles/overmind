@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Create or reconcile the project's documentation convention (docs/, CLAUDE.md). om-manager; Sebastian invokes it on new or undocumented projects.
+description: Extract a project's documentation, wherever it is, into the docs/ convention, together with Sebastian. om-manager; Sebastian invokes it on any project joining the system.
 argument-hint: "[check | fill] [OVERVIEW_FILE] [DESIGN_FOLDER]"
 disable-model-invocation: true
 ---
@@ -9,14 +9,14 @@ disable-model-invocation: true
 
 ## Purpose
 
-Create or reconcile the documentation convention in a project: detect stack, modules and the state of docs/,
-report the gap between ideal and actual, fill it (general TRD, then every module in parallel with om-setup-worker
-subagents, then general PRD and ARD), write the short CLAUDE.md, collect every [inferido] for Sebastian, and
-commit with his approval. Idempotent: works on an empty repo, an old one without docs, or a partial one.
-om-manager only; Sebastian invokes it.
+Bring a project into the documentation convention by extracting what is already known about it: existing docs wherever they live (READMEs, wikis, ADRs, comments, specs, commit history, in the root or in any component), the code itself, and Sebastian.
+It does not expect the convention to exist; the convention is its output.
+On a project that already follows it, it reconciles: refreshes stale files, creates missing ones, never deletes.
+Idempotent, interactive, and parallel per module.
 
 Input: optional mode (`check` only reports; `fill` reports and then fills, the default), and optionally an overview document and a design folder for the PRD.
-Output: `docs/` matching the convention, `CLAUDE.md` short, a list of `[inferido]` items for Sebastian, one commit on the base branch.
+Output: `docs/` in the convention (created from scratch or reconciled), `CLAUDE.md` short, a list of `[inferido]` items for Sebastian, one commit on the base branch.
+The convention is the target shape, never a precondition: a project may arrive with docs anywhere, in any format, or with none.
 
 The convention (see `docs/01-documentacion.md` of the overmind repo):
 
@@ -38,7 +38,7 @@ Without writing anything:
 - Layout: single, mono or multirepo, from `.git` at the root and child repos or apps. Components and their paths.
 - Stack per component, from manifests and lockfiles.
 - Base branch, from the remote's default or the existing TRD.
-- State of `docs/`: which files exist, their `updated` date, and whether the code under each module changed after that date (`git log -1 --format=%cs -- {{module path}}` vs `updated`). Stale means code newer than docs.
+- Whether the convention already exists, partially or not at all: which of its files are present, their `updated` date, and whether the code under each module changed after that date (`git log -1 --format=%cs -- {{module path}}` vs `updated`). Stale means code newer than docs. Absence is the normal case for a new project, not an error.
 - `CLAUDE.md`: exists, and is it the short form (points to `docs/`, under 40 lines)?
 - `.gitignore` has `docs/tasks/_drafts/` and, in single and mono, `.workspaces/`; in multirepo, the root `.gitignore` lists every code repo folder and `.workspaces/`.
 
@@ -59,6 +59,8 @@ Before reading code, read what people already wrote, in the root and in every co
 - API spec files, Postman collections, schema files, diagrams (`.mmd`, `.puml`, `.drawio`, images under docs).
 - Commit messages and merged PR titles of the last months for decisions stated in words (`git log --merges --format=%s`).
 
+Documentation can be anywhere and in any shape: a `NOTES.md` at the root, a Confluence export in `docs/legacy/`, a `docs/` in one repo and nothing in the others, a wiki checked in as a submodule.
+Read all of it; do not skip a source because it is not where the convention would put it.
 Build a short inventory: path, what it covers, how current it looks.
 This is the primary source for PRD intent and ARD reasons; code is the primary source for the TRD.
 Nothing of what exists is deleted or moved; it is read, cited and, when a fact is confirmed, folded into the convention with its source noted.
@@ -86,11 +88,18 @@ Every document is written from three sources in this order: the inventory, the c
 Before writing each document, ask him in one batch what neither the inventory nor the code can tell (for whom the product is, what is deliberately out, why a choice was made, what the environments are).
 Do not ask what the inventory or the code already answers.
 
-1. Modules, in parallel: one `om-setup-worker` subagent per module, at most four at a time, each with a clean context and this brief:
+1. Modules, in parallel, as a Workflow.
+   The per-module documentation is N independent jobs with clean context: run them with the Workflow tool (load the `workflow-authoring` skill first).
+   This skill instructing you to use Workflow is the opt-in; Sebastian does not need to say "ultracode".
+   Script shape: `parallel` over the confirmed modules with concurrency 4, each step an `agent()` with the `om-setup-worker` brief and a schema `{module, files_written: [...], inferidos: [{file, line, text}]}`; return the union.
+   If a module fails, fix the brief and resume the run with `resumeFromRunId`; finished modules come back from cache.
+   If the Workflow tool is not available in the session, fall back to `Agent(om-setup-worker)` subagents, at most four at a time.
+   Brief per module, in both cases:
    - module name, purpose, folders per component, the confirmed module list, the base branch, the inventory items that mention the module, and Sebastian's answers that concern it.
    - run `write-trd {{module}}`, `write-prd {{module}}`, `write-ard {{module}}`.
    - write `README.md` from `templates/module-README.md` and `database.md` from `templates/module-database.md`; `flows.md` from `templates/module-flows.md` only if the module has a flow worth a diagram.
    - return the `[inferido]` items it wrote, with file and line.
+   The interactive parts of `setup` (inventory, module confirmation, interviews) stay in this session; only the fan-out runs as a Workflow.
 2. General TRD: run `write-trd general`. The module docs give it the Modules table; the detection gives it components, verification targets and workspace files. If any command comes out `unknown`, ask Sebastian.
 3. General PRD: run `write-prd general` with the inventory's product documents and Sebastian's answers; it links the module `prd.md` files.
 4. General ARD: run `write-ard general`. Optional in substance: on a new repo with no history, create it with the template header and an empty log, so `document-task` has where to append; do not invent entries. On an existing repo, record only decisions with evidence and rebuild the debt index.
@@ -124,6 +133,7 @@ git push origin {{base}}
 - Never touch application code.
 - Never guess module boundaries; Sebastian confirms them.
 - Never write a document without first reading the existing documentation and asking Sebastian what neither it nor the code can answer.
+- Never treat the absence of the convention as a problem; extracting it is the job.
 - Never invent decisions or debt without evidence; mark inferences.
 - Idempotent: running it twice in a row changes nothing the second time except `updated` on stale files.
 - English in every file.

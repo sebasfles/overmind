@@ -30,3 +30,12 @@ Las decisiones de diseño originales están en `01` a `05`; aquí van los cambio
 - Debt created: none.
 - Revisit when: el lint empiece a dar falsos positivos que cueste más mantener que lo que atrapa.
 - Files: .claude/skills/update-method/, bin/lint-method, docs/method-ard.md.
+
+## 2026-08-29: `setup` extrae, no espera la convención; módulos como Workflow
+
+- Decision: `setup` trata la convención como salida, nunca como precondición: inventaría documentación en cualquier lugar y formato, la cruza con el código y con Sebastian, y produce `docs/`. La documentación por módulo corre como Workflow (paralelo con tope 4, resultados con schema, resume), con `Agent(om-setup-worker)` como fallback.
+- Alternatives rejected: exigir la estructura `docs/` antes de correr; hacer toda la skill un Workflow (las partes interactivas no pueden correr en segundo plano); seguir solo con subagentes sueltos.
+- Reason: los proyectos existentes tienen docs dispersas y ninguno tiene la convención; y el fan-out por módulo es el único trabajo del sistema con N jobs independientes donde el resume y el schema pagan.
+- Debt created: la skill instruye escribir el script del Workflow en tiempo de ejecución; conviene guardar un script de referencia en `skills/setup/references/` tras el piloto.
+- Revisit when: el piloto muestre que el Workflow agrega fricción frente a los subagentes.
+- Files: skills/setup/SKILL.md, docs/03-skills.md.
