@@ -125,7 +125,10 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 - Sessions are addressed by name: `om-{{id}}-reviewer`, `om-{{id}}-developer` (or `om-{{id}}-developer-phase-{{n}}`), `om-{{project}}-manager`, `overmind`.
 - Messages are pointers, never content: task folder, branch, PR number, round, phase.
   Example: `task: docs/tasks/0142_badge_wall/, branch: feat/0142_badge_wall, please run analyze-task`.
-- When a PR reaches `in_review`, forward one line to `overmind` if that session exists: `{{project}}: PR #{{n}} for task {{id}} is ready for Sebastian`.
+- Every message you receive from a session that changes a task's state or blocks it, you forward to `overmind` as one line, if that session exists (`ListAgents`): `{{project}}: task {{id}} {{event}}`.
+  Events: `consolidated`, `PRs ready ({{url}})`, `phase {{n}} merged`, `retake sent`, `cleaned`, and any error or blocker a session reports (`rebase failed`, `not reproduced`, `workspace missing`, `verify red on target {{x}}`).
+  Not forwarded: the question and answer relay of the consolidation phase (Sebastian is in that conversation), and any content (diffs, findings, file text).
+  If `overmind` is not running, do nothing; `check-portfolio` derives the state from disk later.
 - Never paste diffs, logs or file contents into a message.
 
 ## Files you own
