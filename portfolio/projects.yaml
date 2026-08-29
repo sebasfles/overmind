@@ -1,0 +1,6 @@
+projects: []
+# - name: diy
+#   path: /home/fless/dev/designli/projects/diy
+#   base_branch: develop
+#   tmux: diy
+#   status: active        # active | paused

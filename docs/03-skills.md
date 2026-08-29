@@ -1,0 +1,125 @@
+# Punto 3: Skills por rol
+
+Estado: acordado el 2026-08-28.
+Depende de: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-orquestacion.md).
+
+## Principios
+
+1. Todas las skills viven en `~/.claude/skills/` (globales).
+   El flujo es la convención de Sebastian, no del proyecto.
+   El detalle por stack va en `references/{{stack}}.md` dentro de cada skill y en el TRD del proyecto.
+2. Cada rol solo puede invocar sus skills.
+   La definición del agente en `~/.claude/agents/{{rol}}.md` restringe qué skills tiene disponibles.
+   El developer no puede correr `review-task`; el reviewer no puede correr `execute-task`.
+   Es por diseño, no por confianza.
+3. Las skills del manager las dispara Sebastian.
+   Las que cambian estado (`consolidate-task`, `delegate-task`, `reiterate-task`, `clean-task`, `clean-work`) se marcan como solo invocables por el usuario.
+   `check-task` y `check-work` pueden ser invocadas por el manager cuando Sebastian pregunta por el estado.
+4. Las skills del reviewer y del developer se ejecutan automáticamente.
+   Reviewer y developer son máquinas de estado dirigidas por eventos.
+   La máquina vive en el system prompt del agente; nadie invoca las skills, el agente reacciona.
+5. Una skill por procedimiento, no por ronda.
+   No existen variantes `re-*`.
+   El input (estado de la carpeta de la task, hallazgos, retakes) determina el modo.
+   Dos skills que comparten el 80% del texto se desincronizan con el tiempo.
+
+## Manager
+
+| Skill | Qué hace |
+|---|---|
+| `setup` | Crea o reconcilia la convención de documentación del punto 1. Detecta estado, reporta brechas, llama a `write-prd`, `write-trd` y `write-ard` (general y por módulo), escribe el `CLAUDE.md` corto. Idempotente. |
+| `write-prd` / `write-trd` / `write-ard` | Producen o actualizan cada documento. Los usa `setup`; `document-task` los reutiliza a nivel de módulo. |
+| `plan-task` | Conversación de planning con Sebastian siguiendo la ruta de lectura de `docs/`. Termina ofreciendo `create-task`. |
+| `create-task` | Crea la carpeta `docs/tasks/{{id}}_{{title}}/` en el checkout principal con `task.md` (`type`, `Goal`, `Scope`, `Acceptance`), `replication.md` si es bug y, en el raro caso de fases, un `phase_N.md` por fase. No commitea. Termina ofreciendo `consolidate-task`. |
+| `consolidate-task` | Sincroniza la rama base, crea worktree y rama según `type` desde `origin/{{base}}`, abre la ventana de tmux y lanza solo al reviewer dentro del worktree. Media las dudas del reviewer con Sebastian hasta que `Context & decisions` está escrito en la copia del checkout principal. Con aprobación de Sebastian commitea y pushea `docs(tasks): {{id}}_{{title}} planned` (plan más decisiones; único commit de docs de la task). Pregunta si se delega ahora; si no, detiene la sesión del reviewer (conservando la conversación) y cierra la ventana de tmux; worktree y rama se quedan. |
+| `delegate-task` | Verifica `depends_on`. Reabre la sesión del reviewer si estaba detenida (`claude attach` o `claude -r`); solo si se perdió lanza una nueva. Hace `git fetch` y `git rebase origin/{{base}}` en el worktree para que la rama reciba la carpeta con las decisiones. Manda "delegated, start". No lanza developers. |
+| `reiterate-task` | Anota los comentarios de Sebastian sobre el PR, fechados, en `retakes.md` y relanza el par sobre el mismo branch, worktree y PR. |
+| `check-task` | Deriva el estado de una task: `planned` (sin worktree), `consolidating` (worktree sin `Context & decisions`), `consolidated` (worktree con `Context & decisions`, sin commits ni developer), `in_progress` (commits por delante de la base o sesión de developer), `in_review` (PR abierto según `gh`), `merged` (PR mergeado, worktree aún existe), `done` (PR mergeado, sin worktree). No consulta a las sesiones para preguntarles nada; solo comprueba si existen. |
+| `check-work` | `check-task` sobre todas las tasks del proyecto. Es el tablero de Sebastian. |
+| `clean-task` | Si el PR de la task está mergeado a la rama base: `git pull` en el checkout principal, borra sesiones de Claude, worktree, rama local y remota, ventana de tmux. No commitea nada; sin worktree la task se deriva como `done`. |
+| `clean-work` | Recorre todos los worktrees, detecta los mergeados y corre `clean-task` en cada uno. |
+
+## Reviewer
+
+| Skill | Evento que la dispara | Qué hace |
+|---|---|---|
+| `analyze-task` | Nace la sesión | Lee la carpeta de la task y `docs/` de los módulos. Si `Context & decisions` está vacío, hace el ping-pong con manager y Sebastian una sola vez y lo escribe en la copia del checkout principal (la única que se escribe antes de la delegación); puede ajustar `Scope`, `Acceptance` y las fases. Si ya está escrito (solo pasa cuando la sesión original se perdió), lo lee y no vuelve a preguntar. Si hay `retakes.md` nuevo, lo incorpora. Avisa al manager "consolidated" y espera "delegated, start". |
+| `start-task` | Mensaje del manager "delegated, start" | Abre el pane derecho de la ventana de tmux, lanza `task-{{id}}-developer` (o `-developer-phase-1`) con cwd en el worktree y le manda "context ready, start". |
+| `review-task` | Mensaje "ronda N" del developer | Corre el Pipeline sobre el worktree: intent, rebase, `verify-task`, review, documentation. Si hay issues, los manda al developer con archivo:línea, error y lo esperado. Si no hay issues, corre `publish-task`. |
+| `publish-task` | `review-task` sin issues | Push de la rama, abre el PR si no existe, escribe o actualiza el único comentario con Intent, What changed, Decisions, Risk assessment y Pipeline. No escribe ningún estado; avisa al manager "PR #{{n}} ready". |
+| `next-phase` | Mensaje del manager "phase N merged, continue" | Mata la sesión del developer de la fase N, crea la rama de la fase N+1 desde `origin/{{base}}` en el worktree, escribe `Result` de la fase N en `phase_N.md` (viaja en el PR de la fase N+1) y corre `start-task`. |
+
+El reviewer nunca modifica código.
+En tasks con fases es el único que vive toda la task; los developers cambian por fase.
+Sí puede pushear: comparte el worktree con el developer y publicar no es escribir código.
+Es el único punto de publicación.
+
+## Developer
+
+| Skill | Evento que la dispara | Qué hace |
+|---|---|---|
+| `execute-task` | "context ready, start" del reviewer, o mensaje con hallazgos | Modo implementar si no hay código de la task; modo corregir si hay hallazgos o retakes. Rebase desde `origin/{{base}}`, implementa, `verify-task`, `document-task`, aplasta en un commit, escribe su nota de cierre (qué hizo, qué dejó pendiente) en `task.md` o `phase_N.md`, avisa al reviewer "ronda N". |
+| `document-task` | Al final de `execute-task` | Actualiza `prd.md`, `trd.md`, `ard.md`, `database.md` y `flows.md` del módulo tocado con `updated` y `source` (punto 1). |
+
+El developer nunca toca el remoto.
+Su trabajo termina en un commit local y un mensaje al reviewer.
+Nunca habla con el manager ni con Sebastian.
+
+## Compartida
+
+| Skill | Quién | Qué hace |
+|---|---|---|
+| `verify-task` | Reviewer y developer | Lee del TRD los comandos del stack. Corre lint → typecheck → tests, uno a uno y con `--runInBand`. Para `type: docs` no corre tests. Deja registro en `docs/tasks/{{id}}_{{title}}/verify.log`: qué corrió, cuándo, resultado y sobre qué commit. |
+
+El registro de `verify-task` es lo que permite al reviewer comprobar que lint y tests corrieron después del último fix.
+El reviewer además la re-corre sobre el commit final, lo que hace irrelevante el orden en que la corrió el developer.
+
+## Máquinas de estado
+
+### Reviewer
+
+```
+nace ──> analyze-task ──> "consolidated" ──> espera "delegated, start"
+delegated ──> start-task (lanza developer) ──> espera
+espera ──(ronda N)──> review-task ──(issues)──> manda hallazgos ──> espera
+                                  ──(sin issues)──> publish-task ──> in_review ──> espera
+in_review ──(fase N mergeada, hay fase N+1)──> next-phase ──> start-task ──> espera
+in_review ──(última fase mergeada, o sin fases)──> termina
+```
+
+### Developer
+
+```
+nace ──> espera aviso del reviewer
+aviso ──> execute-task (implementar) ──> "ronda 1" ──> espera
+hallazgos ──> execute-task (corregir) ──> "ronda N" ──> espera
+```
+
+## Mapa de nombres
+
+Nombres definitivos, que reemplazan a los usados provisionalmente en conversaciones anteriores:
+
+| Provisional | Definitivo |
+|---|---|
+| `new-task` | `plan-task` + `create-task` |
+| `implement-task` | `execute-task` |
+| `retake-task` | `reiterate-task` |
+| `summarize-task` | `publish-task` |
+| `test-task` | `verify-task` |
+| `reanalyze-task`, `reexecute-task` | eliminadas; el modo lo decide el input |
+
+## Relación con las skills actuales
+
+| Actual en `~/.claude/skills/` | Destino |
+|---|---|
+| `refine-us`, `us-to-tus`, `us-to-specs` | Se absorben en `plan-task` y `create-task`. |
+| `implement-specs-{nestjs,nextjs,rails,react-native}` | Se absorben en `execute-task` con `references/{{stack}}.md`. |
+| `pr-reviews` | Se absorbe en `review-task`. |
+| `address-pr-comments-nestjs` | Se absorbe en `reiterate-task` + `execute-task` (modo corregir). |
+| `ds-write-prd`, `ds-write-trd` | Pasan a `write-prd`, `write-trd`. `ds-write-trd` hay que reescribirlo (hoy es copia del PRD). |
+
+## Pendientes derivados
+
+- Escribir `~/.claude/agents/manager.md`, `reviewer.md` y `developer.md` con la lista de skills permitidas y la máquina de estado de cada rol.
+- Definir el formato exacto de `verify.log`.
+- Definir el formato del mensaje de hallazgos del reviewer al developer.
