@@ -48,3 +48,12 @@ Las decisiones de diseño originales están en `01` a `05`; aquí van los cambio
 - Debt created: none.
 - Revisit when: el piloto en un multirepo muestre que la fusión de candidatos necesita más estructura en el schema.
 - Files: skills/setup/SKILL.md, agents/om-setup-worker.md, docs/03-skills.md.
+
+## 2026-08-29: El om-manager reenvía eventos al overmind, no mensajes
+
+- Decision: el om-manager reenvía al `overmind`, en una línea y solo si está corriendo, todo mensaje entre sesiones que cambie el estado de una task o la bloquee (consolidated, PRs ready, phase merged, retake sent, cleaned, errores). No reenvía el relevo de preguntas de la consolidación ni contenido.
+- Alternatives rejected: reenviar todo mensaje recibido (ruido en la cabina durante la consolidación); reenviar solo "PR ready" (los bloqueos quedaban invisibles hasta que Sebastian entrara al proyecto).
+- Reason: la cabina existe para decir dónde hace falta mirar; los bloqueos son justamente eso.
+- Debt created: none.
+- Revisit when: la lista de eventos crezca y convenga un formato estructurado en vez de una línea.
+- Files: agents/om-manager.md, agents/overmind.md.
