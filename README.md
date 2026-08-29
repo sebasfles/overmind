@@ -52,14 +52,14 @@ agents/            global roles that run inside projects (om-manager, om-reviewe
 .claude/agents/    cockpit roles that only run here (overmind, om-events, om-config)
 skills/            28 skills, one folder each, with templates and references
 .claude/skills/    update-method: how the method itself is changed
-bin/               install, resume-overmind, resume-project, lint-method
+bin/               install (once per machine), resume-overmind (you, daily), resume-project (run by overmind), lint-method (run by om-config)
 docs/              design (01 to 06), usage-guide.md, method-ard.md
 portfolio/         state: project registry, todos, event inbox
 ```
 
 ## Getting started
 
-1. `bin/install`: links roles, skills and scripts into `~/.claude` and `~/bin`.
+1. `bin/install`: links roles and skills into `~/.claude`, and `resume-overmind` into `~/bin`.
 2. `bin/resume-overmind`: opens the cockpit.
 3. In `overmind`: `/add-project {{path}}`, then `/resume-project {{name}}` and, in the project's `om-manager`, `/setup`.
 

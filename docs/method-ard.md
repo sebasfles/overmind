@@ -75,3 +75,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: the pilot shows a mechanical skill that needs more reasoning, or an analysis one that doesn't make use of it.
 - Files: .claude/agents/, skills/*/SKILL.md, docs/04-operacion.md, bin/resume-overmind.
+
+## 2026-08-29: Only resume-overmind goes into ~/bin
+
+- Decision: `bin/install` links only `resume-overmind` into `~/bin`. `resume-project` is run by the `overmind` session from the repo, `lint-method` by `om-config` through `update-method`, `install` once per machine.
+- Alternatives rejected: linking every script (puts commands in the PATH that only agents run).
+- Reason: each script has one operator; the PATH should hold only what Sebastian types.
+- Debt created: none.
+- Revisit when: Sebastian finds himself opening projects without the cockpit often enough to want `resume-project` in the PATH.
+- Files: bin/install, CLAUDE.md, README.md, docs/usage-guide.md, docs/04-operacion.md.

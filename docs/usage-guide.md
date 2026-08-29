@@ -16,7 +16,8 @@ Everything not covered here is in `01` through `06`.
 bin/install
 ```
 
-Creates symlinks: `agents/*` to `~/.claude/agents/`, `skills/*` to `~/.claude/skills/`, `resume-project` and `resume-overmind` to `~/bin/`.
+Creates symlinks: `agents/*` to `~/.claude/agents/`, `skills/*` to `~/.claude/skills/`, and `resume-overmind` to `~/bin/`.
+`resume-project` is not linked: the `overmind` session runs it for you when you ask to open a project.
 It's idempotent; run it again after a `git pull` that adds skills.
 The three cockpit agents are not symlinked: they only exist inside this repo.
 
