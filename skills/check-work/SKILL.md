@@ -16,6 +16,11 @@ how things are.
 Input: none.
 Output: a short board, one line per task, grouped by state in this order: `in_review`, `merged`, `in_progress`, `consolidated`, `consolidating`, `planned`, then `done` collapsed to a count.
 
+## 0. No convention yet
+
+If `docs/tasks/` does not exist, print one line and stop: `no docs/tasks/ in this project; run setup first`.
+This is the normal first run on a project that has just been added.
+
 ## 1. Collect
 
 - Every folder under `docs/tasks/` except `_drafts/`: run `check-task` on each.

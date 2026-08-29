@@ -22,7 +22,8 @@ If the folder is missing or a workspace already exists, stop and say so.
 Output: workspace with bootstrapped worktrees, tmux window, running om-reviewer; `Context & decisions` written in the root checkout copy; the task folder (plan plus decisions) committed and pushed as `planned`, the only docs commit of the task on the root's base branch; and the question "¿delegar ahora?".
 
 Read `task.md` frontmatter: `id`, `title`, `type`, `phases`, `depends_on`, `repos`.
-Read `portfolio/projects.yaml` (through the overmind repo) or the project's `CLAUDE.md` for `root`, the repo list and each `base_branch`.
+Read `docs/TRD.md`, section Components, for the repos and each `base_branch`; the root is your cwd.
+If the TRD has no Components table yet, use `git -C {{repo}} symbolic-ref refs/remotes/origin/HEAD` per repo and tell Sebastian the TRD should declare it.
 Set:
 
 ```

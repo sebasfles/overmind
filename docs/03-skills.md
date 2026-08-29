@@ -126,7 +126,7 @@ Nombres definitivos, que reemplazan a los usados provisionalmente en conversacio
 
 ## Inventario (2026-08-29)
 
-Todas escritas como borrador en `skills/`, pendientes de piloto.
+Todas escritas como borrador en `skills/`, pendientes de piloto (ver [06-piloto.md](06-piloto.md)).
 
 | Rol | Skills |
 |---|---|
