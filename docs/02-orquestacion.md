@@ -29,7 +29,8 @@ Es la única sesión con la que habla Sebastian.
 Con él se hace el planning y las decisiones de producto, arquitectura y técnicas.
 Con `create-task` crea el archivo de la task.
 Al crearla pregunta si se ejecuta ahora o queda en cola.
-Con `consolidate-task` lanza al om-reviewer y media sus dudas con Sebastian; con `delegate-task` le entrega la task. Nunca lanza om-developers: eso lo hace el om-reviewer.
+Con `consolidate-task` lanza al om-reviewer y media sus dudas con Sebastian; con `delegate-task` le entrega la task.
+Nunca lanza om-developers: eso lo hace el om-reviewer.
 Nunca entra en el ciclo de revisión de una task.
 
 ### om-reviewer

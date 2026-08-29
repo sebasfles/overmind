@@ -38,8 +38,7 @@ Without writing anything:
 - Layout: single, mono or multirepo, from `.git` at the root and child repos or apps. Components and their paths.
 - Stack per component, from manifests and lockfiles.
 - Base branch, from the remote's default or the existing TRD.
-- Candidate modules: the bounded areas the code already groups (NestJS modules, Rails engines or namespaces, feature folders). Modules belong to the application and may span components; propose the mapping folder(s) -> module across components, with a one-line guess of purpose.
-- State of `docs/`: which files exist, their `updated` date, and for each module folder whether the code under it changed after that date (`git log -1 --format=%cs -- {{module path}}` vs `updated`). Stale means code newer than docs.
+- State of `docs/`: which files exist, their `updated` date, and whether the code under each module changed after that date (`git log -1 --format=%cs -- {{module path}}` vs `updated`). Stale means code newer than docs.
 - `CLAUDE.md`: exists, and is it the short form (points to `docs/`, under 40 lines)?
 - `.gitignore` has `docs/tasks/_drafts/` and, in single and mono, `.workspaces/`; in multirepo, the root `.gitignore` lists every code repo folder and `.workspaces/`.
 
@@ -50,47 +49,65 @@ Offer Sebastian the option before anything else: make the folder a docs-only rep
 With his yes: `git init`, write `.gitignore`, first commit `docs: init project root`, add the remote he gives.
 With his no: stop; `setup` needs a versioned root. See `docs/05-layouts.md` of the overmind repo.
 
-## 2. Report the gap
+## 2. Inventory what is already documented
+
+Before reading code, read what people already wrote, in the root and in every component:
+
+- `README*`, `CONTRIBUTING*`, `ARCHITECTURE*`, `CHANGELOG*`.
+- `docs/`, `doc/`, `wiki/`, `adr/`, `decisions/`, `rfcs/` folders and anything `.md` outside `node_modules` and vendor folders.
+- Long comments at the top of entrypoints and module roots; `TODO`, `FIXME`, `HACK` comments (they are debt evidence).
+- API spec files, Postman collections, schema files, diagrams (`.mmd`, `.puml`, `.drawio`, images under docs).
+- Commit messages and merged PR titles of the last months for decisions stated in words (`git log --merges --format=%s`).
+
+Build a short inventory: path, what it covers, how current it looks.
+This is the primary source for PRD intent and ARD reasons; code is the primary source for the TRD.
+Nothing of what exists is deleted or moved; it is read, cited and, when a fact is confirmed, folded into the convention with its source noted.
+
+## 3. Report and confirm modules
 
 One screen, to Sebastian:
 
 ```
 Stack        NestJS 10, Prisma, pnpm          base: develop
+Existing     README (2024), docs/adr/ (6 entries), swagger.json, 14 TODOs
 Modules      7 detected: auth, billing, ...   (2 uncertain: shared, legacy)
 docs/        missing                          (or: 4/7 modules documented, 2 stale)
 CLAUDE.md    long (180 lines), not pointing to docs/
 ```
 
-Then ask him to confirm the module list; module boundaries are the one decision you must not guess.
+Then confirm the module list with him: name, purpose in one line, and which folders in which components belong to it.
+Module boundaries are the one decision you must not guess.
 In `check` mode, stop here.
 
-## 3. Fill, in order
+## 4. Fill, in order, with Sebastian
 
-Order matters because later documents index earlier ones.
+`setup` is a working session, not a batch job.
+Every document is written from three sources in this order: the inventory, the code, and Sebastian.
+Before writing each document, ask him in one batch what neither the inventory nor the code can tell (for whom the product is, what is deliberately out, why a choice was made, what the environments are).
+Do not ask what the inventory or the code already answers.
 
-1. General TRD: run `write-trd general`. It needs the confirmed components and modules, and produces the verification targets and workspace files per component. If anything comes out `unknown`, ask Sebastian now.
-2. Modules, in parallel: one `om-setup-worker` subagent per module, each with a clean context and this brief:
-   - module name and root path, the confirmed module list, the base branch.
-   - run `write-trd {{module}}`, `write-prd {{module}}` (pass overview and designs if given), `write-ard {{module}}`.
-   - write `README.md` from `templates/module-README.md` and `database.md` from `templates/module-database.md`; write `flows.md` from `templates/module-flows.md` only if the module has a flow worth a state or sequence diagram.
-   - return the list of `[inferido]` items it wrote, with file and line.
-   Run at most four workers at a time; the machine also runs other tasks.
-3. General PRD: run `write-prd general`, now that module `prd.md` files exist to link.
-4. General ARD: run `write-ard general`; it rebuilds the debt index from the module ARDs.
+1. Modules, in parallel: one `om-setup-worker` subagent per module, at most four at a time, each with a clean context and this brief:
+   - module name, purpose, folders per component, the confirmed module list, the base branch, the inventory items that mention the module, and Sebastian's answers that concern it.
+   - run `write-trd {{module}}`, `write-prd {{module}}`, `write-ard {{module}}`.
+   - write `README.md` from `templates/module-README.md` and `database.md` from `templates/module-database.md`; `flows.md` from `templates/module-flows.md` only if the module has a flow worth a diagram.
+   - return the `[inferido]` items it wrote, with file and line.
+2. General TRD: run `write-trd general`. The module docs give it the Modules table; the detection gives it components, verification targets and workspace files. If any command comes out `unknown`, ask Sebastian.
+3. General PRD: run `write-prd general` with the inventory's product documents and Sebastian's answers; it links the module `prd.md` files.
+4. General ARD: run `write-ard general`. Optional in substance: on a new repo with no history, create it with the template header and an empty log, so `document-task` has where to append; do not invent entries. On an existing repo, record only decisions with evidence and rebuild the debt index.
 5. `CLAUDE.md`: write or rewrite it from `templates/CLAUDE.md`, under 40 lines. If a long one exists, move anything that is not a rule into the TRD and keep the rules.
 6. `.gitignore`: add `docs/tasks/_drafts/` and `.workspaces/` (multirepo: also every code repo folder), and create `docs/tasks/.gitkeep`.
 
 On a partial repo, skip files that exist and are not stale; refresh stale ones; create missing ones.
 Never delete documentation you did not write.
 
-## 4. Inferences
+## 5. Inferences
 
 Collect every `[inferido]` from the workers and from your own writes.
 Present them grouped by file, one line each, and ask Sebastian to confirm, correct or delete.
 Apply his answers: confirmed items lose the marker; deleted items are removed; corrected items are rewritten.
 Items he does not answer keep the marker; they are visible to every future agent as uncertain.
 
-## 5. Commit
+## 6. Commit
 
 Show the file list.
 Ask: "¿Commiteo y pusheo la documentación a {{base}}?"
@@ -106,6 +123,7 @@ git push origin {{base}}
 
 - Never touch application code.
 - Never guess module boundaries; Sebastian confirms them.
+- Never write a document without first reading the existing documentation and asking Sebastian what neither it nor the code can answer.
 - Never invent decisions or debt without evidence; mark inferences.
 - Idempotent: running it twice in a row changes nothing the second time except `updated` on stale files.
 - English in every file.

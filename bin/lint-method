@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""lint-method: mechanical checks over the overmind method (agents/, skills/, docs/, bin/).
+
+Exit 0 when clean, 1 when any finding. Prints one finding per line: path:line: message.
+"""
+import re, sys, pathlib, yaml
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+ROLE_OK = {"overmind", "om-manager", "om-reviewer", "om-developer", "om-setup-worker"}
+findings = []
+
+def add(path, line, msg):
+    findings.append(f"{path.relative_to(ROOT)}:{line}: {msg}")
+
+def frontmatter(path, text):
+    parts = text.split("---", 2)
+    if len(parts) < 3 or parts[0].strip():
+        add(path, 1, "missing frontmatter"); return None, text
+    try:
+        fm = yaml.safe_load(parts[1]) or {}
+    except Exception as e:
+        add(path, 1, f"invalid yaml frontmatter: {e}"); return None, parts[2]
+    return fm, parts[2]
+
+def check_common(path, text):
+    for i, line in enumerate(text.splitlines(), 1):
+        if "—" in line:
+            add(path, i, "em dash")
+        if re.search(r"<[a-zA-Z][^<>\n]*>", line) and "<!--" not in line and "-->" not in line and not line.strip().startswith(("```", "|")) and "gh api" not in line:
+            if not re.search(r"^\s*(claude|git|tmux|wt\.exe|wsl\.exe|cd|mkdir|for|if|printf)\b", line):
+                add(path, i, "angle-bracket placeholder; use {{...}}")
+        if re.search(r"(?<![\w-])(?<!om-)(reviewer|developer|manager)s?(?![\w-])", line, re.I) and "reviewer-summary" not in line and "{{reviewer-id}}" not in line and "{{developer-id}}" not in line:
+            add(path, i, "bare role word; use om- prefixed agent name")
+        if ".claude/worktrees" in line and "léase" not in line and "05-layouts" not in str(path):
+            add(path, i, "old worktree path; use .workspaces/")
+
+def check_skill(path):
+    text = path.read_text()
+    fm, body = frontmatter(path, text)
+    check_common(path, text)
+    if fm is None: return
+    if "name" not in fm or fm["name"] != path.parent.name:
+        add(path, 2, f"name must equal folder name ({path.parent.name})")
+    d = fm.get("description", "")
+    if not isinstance(d, str) or not d.strip():
+        add(path, 3, "missing description")
+    elif len(d) > 170:
+        add(path, 3, f"description too long ({len(d)} chars, max 170)")
+    if "argument-hint" in fm and not isinstance(fm["argument-hint"], str):
+        add(path, 4, "argument-hint must be a quoted string")
+    if "## Purpose" not in body:
+        add(path, 1, "missing '## Purpose' section")
+    if "## Rules" not in body:
+        add(path, 1, "missing '## Rules' section")
+
+def check_agent(path):
+    text = path.read_text()
+    fm, body = frontmatter(path, text)
+    check_common(path, text)
+    if fm is None: return
+    if fm.get("name") not in ROLE_OK:
+        add(path, 2, f"unknown agent name {fm.get('name')!r}; allowed: {sorted(ROLE_OK)}")
+    if fm.get("name") != path.stem:
+        add(path, 2, "name must equal file name")
+    d = fm.get("description", "")
+    if not isinstance(d, str) or len(d) > 170:
+        add(path, 3, "description missing or too long (max 170)")
+    if "## Purpose" not in body:
+        add(path, 1, "missing '## Purpose' section")
+
+def check_doc(path):
+    text = path.read_text()
+    check_common(path, text)
+    for i, line in enumerate(text.splitlines(), 1):
+        # one sentence per line: flag lines with two sentence ends followed by a capital, outside tables and code
+        if line.startswith(("|", "```", "#", "-", "  ", "1", "2", "3", "4", "5", "6", "7", "8", "9")): continue
+        if re.search(r"[.!?] [A-ZÁÉÍÓÚ]", line) and "e.g." not in line and "i.e." not in line and "vs." not in line:
+            add(path, i, "more than one sentence on a line")
+
+for p in sorted((ROOT / "skills").glob("*/SKILL.md")): check_skill(p)
+for p in sorted((ROOT / "agents").glob("*.md")): check_agent(p)
+for p in sorted((ROOT / "docs").glob("*.md")): check_doc(p)
+for p in sorted((ROOT / "skills").rglob("*.md")):
+    if p.name != "SKILL.md": check_common(p, p.read_text())
+
+if findings:
+    print("\n".join(findings)); print(f"\n{len(findings)} finding(s)"); sys.exit(1)
+print("lint-method: clean")

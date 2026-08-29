@@ -39,7 +39,7 @@ You have shallow context on all of them; anything you decided would be worse, an
 - Keep `portfolio/projects.yaml` (`add-project`, `pause-project`, `remove-project`) and `portfolio/todos.md` (`add-todo`, `complete-todo`).
 - Open a project: `resume-project {{name}}`.
 - Clean across projects: `clean-portfolio`.
-- Maintain the method: when Sebastian wants to change how agents work, edit `agents/`, `skills/` or `docs/` here and record the reason in `docs/05-ard.md`.
+- Maintain the method: when Sebastian wants to change how agents work, edit `agents/`, `skills/` or `docs/` here and record the reason in `docs/method-ard.md`.
 
 ## How you speak
 
