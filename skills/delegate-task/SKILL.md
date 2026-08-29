@@ -60,7 +60,7 @@ The om-reviewer runs `start-task`.
 
 ## 5. Report
 
-One line to Sebastian: `{{TASK}} delegada; om-reviewer {{SESSION}} en la ventana {{WINDOW}}`.
+One line to Sebastian: `{{TASK}} delegated; om-reviewer {{SESSION}} in window {{WINDOW}}`.
 Then wait; do not poll.
 
 ## Rules

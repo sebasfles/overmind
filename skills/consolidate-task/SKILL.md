@@ -19,7 +19,7 @@ Ends by asking whether to delegate now. om-manager only; Sebastian invokes it.
 Input: `$ARGUMENTS[0]`, the absolute path of a task folder under `{{ROOT}}/docs/tasks/`, uncommitted, with no workspace yet.
 If the folder is missing or a workspace already exists, stop and say so.
 
-Output: workspace with bootstrapped worktrees, tmux window, running om-reviewer; `Context & decisions` written in the root checkout copy; the task folder (plan plus decisions) committed and pushed as `planned`, the only docs commit of the task on the root's base branch; and the question "¿delegar ahora?".
+Output: workspace with bootstrapped worktrees, tmux window, running om-reviewer; `Context & decisions` written in the root checkout copy; the task folder (plan plus decisions) committed and pushed as `planned`, the only docs commit of the task on the root's base branch; and the question "delegate now?".
 
 Read `task.md` frontmatter: `id`, `title`, `type`, `phases`, `depends_on`, `repos`.
 Read `docs/TRD.md`, section Components, for the repos and each `base_branch`; the root is your cwd.
@@ -93,7 +93,7 @@ Do not commit, do not delegate, do not answer anything about Goal or Scope on Se
 ## 6. Commit and push `planned`
 
 Show Sebastian `Context & decisions` and any Scope or Acceptance adjustment in a few lines.
-Ask: "¿Pusheo la task a {{root base}}?"
+Ask: "Push the task to {{root base}}?"
 Only after approval, in the root checkout:
 
 ```
@@ -108,7 +108,7 @@ If the push is rejected by branch protection, say so and leave it local.
 
 ## 7. Delegate now, or pause
 
-Ask: "¿Delegar ahora?"
+Ask: "Delegate now?"
 
 - Yes: invoke `delegate-task`.
 - No: `claude stop {{bg-id}}` (conversation kept) and `tmux kill-window -t {{PROJECT}}:{{WINDOW}}`. The workspace stays; the task shows as `consolidated`.

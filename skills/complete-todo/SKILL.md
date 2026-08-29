@@ -21,7 +21,7 @@ Output: the line moved to `## Done`, marked `[x]` with the completion date, comm
 ```
 
 If the text matches more than one line, list them and ask which.
-Confirm in one line: `tachado`.
+Confirm in one line: `done`.
 Commit: `portfolio: complete todo`.
 
 ## Rules

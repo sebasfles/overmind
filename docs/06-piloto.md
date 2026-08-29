@@ -1,44 +1,44 @@
-# Punto 6: Piloto
+# Part 6: Pilot
 
-Estado: pendiente.
-Proyecto por elegir (recomendado: `auvral`, multirepo y personal).
-Todo lo escrito en `01` a `05` es diseño; el piloto es donde se corrige.
-Cada fallo se arregla en la skill o el agente con `update-method` antes de seguir al paso siguiente.
+Status: pending.
+Project to be chosen (recommended: `auvral`, multirepo and personal).
+Everything written in `01` through `05` is design; the pilot is where it gets corrected.
+Each failure gets fixed in the skill or agent with `update-method` before moving on to the next step.
 
-## Supuestos técnicos a validar
+## Technical assumptions to validate
 
-| Supuesto | Dónde se usa | Si falla |
+| Assumption | Where it's used | If it fails |
 |---|---|---|
-| `claude --agent {{rol}}` carga agentes de `~/.claude/agents/` (symlinks) y de `.claude/agents/` del repo | todos los lanzamientos | mover los de la cabina a globales |
-| `claude --bg` + `claude attach` en un pane de tmux da la misma experiencia que una sesión directa | consolidate, start-task, resume-overmind | forma alternativa documentada en el `02` |
-| `SendMessage` entre sesiones locales lanzadas con `--bg` se entrega y se procesa como turno | toda la comunicación | sesiones directas; si tampoco, archivo de buzón en disco |
-| `--allow-dangerously-skip-permissions` con `--bg` deja a om-reviewer y om-developer sin bloqueos del clasificador | consolidate, start-task | `permissionMode: auto` con allowlist en settings |
-| El Workflow tool está disponible dentro de una sesión om-manager y acepta `model` por paso | setup (discovery y módulos) | fallback `Agent(om-setup-worker)` ya escrito |
-| Un `initialPrompt` que invoca una skill (`/check-work`, `/analyze-task`, `/check-portfolio`) se ejecuta al arrancar | om-manager, om-reviewer, overmind | mandar el primer mensaje a mano desde quien lanza |
-| `wt.exe -w 0 new-tab ... wsl.exe --cd ... tmux attach` abre la pestaña en la ventana actual | resume-project, resume-overmind | ajustar flags de Windows Terminal |
+| `claude --agent {{rol}}` loads agents from `~/.claude/agents/` (symlinks) and from the repo's `.claude/agents/` | all launches | move the cockpit ones to global |
+| `claude --bg` + `claude attach` in a tmux pane gives the same experience as a direct session | consolidate, start-task, resume-overmind | alternative form documented in `02` |
+| `SendMessage` between local sessions launched with `--bg` gets delivered and processed as a turn | all communication | direct sessions; if that fails too, an on-disk mailbox file |
+| `--allow-dangerously-skip-permissions` with `--bg` leaves om-reviewer and om-developer without the classifier's blocks | consolidate, start-task | `permissionMode: auto` with an allowlist in settings |
+| The Workflow tool is available inside an om-manager session and accepts `model` per step | setup (discovery and modules) | fallback `Agent(om-setup-worker)` already written |
+| An `initialPrompt` that invokes a skill (`/check-work`, `/analyze-task`, `/check-portfolio`) runs on startup | om-manager, om-reviewer, overmind | send the first message by hand from whoever launches it |
+| `wt.exe -w 0 new-tab ... wsl.exe --cd ... tmux attach` opens the tab in the current window | resume-project, resume-overmind | adjust Windows Terminal flags |
 
-## Orden
+## Order
 
-1. `bin/install`: symlinks. Comprobar que `claude --agent om-manager` arranca en cualquier directorio y que `/plan-task` aparece en `/help`.
-2. `bin/resume-overmind`: las tres sesiones. Comprobar que `overmind` abre `om-events` si falta.
-3. `add-project {{proyecto}}` desde `overmind`: detección de layout, repo `{{name}}-docs` si es multirepo, registro.
-4. `resume-project {{proyecto}}`: pestaña, tmux, om-manager en la ventana 0 con `check-work` diciendo "run setup first".
-5. `setup`: discovery por componente (Workflow), confirmación de módulos, entrevista, documentación por módulo (Workflow), TRD, PRD, ARD, `CLAUDE.md`, inferidos, commit. Es la prueba más dura.
-6. Una task chica y real: `plan-task` → `create-task` → `consolidate-task` (aquí se validan `--bg`, `attach`, `SendMessage` y el bootstrap del workspace) → `delegate-task` → `start-task` → una ronda → `publish-task` → merge → `clean-task`.
-7. Una segunda task en paralelo con la primera, para ver dos workspaces y dos pares a la vez.
-8. Un `reiterate-task` con un comentario tuyo en el PR.
-9. Si el proyecto es multirepo, una task que toque dos repos: dos PRs de código y el PR del root con el resumen.
+1. `bin/install`: symlinks. Check that `claude --agent om-manager` starts in any directory and that `/plan-task` appears in `/help`.
+2. `bin/resume-overmind`: the three sessions. Check that `overmind` opens `om-events` if it's missing.
+3. `add-project {{proyecto}}` from `overmind`: layout detection, `{{name}}-docs` repo if multirepo, registration.
+4. `resume-project {{proyecto}}`: tab, tmux, om-manager in window 0 with `check-work` saying "run setup first".
+5. `setup`: discovery per component (Workflow), module confirmation, interview, per-module documentation (Workflow), TRD, PRD, ARD, `CLAUDE.md`, inferred items, commit. It's the hardest test.
+6. One small, real task: `plan-task` → `create-task` → `consolidate-task` (this is where `--bg`, `attach`, `SendMessage` and the workspace bootstrap get validated) → `delegate-task` → `start-task` → one round → `publish-task` → merge → `clean-task`.
+7. A second task in parallel with the first, to see two workspaces and two pairs at once.
+8. A `reiterate-task` with a comment of yours on the PR.
+9. If the project is multirepo, a task that touches two repos: two code PRs and the root PR with the summary.
 
-## Qué medir
+## What to measure
 
-- Cuántas veces tuviste que intervenir fuera de `plan-task`, la consolidación y el merge.
-- Cuántos `[inferido]` de `setup` estaban mal.
-- Cuántos hallazgos del om-reviewer fueron reales y cuántos ruido.
-- Tokens por rol y por task, para revisar modelos y effort.
+- How many times you had to step in outside of `plan-task`, consolidation and merge.
+- How many `[inferido]` from `setup` were wrong.
+- How many om-reviewer findings were real and how many noise.
+- Tokens per role and per task, to review models and effort.
 
-## Después del piloto
+## After the pilot
 
-- Fusionar skills que nunca se invocaron solas (candidatas: `create-task` en `plan-task`, `start-task` en `analyze-task` y `next-phase`).
-- Guardar el script de Workflow de `setup` en `skills/setup/references/`.
-- Escribir `references/{{stack}}.md` de `execute-task` y `verify-task` con lo que el TRD del piloto declaró.
-- Crear los symlinks definitivos y borrar `bin/install` si ya no hace falta, o dejarlo para la segunda máquina.
+- Merge skills that were never invoked on their own (candidates: `create-task` into `plan-task`, `start-task` into `analyze-task` and `next-phase`).
+- Save the Workflow script for `setup` in `skills/setup/references/`.
+- Write `references/{{stack}}.md` for `execute-task` and `verify-task` with what the pilot's TRD declared.
+- Create the final symlinks and delete `bin/install` if it's no longer needed, or leave it for the second machine.

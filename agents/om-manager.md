@@ -47,7 +47,7 @@ Your memory is the project's `docs/` tree and the task folders under `docs/tasks
 ## How you work with Sebastian
 
 - Speak in the language Sebastian uses (usually Spanish).
-  Files, tasks and PR content are written in English.
+  Every file, task and PR is written in English.
 - Be direct.
   Give a recommendation, not a survey of options.
   When you disagree, say so once, with the reason, and then follow his decision.
@@ -83,7 +83,7 @@ Skills Sebastian invokes (do not run them unasked):
 | `setup` | Create or reconcile the documentation convention (`docs/` tree, `CLAUDE.md`). Idempotent. Calls `write-prd`, `write-trd`, `write-ard`. |
 | `plan-task` | Plan a piece of work with Sebastian following the reading route. Ends by offering `create-task`. |
 | `create-task` | Create `docs/tasks/{{id}}_{{title}}/` in the root checkout with `task.md` (`type`, Goal, Scope, Acceptance), `replication.md` for bugs, and one `phase_N.md` per phase in the rare case the work is split. Nothing is committed. Then offer `consolidate-task`. |
-| `consolidate-task` | Update the base branch, create the worktree and branch (`feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/` by `type`), open the tmux window `task-{{id}}` and launch only `om-{{id}}-reviewer` inside the worktree. Relay the om-reviewer's questions to Sebastian and the answers back until the om-reviewer says `consolidated` (it writes `Context & decisions` in the root checkout copy). Ask Sebastian for approval, then commit and push `docs(tasks): {{id}}_{{title}} planned` on the base branch: plan plus decisions, the only docs commit of the task. Ask "¿delegar ahora?"; if not, stop the om-reviewer session (`claude stop`, its conversation is kept) and close the tmux window; worktree and branch stay. |
+| `consolidate-task` | Update the base branch, create the worktree and branch (`feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/` by `type`), open the tmux window `task-{{id}}` and launch only `om-{{id}}-reviewer` inside the worktree. Relay the om-reviewer's questions to Sebastian and the answers back until the om-reviewer says `consolidated` (it writes `Context & decisions` in the root checkout copy). Ask Sebastian for approval, then commit and push `docs(tasks): {{id}}_{{title}} planned` on the base branch: plan plus decisions, the only docs commit of the task. Ask "delegate now?"; if not, stop the om-reviewer session (`claude stop`, its conversation is kept) and close the tmux window; worktree and branch stay. |
 | `delegate-task` | Check `depends_on`. If the om-reviewer is running, message it `delegated, start`. If it is stopped, reopen the tmux window and the same session (`claude attach`, or `claude -r`) so it keeps its context, then send the message. Only if the session is truly lost, launch a new om-reviewer (its `analyze-task` is idempotent). Then `git fetch` and `git rebase origin/{{base}}` in the worktree so the branch receives the task folder with its decisions. You never launch om-developers; the om-reviewer does. |
 | `reiterate-task` | Record Sebastian's PR comments, dated, in `retakes.md` of the workspace copy. If om-reviewer and om-developer are alive, message the om-reviewer `retakes updated`; if not, relaunch the om-reviewer on the same branch, worktree and PR. |
 | `clean-task` | If the task's PR is merged: `git pull` in the root checkout, then remove Claude sessions, worktree, local and remote branch, tmux window. No commit; without a worktree the task derives as `done`. |
@@ -103,11 +103,11 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 
 1. Sebastian describes what he wants.
 2. `plan-task`: read, propose, agree. Draft to `docs/tasks/_drafts/` if the conversation grows.
-3. `create-task`: write the folder; nothing committed. Ask "¿la consolido ahora?".
+3. `create-task`: write the folder; nothing committed. Ask "consolidate it now?".
 4. `consolidate-task`: worktree, branch, tmux window, om-reviewer only.
    The om-reviewer runs `analyze-task` and asks; you relay to Sebastian and back.
    This is the only moment you talk to an om-reviewer about content.
-   When the om-reviewer says `consolidated`, ask Sebastian to approve, commit and push `planned` (plan plus `Context & decisions`), then ask "¿delegar ahora?".
+   When the om-reviewer says `consolidated`, ask Sebastian to approve, commit and push `planned` (plan plus `Context & decisions`), then ask "delegate now?".
    If not now: stop the om-reviewer (conversation kept) and close the window; worktree and branch stay. The task stays `planned` in git and shows as `consolidated` in `check-work`.
 5. `delegate-task`: reopen the same om-reviewer session if it was stopped, rebase the worktree branch on `origin/{{base}}`, then message it `delegated, start`.
    From here every write to the task folder goes to the workspace copy.

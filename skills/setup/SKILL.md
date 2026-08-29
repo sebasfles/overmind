@@ -138,7 +138,7 @@ Items he does not answer keep the marker; they are visible to every future agent
 ## 6. Commit
 
 Show the file list.
-Ask: "¿Commiteo y pusheo la documentación a {{base}}?"
+Ask: "Commit and push the documentation to {{base}}?"
 Only then:
 
 ```

@@ -1,145 +1,145 @@
-# Punto 3: Skills por rol
+# Part 3: Skills by role
 
-Estado: acordado el 2026-08-28.
-Depende de: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-orquestacion.md).
+Status: agreed on 2026-08-28.
+Depends on: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-orquestacion.md).
 
-## Principios
+## Principles
 
-1. Todas las skills viven en `~/.claude/skills/` (globales).
-   El flujo es la convención de Sebastian, no del proyecto.
-   El detalle por stack va en `references/{{stack}}.md` dentro de cada skill y en el TRD del proyecto.
-2. Cada rol solo puede invocar sus skills.
-   La definición del agente en `~/.claude/agents/{{rol}}.md` restringe qué skills tiene disponibles.
-   El om-developer no puede correr `review-task`; el om-reviewer no puede correr `execute-task`.
-   Es por diseño, no por confianza.
-3. Las skills del om-manager las dispara Sebastian.
-   Las que cambian estado (`consolidate-task`, `delegate-task`, `reiterate-task`, `clean-task`, `clean-work`) se marcan como solo invocables por el usuario.
-   `check-task` y `check-work` pueden ser invocadas por el om-manager cuando Sebastian pregunta por el estado.
-4. Las skills del om-reviewer y del om-developer se ejecutan automáticamente.
-   om-reviewer y om-developer son máquinas de estado dirigidas por eventos.
-   La máquina vive en el system prompt del agente; nadie invoca las skills, el agente reacciona.
-5. Una skill por procedimiento, no por ronda.
-   No existen variantes `re-*`.
-   El input (estado de la carpeta de la task, hallazgos, retakes) determina el modo.
-   Dos skills que comparten el 80% del texto se desincronizan con el tiempo.
+1. All skills live in `~/.claude/skills/` (global).
+   The flow is Sebastian's convention, not the project's.
+   Stack-specific detail goes in `references/{{stack}}.md` inside each skill and in the project's TRD.
+2. Each role can only invoke its own skills.
+   The agent definition in `~/.claude/agents/{{rol}}.md` restricts which skills it has available.
+   The om-developer cannot run `review-task`; the om-reviewer cannot run `execute-task`.
+   It's by design, not by trust.
+3. Sebastian triggers the om-manager's skills.
+   The ones that change state (`consolidate-task`, `delegate-task`, `reiterate-task`, `clean-task`, `clean-work`) are marked as invocable only by the user.
+   `check-task` and `check-work` can be invoked by the om-manager when Sebastian asks about status.
+4. The om-reviewer's and om-developer's skills run automatically.
+   om-reviewer and om-developer are event-driven state machines.
+   The machine lives in the agent's system prompt; nobody invokes the skills, the agent reacts.
+5. One skill per procedure, not per round.
+   There are no `re-*` variants.
+   The input (state of the task folder, findings, retakes) determines the mode.
+   Two skills that share 80% of the text drift out of sync over time.
 
 ## om-manager
 
-| Skill | Qué hace |
+| Skill | What it does |
 |---|---|
-| `setup` | Extrae la documentación de un proyecto, esté donde esté (READMEs, wikis, ADRs, comentarios, código, Sebastian), hacia la convención del punto 1. No la espera como entrada: es su salida. Dos Workflows con `om-setup-worker`: discovery por componente (solo lectura) y documentación por módulo, con la confirmación de módulos contigo en medio; luego TRD, PRD y ARD (vacío si no hay historia), `CLAUDE.md` corto. Idempotente. |
-| `write-prd` / `write-trd` / `write-ard` | Producen o actualizan cada documento. Los usa `setup`; `document-task` los reutiliza a nivel de módulo. |
-| `plan-task` | Conversación de planning con Sebastian siguiendo la ruta de lectura de `docs/`. Termina ofreciendo `create-task`. |
-| `create-task` | Crea la carpeta `docs/tasks/{{id}}_{{title}}/` en el root checkout con `task.md` (`type`, `Goal`, `Scope`, `Acceptance`), `replication.md` si es bug y, en el raro caso de fases, un `phase_N.md` por fase. No commitea. Termina ofreciendo `consolidate-task`. |
-| `consolidate-task` | Sincroniza la rama base, crea worktree y rama según `type` desde `origin/{{base}}`, abre la ventana de tmux y lanza solo al om-reviewer dentro del worktree. Media las dudas del om-reviewer con Sebastian hasta que `Context & decisions` está escrito en la copia del root checkout. Con aprobación de Sebastian commitea y pushea `docs(tasks): {{id}}_{{title}} planned` (plan más decisiones; único commit de docs de la task). Pregunta si se delega ahora; si no, detiene la sesión del om-reviewer (conservando la conversación) y cierra la ventana de tmux; worktree y rama se quedan. |
-| `delegate-task` | Verifica `depends_on`. Reabre la sesión del om-reviewer si estaba detenida (`claude attach` o `claude -r`); solo si se perdió lanza una nueva. Hace `git fetch` y `git rebase origin/{{base}}` en el worktree para que la rama reciba la carpeta con las decisiones. Manda "delegated, start". No lanza om-developers. |
-| `reiterate-task` | Anota los comentarios de Sebastian sobre el PR, fechados, en `retakes.md` y relanza el par sobre el mismo branch, worktree y PR. |
-| `check-task` | Deriva el estado de una task: `planned` (sin worktree), `consolidating` (worktree sin `Context & decisions`), `consolidated` (worktree con `Context & decisions`, sin commits ni om-developer), `in_progress` (commits por delante de la base o sesión de om-developer), `in_review` (PR abierto según `gh`), `merged` (PR mergeado, worktree aún existe), `done` (PR mergeado, sin worktree). No consulta a las sesiones para preguntarles nada; solo comprueba si existen. |
-| `check-work` | `check-task` sobre todas las tasks del proyecto. Es el tablero de Sebastian. |
-| `clean-task` | Si el PR de la task está mergeado a la rama base: `git pull` en el root checkout, borra sesiones de Claude, worktree, rama local y remota, ventana de tmux. No commitea nada; sin worktree la task se deriva como `done`. |
-| `clean-work` | Recorre todos los worktrees, detecta los mergeados y corre `clean-task` en cada uno. |
+| `setup` | Extracts a project's documentation, wherever it lives (READMEs, wikis, ADRs, comments, code, Sebastian), into the Part 1 convention. It doesn't wait for it as input: it's its output. Two Workflows with `om-setup-worker`: discovery per component (read-only) and documentation per module, with module confirmation with you in between; then TRD, PRD and ARD (empty if there's no history), a short `CLAUDE.md`. Idempotent. |
+| `write-prd` / `write-trd` / `write-ard` | Produce or update each document. `setup` uses them; `document-task` reuses them at the module level. |
+| `plan-task` | Planning conversation with Sebastian following the `docs/` reading path. Ends by offering `create-task`. |
+| `create-task` | Creates the `docs/tasks/{{id}}_{{title}}/` folder in the root checkout with `task.md` (`type`, `Goal`, `Scope`, `Acceptance`), `replication.md` if it's a bug, and, in the rare case of phases, one `phase_N.md` per phase. Doesn't commit. Ends by offering `consolidate-task`. |
+| `consolidate-task` | Syncs the base branch, creates a worktree and branch according to `type` from `origin/{{base}}`, opens the tmux window and launches only the om-reviewer inside the worktree. Mediates the om-reviewer's questions with Sebastian until `Context & decisions` is written in the root checkout copy. With Sebastian's approval it commits and pushes `docs(tasks): {{id}}_{{title}} planned` (plan plus decisions; the task's only docs commit). Asks whether to delegate now; if not, it stops the om-reviewer session (keeping the conversation) and closes the tmux window; the worktree and branch stay. |
+| `delegate-task` | Checks `depends_on`. Reopens the om-reviewer session if it was stopped (`claude attach` or `claude -r`); only launches a new one if it was lost. Runs `git fetch` and `git rebase origin/{{base}}` in the worktree so the branch receives the folder with the decisions. Sends "delegated, start". Doesn't launch om-developers. |
+| `reiterate-task` | Notes Sebastian's comments on the PR, dated, in `retakes.md` and relaunches the pair on the same branch, worktree and PR. |
+| `check-task` | Derives a task's status: `planned` (no worktree), `consolidating` (worktree without `Context & decisions`), `consolidated` (worktree with `Context & decisions`, no commits or om-developer), `in_progress` (commits ahead of base or an om-developer session), `in_review` (PR open according to `gh`), `merged` (PR merged, worktree still exists), `done` (PR merged, no worktree). It doesn't query the sessions to ask them anything; it only checks whether they exist. |
+| `check-work` | `check-task` over all the project's tasks. It's Sebastian's dashboard. |
+| `clean-task` | If the task's PR is merged into the base branch: `git pull` in the root checkout, deletes Claude sessions, worktree, local and remote branch, tmux window. Doesn't commit anything; without a worktree the task is derived as `done`. |
+| `clean-work` | Goes through all the worktrees, detects the merged ones and runs `clean-task` on each one. |
 
 ## om-reviewer
 
-| Skill | Evento que la dispara | Qué hace |
+| Skill | Event that triggers it | What it does |
 |---|---|---|
-| `analyze-task` | Nace la sesión | Lee la carpeta de la task y `docs/` de los módulos. Si `Context & decisions` está vacío, hace el ping-pong con om-manager y Sebastian una sola vez y lo escribe en la copia del root checkout (la única que se escribe antes de la delegación); puede ajustar `Scope`, `Acceptance` y las fases. Si ya está escrito (solo pasa cuando la sesión original se perdió), lo lee y no vuelve a preguntar. Si hay `retakes.md` nuevo, lo incorpora. Avisa al om-manager "consolidated" y espera "delegated, start". |
-| `start-task` | Mensaje del om-manager "delegated, start" | Abre el pane derecho de la ventana de tmux, lanza `om-{{id}}-developer` (o `-developer-phase-1`) con cwd en el worktree y le manda "context ready, start". |
-| `review-task` | Mensaje "ronda N" del om-developer | Corre el Pipeline sobre el worktree: intent, rebase, `verify-task`, review, documentation. Si hay issues, los manda al om-developer con archivo:línea, error y lo esperado. Si no hay issues, corre `publish-task`. |
-| `publish-task` | `review-task` sin issues | Push de cada rama del workspace, un PR por repo tocado (más el del root en multirepo), y el único comentario resumen en el PR del root con Intent, What changed (con links a cada PR), Decisions (incluido orden de merge), Risk assessment y Pipeline por target. No escribe ningún estado; avisa al om-manager "PRs ready". |
-| `next-phase` | Mensaje del om-manager "phase N merged, continue" | Mata la sesión del om-developer de la fase N, crea la rama de la fase N+1 desde `origin/{{base}}` en el worktree, escribe `Result` de la fase N en `phase_N.md` (viaja en el PR de la fase N+1) y corre `start-task`. |
+| `analyze-task` | The session starts | Reads the task folder and the modules' `docs/`. If `Context & decisions` is empty, it does the back-and-forth with om-manager and Sebastian once and writes it in the root checkout copy (the only one written before delegation); it can adjust `Scope`, `Acceptance` and the phases. If it's already written (only happens when the original session was lost), it reads it and doesn't ask again. If there's a new `retakes.md`, it incorporates it. Notifies the om-manager "consolidated" and waits for "delegated, start". |
+| `start-task` | Message from the om-manager "delegated, start" | Opens the right pane of the tmux window, launches `om-{{id}}-developer` (or `-developer-phase-1`) with cwd in the worktree and sends it "context ready, start". |
+| `review-task` | Message "round N" from the om-developer | Runs the Pipeline over the worktree: intent, rebase, `verify-task`, review, documentation. If there are issues, it sends them to the om-developer with file:line, error and what was expected. If there are no issues, it runs `publish-task`. |
+| `publish-task` | `review-task` with no issues | Pushes each branch in the workspace, one PR per touched repo (plus the root one in multirepo), and the single summary comment on the root PR with Intent, What changed (with links to each PR), Decisions (including merge order), Risk assessment and Pipeline per target. Writes no state; notifies the om-manager "PRs ready". |
+| `next-phase` | Message from the om-manager "phase N merged, continue" | Kills the phase N om-developer session, creates the phase N+1 branch from `origin/{{base}}` in the worktree, writes phase N's `Result` in `phase_N.md` (it travels in the phase N+1 PR) and runs `start-task`. |
 
-El om-reviewer nunca modifica código.
-En tasks con fases es el único que vive toda la task; los om-developers cambian por fase.
-Sí puede pushear: comparte el worktree con el om-developer y publicar no es escribir código.
-Es el único punto de publicación.
+The om-reviewer never modifies code.
+In tasks with phases it's the only one that lives through the whole task; the om-developers change per phase.
+It can push: it shares the worktree with the om-developer and publishing isn't writing code.
+It's the only publication point.
 
 ## om-developer
 
-| Skill | Evento que la dispara | Qué hace |
+| Skill | Event that triggers it | What it does |
 |---|---|---|
-| `execute-task` | "context ready, start" del om-reviewer, o mensaje con hallazgos | Modo implementar si no hay código de la task; modo corregir si hay hallazgos o retakes. Rebase desde `origin/{{base}}`, implementa, `verify-task`, `document-task`, aplasta en un commit, escribe su nota de cierre (qué hizo, qué dejó pendiente) en `task.md` o `phase_N.md`, avisa al om-reviewer "ronda N". |
-| `document-task` | Al final de `execute-task` | Actualiza `prd.md`, `trd.md`, `ard.md`, `database.md` y `flows.md` del módulo tocado con `updated` y `source` (punto 1). |
+| `execute-task` | "context ready, start" from the om-reviewer, or a message with findings | Implement mode if there's no task code yet; fix mode if there are findings or retakes. Rebase from `origin/{{base}}`, implements, `verify-task`, `document-task`, squashes into one commit, writes its closing note (what it did, what it left pending) in `task.md` or `phase_N.md`, notifies the om-reviewer "round N". |
+| `document-task` | At the end of `execute-task` | Updates `prd.md`, `trd.md`, `ard.md`, `database.md` and `flows.md` of the touched module with `updated` and `source` (Part 1). |
 
-El om-developer nunca toca el remoto.
-Su trabajo termina en un commit local y un mensaje al om-reviewer.
-Nunca habla con el om-manager ni con Sebastian.
+The om-developer never touches the remote.
+Its work ends in a local commit and a message to the om-reviewer.
+It never talks to the om-manager or to Sebastian.
 
-## Compartida
+## Shared
 
-| Skill | Quién | Qué hace |
+| Skill | Who | What it does |
 |---|---|---|
-| `verify-task` | om-reviewer y om-developer | Itera los `Verification targets` del TRD (uno por repo o app que la task toca). Corre lint → typecheck → tests, uno a uno y con `--runInBand`. Para `type: docs` no corre tests. Un bloque por target en `verify.log`: qué corrió, cuándo, resultado y sobre qué commit. |
+| `verify-task` | om-reviewer and om-developer | Iterates the TRD's `Verification targets` (one per repo or app the task touches). Runs lint → typecheck → tests, one at a time and with `--runInBand`. For `type: docs` it doesn't run tests. One block per target in `verify.log`: what ran, when, the result and on which commit. |
 
-El registro de `verify-task` es lo que permite al om-reviewer comprobar que lint y tests corrieron después del último fix.
-El om-reviewer además la re-corre sobre el commit final, lo que hace irrelevante el orden en que la corrió el om-developer.
+The `verify-task` log is what lets the om-reviewer confirm that lint and tests ran after the last fix.
+The om-reviewer also reruns it on the final commit, which makes irrelevant the order in which the om-developer ran it.
 
-## Máquinas de estado
+## State machines
 
 ### om-reviewer
 
 ```
-nace ──> analyze-task ──> "consolidated" ──> espera "delegated, start"
-delegated ──> start-task (lanza om-developer) ──> espera
-espera ──(ronda N)──> review-task ──(issues)──> manda hallazgos ──> espera
-                                  ──(sin issues)──> publish-task ──> in_review ──> espera
-in_review ──(fase N mergeada, hay fase N+1)──> next-phase ──> start-task ──> espera
-in_review ──(última fase mergeada, o sin fases)──> termina
+starts ──> analyze-task ──> "consolidated" ──> waits "delegated, start"
+delegated ──> start-task (launches om-developer) ──> waits
+waits ──(round N)──> review-task ──(issues)──> sends findings ──> waits
+                                 ──(no issues)──> publish-task ──> in_review ──> waits
+in_review ──(phase N merged, phase N+1 exists)──> next-phase ──> start-task ──> waits
+in_review ──(last phase merged, or no phases)──> ends
 ```
 
 ### om-developer
 
 ```
-nace ──> espera aviso del om-reviewer
-aviso ──> execute-task (implementar) ──> "ronda 1" ──> espera
-hallazgos ──> execute-task (corregir) ──> "ronda N" ──> espera
+starts ──> waits for the om-reviewer's notice
+notice ──> execute-task (implement) ──> "round 1" ──> waits
+findings ──> execute-task (fix) ──> "round N" ──> waits
 ```
 
-## Mapa de nombres
+## Name map
 
-Nombres definitivos, que reemplazan a los usados provisionalmente en conversaciones anteriores:
+Final names, which replace the ones used provisionally in earlier conversations:
 
-| Provisional | Definitivo |
+| Provisional | Final |
 |---|---|
 | `new-task` | `plan-task` + `create-task` |
 | `implement-task` | `execute-task` |
 | `retake-task` | `reiterate-task` |
 | `summarize-task` | `publish-task` |
 | `test-task` | `verify-task` |
-| `reanalyze-task`, `reexecute-task` | eliminadas; el modo lo decide el input |
+| `reanalyze-task`, `reexecute-task` | removed; the mode is decided by the input |
 
-## Relación con las skills actuales
+## Relationship to current skills
 
-| Actual en `~/.claude/skills/` | Destino |
+| Current in `~/.claude/skills/` | Destination |
 |---|---|
-| `refine-us`, `us-to-tus`, `us-to-specs` | Se absorben en `plan-task` y `create-task`. |
-| `implement-specs-{nestjs,nextjs,rails,react-native}` | Se absorben en `execute-task` con `references/{{stack}}.md`. |
-| `pr-reviews` | Se absorbe en `review-task`. |
-| `address-pr-comments-nestjs` | Se absorbe en `reiterate-task` + `execute-task` (modo corregir). |
-| `ds-write-prd`, `ds-write-trd` | Reemplazadas por `write-prd`, `write-trd`, escritas de cero. |
+| `refine-us`, `us-to-tus`, `us-to-specs` | Absorbed into `plan-task` and `create-task`. |
+| `implement-specs-{nestjs,nextjs,rails,react-native}` | Absorbed into `execute-task` with `references/{{stack}}.md`. |
+| `pr-reviews` | Absorbed into `review-task`. |
+| `address-pr-comments-nestjs` | Absorbed into `reiterate-task` + `execute-task` (fix mode). |
+| `ds-write-prd`, `ds-write-trd` | Replaced by `write-prd`, `write-trd`, written from scratch. |
 
-## Pendientes derivados
+## Open items
 
-- Escribir `~/.claude/agents/om-manager.md`, `om-reviewer.md` y `om-developer.md` con la lista de skills permitidas y la máquina de estado de cada rol.
-- Definir el formato exacto de `verify.log`.
-- Definir el formato del mensaje de hallazgos del om-reviewer al om-developer.
+- Write `~/.claude/agents/om-manager.md`, `om-reviewer.md` and `om-developer.md` with the list of allowed skills and each role's state machine.
+- Define the exact format of `verify.log`.
+- Define the format of the om-reviewer's findings message to the om-developer.
 
-## Inventario (2026-08-29)
+## Inventory (2026-08-29)
 
-Todas escritas como borrador en `skills/`, pendientes de piloto (ver [06-piloto.md](06-piloto.md)).
+All written as drafts in `skills/`, pending pilot (see [06-piloto.md](06-piloto.md)).
 
-| Rol | Skills |
+| Role | Skills |
 |---|---|
 | om-manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work` |
 | om-reviewer | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
 | om-developer | `execute-task`, `document-task` |
-| Compartida | `verify-task` |
-| overmind | `add-project` (con `pause` y `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
-| om-config (skill de proyecto en `.claude/skills/`) | `update-method` |
+| Shared | `verify-task` |
+| overmind | `add-project` (with `pause` and `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
+| om-config (project skill in `.claude/skills/`) | `update-method` |
 
-Agentes globales en `agents/`: `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker` (subagente de `setup` con modos `discover` y `document`).
-Agentes de este repo en `.claude/agents/`: `overmind`, `om-events`, `om-config`.
+Global agents in `agents/`: `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker` (subagent of `setup` with `discover` and `document` modes).
+Agents of this repo in `.claude/agents/`: `overmind`, `om-events`, `om-config`.
 
-Pendiente de contenido: `references/{{stack}}.md` de `execute-task` y `verify-task` (nestjs, nextjs, rails, react-native).
-Se escriben cuando el primer proyecto de cada stack pase por `setup`; el TRD del proyecto es la fuente y el reference solo el fallback.
-Las skills previas de `~/.claude/skills/` fueron eliminadas por Sebastian el 2026-08-29 por no usarse.
+Content pending: `references/{{stack}}.md` for `execute-task` and `verify-task` (nestjs, nextjs, rails, react-native).
+They get written when the first project of each stack goes through `setup`; the project's TRD is the source and the reference is only the fallback.
+The previous skills in `~/.claude/skills/` were deleted by Sebastian on 2026-08-29 because they weren't being used.

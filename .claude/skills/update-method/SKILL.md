@@ -47,7 +47,7 @@ List the files before editing; the list goes into the commit message.
 - Removal or merge: delete the folder, move what survives into the target skill, update every reference, add the pair to the name map in `docs/03-skills.md`.
 - Design: edit the document that owns the decision and every skill or agent that implemented the old one.
 
-Writing conventions: English in skills and agents, Spanish in `docs/`; one sentence per line; no em dash; placeholders as `{{...}}`; roles always by agent name (`om-reviewer`), the person always `Sebastian`.
+Writing conventions: English in every file of the repo, including `docs/`; one sentence per line; no em dash; placeholders as `{{...}}`; roles always by agent name (`om-reviewer`), the person always `Sebastian`.
 
 ## 4. Lint
 

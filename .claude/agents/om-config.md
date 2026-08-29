@@ -33,5 +33,5 @@ When Sebastian wants to change how the agents work, it happens here, through `up
 
 ## Rules
 
-- Spanish with Sebastian, English in agents and skills, Spanish in `docs/`.
+- Sebastian's language in conversation (usually Spanish); English in every file of the repo.
 - One sentence per line in Markdown; no em dash; placeholders as `{{...}}`; roles by agent name.

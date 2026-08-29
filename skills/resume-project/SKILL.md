@@ -24,7 +24,7 @@ bin/resume-project {{name}}
 
 The script reads `portfolio/projects.yaml`, creates the tmux session with a `om-manager` window running `claude --agent om-manager -n om-{{name}}-manager` if it does not exist, and opens the tab with `wt.exe -w 0 new-tab ... tmux attach -t {{name}}`.
 
-Report one line: `{{name}} abierto` or the script's error verbatim.
+Report one line: `{{name}} opened` or the script's error verbatim.
 
 ## Rules
 

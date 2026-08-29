@@ -31,7 +31,7 @@ def check_common(path, text):
                 add(path, i, "angle-bracket placeholder; use {{...}}")
         if re.search(r"(?<![\w-])(?<!om-)(reviewer|developer|manager)s?(?![\w-])", line, re.I) and "reviewer-summary" not in line and "{{reviewer-id}}" not in line and "{{developer-id}}" not in line:
             add(path, i, "bare role word; use om- prefixed agent name")
-        if ".claude/worktrees" in line and "léase" not in line and "05-layouts" not in str(path):
+        if ".claude/worktrees" in line and "read" not in line and "05-layouts" not in str(path):
             add(path, i, "old worktree path; use .workspaces/")
 
 def check_skill(path):

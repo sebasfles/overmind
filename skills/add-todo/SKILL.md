@@ -22,7 +22,7 @@ Format:
 - [ ] {{YYYY-MM-DD}} {{text}} @{{project}}
 ```
 
-Do not classify, rephrase or ask questions; capture and confirm in one line: `anotado`.
+Do not classify, rephrase or ask questions; capture and confirm in one line: `noted`.
 Commit: `portfolio: add todo`.
 
 ## Rules

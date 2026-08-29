@@ -110,7 +110,7 @@ Do not publish artifacts on your own; if Sebastian wants one, he will ask.
 ## 7. Approve and hand off
 
 Iterate until Sebastian approves the plan.
-Then ask: "¿Creo la task?" and, if yes, invoke `create-task` with the approved plan in context.
+Then ask: "Create the task?" and, if yes, invoke `create-task` with the approved plan in context.
 If Sebastian says not now, keep the plan in the conversation and remind him it is not on disk yet.
 
 ## Rules

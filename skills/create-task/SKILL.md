@@ -17,7 +17,7 @@ normally invoked by plan-task after approval.
 Input: the plan approved in this conversation by `plan-task`, or `$ARGUMENTS[0]`, a plan file (normally `docs/tasks/_drafts/{{title}}.md`).
 If there is no approved plan in context and no file, stop and run `plan-task` first.
 
-Output: `docs/tasks/{{id}}_{{title}}/` in the root checkout, uncommitted, and the question "¿la consolido ahora?".
+Output: `docs/tasks/{{id}}_{{title}}/` in the root checkout, uncommitted, and the question "consolidate it now?".
 
 ## 1. Locate `docs/tasks/`
 
@@ -91,7 +91,7 @@ If the plan came from `docs/tasks/_drafts/{{title}}.md`, delete that file now; t
 
 Print the folder path and the frontmatter in a few lines.
 Nothing is committed yet; that happens at the end of `consolidate-task`, with Sebastian's approval.
-Ask: "¿La consolido con el om-reviewer ahora?"
+Ask: "Consolidate it with the om-reviewer now?"
 If yes, invoke `consolidate-task` with the folder path.
 If no, stop; the folder stays uncommitted in the root checkout and shows up in `check-work` as `planned`.
 There is no status field; `check-task` derives every state.

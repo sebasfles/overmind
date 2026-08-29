@@ -1,57 +1,57 @@
-# Punto 4: Operación diaria, cabina y portafolio
+# Part 4: Daily operation, cockpit and portfolio
 
-Estado: parcialmente acordado el 2026-08-28.
-Las secciones marcadas "Por definir" aún no se han conversado.
-Depende de: [02-orquestacion.md](02-orquestacion.md), [03-skills.md](03-skills.md).
+Status: partially agreed on 2026-08-28.
+Sections marked "To be defined" have not been discussed yet.
+Depends on: [02-orquestacion.md](02-orquestacion.md), [03-skills.md](03-skills.md).
 
-## Cabina (cockpit)
+## Cockpit
 
-Un solo lugar donde Sebastian ve todos los proyectos.
-Es una sesión de tmux `overmind` en la raíz del repo `~/dev/personal/projects/overmind`, con tres sesiones de Claude long-lived:
+A single place where Sebastian sees all projects.
+It's a tmux session `overmind` in the root of the `~/dev/personal/projects/overmind` repo, with three long-lived Claude sessions:
 
-| Sesión | Agente | Dónde | Para qué |
+| Session | Agent | Where | For what |
 |---|---|---|---|
-| `overmind` | `overmind` | ventana `overmind`, pane izquierdo | cabina: estado de proyectos, todos, eventos; abre proyectos |
-| `om-events` | `om-events` (haiku) | ventana `overmind`, pane derecho | buzón: recibe eventos de los om-managers, los archiva en `portfolio/events/`, imprime los contadores apilados |
-| `om-config` | `om-config` | ventana `config` | mantener el método con `update-method` |
+| `overmind` | `overmind` | `overmind` window, left pane | cockpit: project status, todos, events; opens projects |
+| `om-events` | `om-events` (haiku) | `overmind` window, right pane | inbox: receives events from the om-managers, archives them in `portfolio/events/`, prints the stacked counters |
+| `om-config` | `om-config` | `config` window | maintain the method with `update-method` |
 
-`bin/resume-overmind` abre la sesión completa; si `overmind` arranca y `om-events` no está corriendo, la abre o la retoma en el pane derecho.
-Los tres agentes viven en `.claude/agents/` del repo (ámbito de proyecto), porque solo corren aquí; los cuatro roles que corren dentro de los proyectos viven en `agents/` con symlink global.
+`bin/resume-overmind` opens the complete session; if `overmind` starts and `om-events` is not running, it opens or resumes it in the right pane.
+The three agents live in the repo's `.claude/agents/` (project scope), because they only run here; the four roles that run inside projects live in `agents/` with a global symlink.
 
-Regla de enrutamiento: preguntas sobre proyectos, estado o notificaciones van a `overmind`; cambios al método van a `om-config`.
-Si se pide lo uno en la sesión de lo otro, esa sesión abre o retoma la correcta y reenvía la petición en una línea.
-El nombre es deliberadamente distinto de "om-manager" para que nunca se confunda con el de un proyecto.
+Routing rule: questions about projects, status or notifications go to `overmind`; changes to the method go to `om-config`.
+If one is requested in the other's session, that session opens or resumes the correct one and forwards the request in one line.
+The name is deliberately different from "om-manager" so it's never confused with a project's.
 
-### Regla
+### Rule
 
-La cabina observa, agrega, notifica y lleva a Sebastian al lugar correcto.
-Nunca planea ni decide sobre un proyecto.
-Las conversaciones de producto, arquitectura y técnicas siguen siendo con el om-manager de cada proyecto, en su sesión de tmux.
+The cockpit observes, aggregates, notifies and takes Sebastian to the right place.
+It never plans or decides on a project.
+Product, architecture and technical conversations stay with each project's om-manager, in its tmux session.
 
-Razón: el om-manager vale por su contexto profundo de un proyecto.
-Un overmind con poder de decisión tendría contexto superficial de todos, decidiría peor y agregaría un salto donde la información se pierde.
-El planning con el om-manager es la conversación de mayor valor del flujo y no se intermedia.
+Reason: the om-manager's value comes from its deep context of a project.
+An overmind with decision-making power would have shallow context of all of them, would decide worse and would add a hop where information gets lost.
+Planning with the om-manager is the highest-value conversation in the flow and is not intermediated.
 
-### Qué hace
+### What it does
 
-- Estado agregado: `check-work` de cada proyecto registrado, en una sola tabla.
-  Una línea por ítem, sin explicaciones; el detalle se ve en la sesión del proyecto o en el PR.
-  Sale de disco (`docs/tasks/*.md`), git y `gh`; no le pregunta a los om-managers.
-- Eventos: los om-managers le avisan por `SendMessage` cuando algo requiere de Sebastian (PR listo, task trabada en delegación).
-- Limpieza transversal: `clean-work` en todos los proyectos.
-- Deriva de documentación: compara el `updated` de los docs de cada módulo con los últimos commits que tocaron ese módulo.
-  Es el chequeo que se decidió no hacer con hooks; aquí es una lectura, no un bloqueo.
-- Mantener el método: desde `om-config`, con `update-method`.
+- Aggregated status: `check-work` for each registered project, in a single table.
+  One line per item, no explanations; detail is seen in the project's session or in the PR.
+  It comes from disk (`docs/tasks/*.md`), git and `gh`; it doesn't ask the om-managers.
+- Events: the om-managers notify it via `SendMessage` when something requires Sebastian (PR ready, task stuck in delegation).
+- Cross-project cleanup: `clean-work` across all projects.
+- Documentation drift: compares each module's docs `updated` field with the latest commits that touched that module.
+  It's the check that was decided not to do with hooks; here it's a read, not a block.
+- Maintaining the method: from `om-config`, with `update-method`.
 
-Más adelante puede vivir aquí la priorización entre proyectos ("¿qué ataco hoy?"), como decisión de Sebastian informada por datos, no del agente.
+Later, prioritization between projects ("what do I tackle today?") can live here, as a decision made by Sebastian informed by data, not by the agent.
 
-No se crea `audit-portfolio`: la deriva de docs y la basura acumulada son columnas de `check-portfolio`.
-Se separaría solo si el reporte se vuelve demasiado largo para el tablero diario.
+`audit-portfolio` is not created: doc drift and accumulated clutter are columns of `check-portfolio`.
+It would only be split out if the report becomes too long for the daily dashboard.
 
-## Registro de proyectos
+## Project registry
 
-La cabina no adivina recorriendo `~/dev`; solo considera los proyectos registrados.
-Archivo `portfolio/projects.yaml` en el repo `overmind`:
+The cockpit doesn't guess by walking `~/dev`; it only considers registered projects.
+File `portfolio/projects.yaml` in the `overmind` repo:
 
 ```yaml
 projects:
@@ -66,33 +66,33 @@ projects:
         base_branch: main
 ```
 
-Ver [05-layouts.md](05-layouts.md) para `root` y `repos` en single repo, monorepo y multirepo.
+See [05-layouts.md](05-layouts.md) for `root` and `repos` in single repo, monorepo and multirepo.
 
-## Skills del overmind
+## Overmind skills
 
-| Skill | Qué hace |
+| Skill | What it does |
 |---|---|
-| `add-project` | Registra un proyecto (`root`, `repos`) en `projects.yaml`; en multirepo convierte la carpeta en repo de docs (`{{name}}-docs`). Verifica la convención del punto 1 y, si no, ofrece correr `setup` desde su om-manager. |
-| `add-project {{name}} pause` / `add-project {{name}} remove` | Lo saca del tablero sin borrar nada. |
-| `resume-project` | Abre una pestaña nueva de Windows Terminal, en WSL, en la raíz del proyecto, dentro de su sesión de tmux, con el om-manager corriendo. |
-| `check-portfolio` | Tabla por proyecto: tasks en delegación, en progreso, en PR esperando a Sebastian, ejecutores ociosos, deriva de docs, basura acumulada. |
-| `clean-portfolio` | `clean-work` en todos los proyectos activos. |
-| `add-todo` | Captura rápida de algo para no olvidar, opcionalmente ligado a un proyecto. |
-| `complete-todo` | Tacha un todo. |
+| `add-project` | Registers a project (`root`, `repos`) in `projects.yaml`; in multirepo it converts the folder into a docs repo (`{{name}}-docs`). Checks the Part 1 convention and, if not met, offers to run `setup` from its om-manager. |
+| `add-project {{name}} pause` / `add-project {{name}} remove` | Takes it off the dashboard without deleting anything. |
+| `resume-project` | Opens a new Windows Terminal tab, in WSL, at the project's root, inside its tmux session, with the om-manager running. |
+| `check-portfolio` | Per-project table: tasks in delegation, in progress, in PR waiting on Sebastian, idle executors, doc drift, accumulated clutter. |
+| `clean-portfolio` | `clean-work` across all active projects. |
+| `add-todo` | Quick capture of something not to forget, optionally linked to a project. |
+| `complete-todo` | Crosses off a todo. |
 
 ### resume-project
 
-Es un script de shell determinista (`bin/resume-project`); la skill es un envoltorio fino que lo llama con el nombre del proyecto.
-Funciona también como comando directo, sin la cabina.
+It's a deterministic shell script (`bin/resume-project`); the skill is a thin wrapper that calls it with the project name.
+It also works as a direct command, without the cockpit.
 
-Entorno verificado el 2026-08-28: Windows Terminal (`WT_SESSION` definido), `wt.exe` invocable desde WSL, distro `Ubuntu`, tmux 3.4.
-Sebastian ya trabaja con una sesión de tmux por proyecto (`diy`, `auvral`, `drive-now`).
+Environment verified on 2026-08-28: Windows Terminal (`WT_SESSION` set), `wt.exe` invocable from WSL, `Ubuntu` distro, tmux 3.4.
+Sebastian already works with one tmux session per project (`diy`, `auvral`, `drive-now`).
 
-Comportamiento:
+Behavior:
 
-1. Lee `projects.yaml` para obtener `root` y `tmux`.
-2. Si la sesión de tmux no existe, la crea con cwd en `root` y la primera ventana `om-manager` corriendo `claude --agent om-manager -n om-{{name}}-manager`.
-3. Abre la pestaña en la ventana actual de Windows Terminal y se engancha a la sesión.
+1. Reads `projects.yaml` to get `root` and `tmux`.
+2. If the tmux session doesn't exist, creates it with cwd at `root` and the first window `om-manager` running `claude --agent om-manager -n om-{{name}}-manager`.
+3. Opens the tab in the current Windows Terminal window and attaches to the session.
 
 ```bash
 tmux has-session -t "$name" 2>/dev/null || \
@@ -103,63 +103,63 @@ wt.exe -w 0 new-tab --title "$name" \
   -- tmux attach -t "$name"
 ```
 
-`-w 0` abre la pestaña en la ventana actual de Windows Terminal.
-Engancharse a una sesión ya enganchada desde otra pestaña es válido; ambas la reflejan.
+`-w 0` opens the tab in the current Windows Terminal window.
+Attaching to a session already attached from another tab is valid; both reflect it.
 
 ## Todos
 
-Un todo es una captura rápida: algo que Sebastian anota para no olvidarlo y sigue con lo que estaba haciendo.
-Puede estar relacionado a un proyecto o no.
-Puede terminar siendo una task, una decisión, una conversación con alguien, o nada.
-No se clasifica al anotarlo; la fricción de captura debe ser mínima.
+A todo is a quick capture: something Sebastian jots down so as not to forget it and continues with what he was doing.
+It may or may not be related to a project.
+It may end up being a task, a decision, a conversation with someone, or nothing.
+It's not classified when jotted down; capture friction must be minimal.
 
-Reglas:
+Rules:
 
-- Un todo puede ligarse a un proyecto de forma opcional.
-  `check-portfolio` lo muestra en la fila de ese proyecto; los globales van en una sección aparte.
-- Lo que ya muestra el estado (por ejemplo un PR en `in_review`) no hace falta anotarlo, pero tampoco está prohibido.
-- Cuando un todo se convierte en trabajo para agentes, Sebastian salta al om-manager del proyecto, lo planea con `plan-task` y lo cierra con `complete-todo`.
+- A todo can optionally be linked to a project.
+  `check-portfolio` shows it in that project's row; global ones go in a separate section.
+- What the status already shows (for example a PR in `in_review`) doesn't need to be noted, but it's not forbidden either.
+- When a todo turns into work for agents, Sebastian jumps to the project's om-manager, plans it with `plan-task` and closes it with `complete-todo`.
 
-Skills: `add-todo` para anotar y `complete-todo` para tacharlo.
-Listar no necesita skill: lo hace `check-portfolio`.
+Skills: `add-todo` to jot it down and `complete-todo` to cross it off.
+Listing doesn't need a skill: `check-portfolio` does it.
 
-Almacenamiento: `portfolio/todos.md`, Markdown plano, legible y editable sin el agente.
+Storage: `portfolio/todos.md`, plain Markdown, readable and editable without the agent.
 
-## Día típico
+## A typical day
 
-1. Sebastian abre la cabina y pide `check-portfolio`.
-2. Ve qué espera por él: PRs en `in_review`, delegaciones trabadas, todos pendientes.
-3. `resume-project {{name}}` lo lleva al om-manager de ese proyecto.
-4. Habla con el om-manager: aprueba PRs, planea tasks nuevas, delega.
-5. Vuelve a la cabina o salta a otro proyecto.
+1. Sebastian opens the cockpit and asks for `check-portfolio`.
+2. Sees what's waiting for him: PRs in `in_review`, stuck delegations, pending todos.
+3. `resume-project {{name}}` takes him to that project's om-manager.
+4. Talks with the om-manager: approves PRs, plans new tasks, delegates.
+5. Returns to the cockpit or jumps to another project.
 
-## Por definir
+## To be defined
 
-### Contenido de los agentes
+### Agent content
 
-`agents/om-manager.md`, `om-reviewer.md`, `om-developer.md`, `overmind.md` y `om-setup-worker.md`, en el repo `overmind`, con symlinks desde `~/.claude/agents/`.
-Escritos como borrador el 2026-08-29; ver `03-skills.md`.
-Cada uno con: descripción del rol, skills permitidas, herramientas permitidas, modo de permisos, máquina de estado (para om-reviewer y om-developer), y reglas de qué nunca hace.
+`agents/om-manager.md`, `om-reviewer.md`, `om-developer.md`, `overmind.md` and `om-setup-worker.md`, in the `overmind` repo, with symlinks from `~/.claude/agents/`.
+Written as a draft on 2026-08-29; see `03-skills.md`.
+Each with: role description, allowed skills, allowed tools, permission mode, state machine (for om-reviewer and om-developer), and rules for what it never does.
 
-### `~/OPINIONS.md`: descartado
+### `~/OPINIONS.md`: dropped
 
-Decidido el 2026-08-28: no se crea.
-Las opiniones que importan a los agentes de Sebastian son estrechas (código, arquitectura, proceso) y ya tienen tres casas mejores:
+Decided on 2026-08-28: it's not created.
+The opinions that matter to Sebastian's agents are narrow (code, architecture, process) and already have three better homes:
 
-| Tipo de opinión | Dónde vive |
+| Opinion type | Where it lives |
 |---|---|
-| Regla corta, siempre aplica | `~/.claude/CLAUDE.md` |
-| Criterio de un rol | `~/.claude/agents/{{rol}}.md` |
-| Decisión de un proyecto | `ARD.md` del proyecto |
+| Short rule, always applies | `~/.claude/CLAUDE.md` |
+| A role's criteria | `~/.claude/agents/{{rol}}.md` |
+| A project's decision | project's `ARD.md` |
 
-Un cuarto lugar se desincronizaría de los otros tres.
-La línea del `CLAUDE.md` global que mandaba leer `~/OPINIONS.md` ya fue eliminada.
+A fourth place would fall out of sync with the other three.
+The line in the global `CLAUDE.md` that told it to read `~/OPINIONS.md` has already been removed.
 
-Se revisita solo si los agentes toman decisiones de criterio equivocadas de forma repetida y la corrección no cabe en una línea de `CLAUDE.md` ni pertenece a un rol.
-En ese caso el archivo nace con contenido real, no inferido.
+This gets revisited only if the agents repeatedly make wrong judgment calls and the fix doesn't fit in one line of `CLAUDE.md` or belong to a role.
+In that case the file is created with real content, not inferred.
 
-### Piloto
+### Pilot
 
-Proyecto donde se valida el flujo de punta a punta.
-Debe validar: `--bg` + `attach` en panes de tmux, entrega de `SendMessage` entre sesiones, `setup` sobre un repo existente, y una task completa hasta el merge.
-Proyecto por elegir.
+Project where the end-to-end flow gets validated.
+Must validate: `--bg` + `attach` in tmux panes, `SendMessage` delivery between sessions, `setup` on an existing repo, and a complete task through to merge.
+Project to be chosen.

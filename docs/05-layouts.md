@@ -1,113 +1,113 @@
-# Punto 5: Layouts de proyecto (single repo, monorepo, multirepo)
+# Part 5: Project layouts (single repo, monorepo, multirepo)
 
-Estado: acordado el 2026-08-29.
-Depende de: [02-orquestacion.md](02-orquestacion.md), [03-skills.md](03-skills.md), [04-operacion.md](04-operacion.md).
-Donde este documento contradice a los anteriores, manda este.
+Status: agreed on 2026-08-29.
+Depends on: [02-orquestacion.md](02-orquestacion.md), [03-skills.md](03-skills.md), [04-operacion.md](04-operacion.md).
+Where this document contradicts the previous ones, this one governs.
 
-## Objetivo
+## Objective
 
-Un solo flujo para los tres layouts que Sebastian tiene:
+One single flow for the three layouts Sebastian has:
 
-- Single repo: un repo, una app.
-- Monorepo: un repo con varias apps dentro (`/backend`, `/frontend`, `/infra`, o turborepo).
-- Multirepo: una carpeta de proyecto con varios repos hermanos (`diy/diy-platform`, `diy/diy-infra`, ...).
+- Single repo: one repo, one app.
+- Monorepo: one repo with several apps inside (`/backend`, `/frontend`, `/infra`, or turborepo).
+- Multirepo: a project folder with several sibling repos (`diy/diy-platform`, `diy/diy-infra`, ...).
 
-Los tres se describen con la misma abstracción, y single y mono son casos con listas de un elemento.
+All three are described with the same abstraction, and single and mono are cases with single-element lists.
 
-## Glosario
+## Glossary
 
-- Root checkout: el clon del root donde corre el om-manager, siempre en su rama base.
-- Workspace: `{{root}}/.workspaces/{{task}}/`, cwd de om-reviewer y om-developer, con un worktree por repo tocado.
-- Root worktree: el worktree del root dentro del workspace; en single y mono es el mismo worktree del código.
-- Root checkout copy: la carpeta de la task en el root checkout; se escribe solo antes de `delegate-task`.
-- Workspace copy: la carpeta de la task en el root worktree del workspace; se escribe solo después de `delegate-task`.
+- Root checkout: the clone of the root where om-manager runs, always on its base branch.
+- Workspace: `{{root}}/.workspaces/{{task}}/`, cwd of om-reviewer and om-developer, with one worktree per repo touched.
+- Root worktree: the root's worktree inside the workspace; in single and mono it is the same worktree as the code.
+- Root checkout copy: the task folder in the root checkout; it is written only before `delegate-task`.
+- Workspace copy: the task folder in the workspace's root worktree; it is written only after `delegate-task`.
 
-## Abstracción
+## Abstraction
 
-Un proyecto tiene `root`, `repos` y workspaces.
+A project has `root`, `repos` and workspaces.
 
-| Concepto | Single | Monorepo | Multirepo |
+| Concept | Single | Monorepo | Multirepo |
 |---|---|---|---|
-| `root`: cwd del om-manager, dueño de `docs/`, siempre un repo git | el repo | el repo | la carpeta del proyecto, convertida en repo git de docs con los clones ignorados |
-| `repos`: repos de código | `[.]` | `[.]` | `[diy-platform, diy-infra, ...]` |
-| Workspace de una task | `.workspaces/{{task}}/{{repo}}/` | idem | `.workspaces/{{task}}/{{repo}}/` por repo tocado, más `.workspaces/{{task}}/{{root}}/` |
-| `docs/` y `docs/tasks/` | en el root | en el root | en el root |
-| Targets de `verify-task` | 1 | N, uno por app, declarados en el TRD | N, uno por repo, cada uno con su sección del TRD |
-| PRs de código | 1 | 1 | uno por repo tocado |
-| PR de la task (lleva el resumen) | el mismo PR de código | el mismo | el PR del repo root |
+| `root`: cwd of om-manager, owner of `docs/`, always a git repo | the repo | the repo | the project folder, converted into a docs git repo with the clones ignored |
+| `repos`: code repos | `[.]` | `[.]` | `[diy-platform, diy-infra, ...]` |
+| Workspace for a task | `.workspaces/{{task}}/{{repo}}/` | same | `.workspaces/{{task}}/{{repo}}/` per repo touched, plus `.workspaces/{{task}}/{{root}}/` |
+| `docs/` and `docs/tasks/` | in the root | in the root | in the root |
+| `verify-task` targets | 1 | N, one per app, declared in the TRD | N, one per repo, each with its own TRD section |
+| Code PRs | 1 | 1 | one per repo touched |
+| Task PR (carries the summary) | the same code PR | the same | the root repo's PR |
 
-## El repo root en multirepo
+## The root repo in multirepo
 
-La carpeta del proyecto se inicializa como repo git que trackea solo `CLAUDE.md`, `docs/` y `.gitignore`.
-Los clones de código y `.workspaces/` van en `.gitignore`; git no mira dentro de rutas ignoradas, así que los repos anidados no molestan.
-Remoto privado personal, nombrado `{{proyecto}}-docs` (por ejemplo `fless/diy-docs`); la carpeta local sigue llamándose `{{proyecto}}`.
-`add-project` lo crea cuando detecta un multirepo sin `.git` en la raíz, preguntando el remoto.
+The project folder is initialized as a git repo that tracks only `CLAUDE.md`, `docs/` and `.gitignore`.
+Code clones and `.workspaces/` go in `.gitignore`; git does not look inside ignored paths, so the nested repos do not cause problems.
+Personal private remote, named `{{proyecto}}-docs` (for example `fless/diy-docs`); the local folder keeps being called `{{proyecto}}`.
+`add-project` creates it when it detects a multirepo without `.git` at the root, asking for the remote.
 
 ```
-diy/                      # repo diy-docs
+diy/                      # diy-docs repo
   .gitignore              # diy-platform/ diy-infra/ diy-pocs/ .workspaces/
   CLAUDE.md
   docs/
-  diy-platform/           # clon, ignorado
-  diy-infra/              # clon, ignorado
-  .workspaces/            # ignorado
+  diy-platform/           # clone, ignored
+  diy-infra/              # clone, ignored
+  .workspaces/            # ignored
 ```
 
-En single y mono no aplica: el repo de código ya es el root.
+In single and mono this does not apply: the code repo already is the root.
 
 ## Workspaces
 
-`{{root}}/.workspaces/{{id}}_{{title}}/` es el cwd del om-reviewer y del om-developer de la task.
-Contiene un worktree por repo tocado, todos en la misma rama `{{prefix}}/{{id}}_{{title}}`, y en multirepo además el worktree del root.
-Reemplaza a `{{repo}}/.claude/worktrees/`.
+`{{root}}/.workspaces/{{id}}_{{title}}/` is the cwd of the task's om-reviewer and om-developer.
+It contains one worktree per repo touched, all on the same branch `{{prefix}}/{{id}}_{{title}}`, and in multirepo also the root's worktree.
+It replaces `{{repo}}/.claude/worktrees/`.
 
-- Se crean con `git -C {{repo}} worktree add -b {{rama}} {{root}}/.workspaces/{{task}}/{{repo}} origin/{{base}}`.
-  Un worktree comparte `.git` con su clon; no es una copia.
-- En single y mono el workspace queda dentro del repo; `.workspaces/` va al `.gitignore` del repo.
-- Bootstrap por worktree, en `consolidate-task`: copiar o enlazar los archivos no versionados que el repo necesita (`.env*` y lo que el TRD liste en `Workspace files`) y correr el comando de instalación del TRD.
-  Sin esto, la primera `verify-task` falla por razones ajenas a la task.
-- Rutas absolutas siempre: el shell no conserva el `cd` entre comandos.
-- Al limpiar: `git -C {{repo}} worktree remove {{ruta}}` por cada uno y borrar la carpeta del workspace.
+- They are created with `git -C {{repo}} worktree add -b {{rama}} {{root}}/.workspaces/{{task}}/{{repo}} origin/{{base}}`.
+  A worktree shares `.git` with its clone; it is not a copy.
+- In single and mono the workspace stays inside the repo; `.workspaces/` goes into the repo's `.gitignore`.
+- Bootstrap per worktree, in `consolidate-task`: copy or link the unversioned files the repo needs (`.env*` and whatever the TRD lists under `Workspace files`) and run the TRD's install command.
+  Without this, the first `verify-task` fails for reasons unrelated to the task.
+- Always absolute paths: the shell does not preserve `cd` between commands.
+- When cleaning up: `git -C {{repo}} worktree remove {{ruta}}` for each one, and delete the workspace folder.
 
-## Documentación
+## Documentation
 
-`docs/` pertenece al root y describe la aplicación completa, no un repo.
-Los módulos son de la aplicación: `docs/modules/billing/trd.md` tiene una sección por repo o app que participa.
-El TRD general tiene una sección por repo o app: stack, rama base, `Verification targets`, `Workspace files`, instalación.
+`docs/` belongs to the root and describes the whole application, not a single repo.
+Modules belong to the application: `docs/modules/billing/trd.md` has one section per repo or app that participates.
+The general TRD has one section per repo or app: stack, base branch, `Verification targets`, `Workspace files`, installation.
 
-La regla de escritura de la carpeta de la task no cambia, solo se lee sobre el root:
+The writing rule for the task folder does not change, it just gets read against the root:
 
-- Antes de `delegate-task`: en el checkout del root.
-- `consolidate-task` termina con el commit `docs(tasks): {{task}} planned` en la rama base del root, con aprobación de Sebastian.
-- `delegate-task` rebasea **el worktree del root** sobre `origin/{{base}}`; en single y mono ese worktree es el del código.
-- Después: en el worktree del root dentro del workspace. Viaja en el PR del root.
+- Before `delegate-task`: in the root checkout.
+- `consolidate-task` ends with the commit `docs(tasks): {{task}} planned` on the root's base branch, with Sebastian's approval.
+- `delegate-task` rebases **the root's worktree** onto `origin/{{base}}`; in single and mono that worktree is the code's worktree.
+- After that: in the root's worktree inside the workspace. It travels in the root's PR.
 
-## Verificación
+## Verification
 
-`verify-task` itera los `Verification targets` del TRD: cada uno con nombre, ruta (relativa al workspace) y comandos de lint, typecheck, unit y e2e con su flag serial.
-Single: un target.
-Monorepo: uno por app.
-Multirepo: uno por repo tocado.
-Un bloque por target en `verify.log`.
+`verify-task` iterates over the TRD's `Verification targets`: each one with a name, path (relative to the workspace) and lint, typecheck, unit and e2e commands with their serial flag.
+Single: one target.
+Monorepo: one per app.
+Multirepo: one per repo touched.
+One block per target in `verify.log`.
 
-## Publicación
+## Publishing
 
-`publish-task` abre un PR por repo tocado, más el del root en multirepo.
-El resumen (Intent, What changed, Decisions, Risk, Pipeline por target) vive en **el PR del repo root**: en single y mono es el mismo PR de código; en multirepo es el PR de `{{proyecto}}-docs`.
-Los PRs de código en multirepo llevan un body de una línea con el link al PR del root.
-`What changed` enlaza cada PR de código.
-Si hay orden de merge entre repos (infra antes que plataforma), va en `Decisions`; Sebastian mergea en ese orden y al final el del root.
-No existe el concepto de repo primario.
+`publish-task` opens one PR per repo touched, plus the root's PR in multirepo.
+The summary (Intent, What changed, Decisions, Risk, Pipeline per target) lives in **the root repo's PR**: in single and mono it is the same code PR; in multirepo it is the `{{proyecto}}-docs` PR.
+Code PRs in multirepo carry a one-line body with the link to the root's PR.
+`What changed` links to each code PR.
+If there is a merge order between repos (infra before platform), it goes in `Decisions`; Sebastian merges in that order and merges the root's last.
+There is no concept of a primary repo.
 
-## Estado derivado
+## Derived status
 
-Igual que en el `02`, evaluado sobre todos los PRs de la task:
+Same as in `02`, evaluated over all the task's PRs:
 
-- `in_review`: algún PR abierto.
-- `merged`: todos mergeados, incluido el del root, y el workspace aún existe.
-- `done`: todos mergeados y sin workspace.
+- `in_review`: some PR is open.
+- `merged`: all merged, including the root's, and the workspace still exists.
+- `done`: all merged and no workspace.
 
-## Registro (`portfolio/projects.yaml`)
+## Registry (`portfolio/projects.yaml`)
 
 ```yaml
 projects:
@@ -129,12 +129,12 @@ projects:
         base_branch: main
 ```
 
-`task.md` gana `repos:` con los repos que toca (default: todos los de la lista cuando hay uno solo; obligatorio elegir en multirepo).
+`task.md` gains `repos:` with the repos it touches (default: all of the list when there is only one; mandatory to choose in multirepo).
 
-## Cambios en lo escrito
+## Changes to what was written
 
-- `02`: carpeta de task, worktree, ciclo y limpieza se leen sobre root y workspaces; `.claude/worktrees/` desaparece.
-- `03`: `verify-task` por targets; `publish-task` PR por repo con resumen en el root.
-- `04`: registro con `root` y `repos`; `resume-project` abre el root.
+- `02`: task folder, worktree, cycle and cleanup are read against root and workspaces; `.claude/worktrees/` disappears.
+- `03`: `verify-task` per targets; `publish-task` one PR per repo with the summary in the root.
+- `04`: registry with `root` and `repos`; `resume-project` opens the root.
 - Skills: `add-project`, `resume-project`, `setup`, `write-trd`, `create-task`, `consolidate-task`, `delegate-task`, `start-task`, `verify-task`, `publish-task`, `check-task`, `clean-task`.
-- Agentes: regla de rutas absolutas en `om-manager`, `om-reviewer`, `om-developer`; cwd del workspace en `om-reviewer` y `om-developer`.
+- Agents: absolute-path rule in `om-manager`, `om-reviewer`, `om-developer`; workspace cwd in `om-reviewer` and `om-developer`.
