@@ -97,6 +97,7 @@ La convención `task-{{id}}-{{rol}}` hace el direccionamiento determinista: el o
 3. El om-reviewer trabaja en el mismo worktree que el om-developer porque necesita correr lint y tests sobre la rama.
    Alternan; nunca escriben a la vez porque el om-reviewer no escribe código.
 
+Los agentes om-reviewer y om-developer corren con `permissionMode: bypassPermissions`: trabajan aislados en su workspace y no deben ser frenados por el clasificador; con `--bg` hay que lanzarlos con `--allow-dangerously-skip-permissions`.
 Ventajas: `claude agents` lista las sesiones vivas, `claude stop {{id}}` pausa, `claude rm {{id}}` borra la sesión y su worktree, `claude attach {{id}}` reabre.
 El proceso sobrevive si se cierra el pane.
 
