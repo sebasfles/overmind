@@ -10,6 +10,21 @@ projects:
         base_branch: main
       - name: diy-pocs
         base_branch: main
+  - name: auvral
+    root: /home/fless/dev/personal/projects/auvral
+    tmux: auvral
+    status: active
+    repos:
+      - name: auvral-platform
+        base_branch: main
+      - name: auvral-backend
+        base_branch: main
+      - name: auvral-cdk
+        base_branch: main
+      - name: dashboard-backend
+        base_branch: main
+      - name: dashboard-cdk
+        base_branch: main
 #  - name: diy
 #    root: /home/fless/dev/designli/projects/diy
 #    tmux: diy
