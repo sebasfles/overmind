@@ -93,3 +93,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: never, unless a script needs both operators.
 - Files: bin/, scripts/, scripts/install, CLAUDE.md, README.md, docs/.
+
+## 2026-08-31: resume-project pins the om-manager window at index 1
+
+- Decision: `scripts/resume-project` guarantees the `om-manager` window at tmux index 1 (Sebastian's `base-index` is 1): new sessions create it there, and existing sessions are repaired by inserting or moving it to 1 with `-b`, shifting other windows up; the script selects window 1 before attaching.
+- Alternatives rejected: only creating the window on new sessions (an existing session with the om-manager window missing or displaced stayed wrong), swapping windows instead of shifting (moves an unrelated window to an arbitrary index).
+- Reason: Sebastian navigates by number and expects the project's om-manager always on window 1; the same repair pattern already proved itself in `resume-overmind`.
+- Debt created: the index is fixed at 1 and assumes `base-index 1`; with `base-index 0` the om-manager window still lands at 1 and index 0 stays occupied by another window.
+- Revisit when: a project session needs a fixed window other than the om-manager, or the tmux config changes `base-index`.
+- Files: scripts/resume-project, skills/resume-project/SKILL.md, docs/04-operacion.md, docs/usage-guide.md, docs/06-piloto.md.

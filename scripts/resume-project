@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # resume-project <name>
-# Opens a registered project in a new Windows Terminal tab (WSL), attached to its tmux session,
-# creating the session with the om-manager in window 0 (cwd = project root) if it does not exist.
+# Opens a registered project in a new Windows Terminal tab (WSL), attached to its tmux session.
+# The om-manager window always lives at index 1 (cwd = project root): it is created there for new
+# sessions, and existing sessions are repaired by inserting it at 1 and shifting other windows up.
 set -euo pipefail
 
 name="${1:-}"
@@ -26,10 +27,30 @@ tmux_name="${tmux_name:-$name}"
 
 distro="${WSL_DISTRO_NAME:-Ubuntu}"
 
+manager_cmd="claude --agent om-manager -n om-${name}-manager"
+
 if ! tmux has-session -t "$tmux_name" 2>/dev/null; then
-  tmux new-session -d -s "$tmux_name" -c "$root" -n om-manager \
-    "claude --agent om-manager -n om-${name}-manager"
+  tmux new-session -d -s "$tmux_name" -c "$root" -n om-manager "$manager_cmd"
 fi
+
+# Repair: the om-manager window always lives at index 1; other windows shift up.
+manager_idx="$(tmux list-windows -t "$tmux_name" -F '#I #W' | awk '$2 == "om-manager" { print $1; exit }')"
+index_1_taken() { tmux list-windows -t "$tmux_name" -F '#I' | grep -qx 1; }
+if [[ -z "$manager_idx" ]]; then
+  if index_1_taken; then
+    tmux new-window -d -b -t "$tmux_name:1" -n om-manager -c "$root" "$manager_cmd"
+  else
+    tmux new-window -d -t "$tmux_name:1" -n om-manager -c "$root" "$manager_cmd"
+  fi
+elif [[ "$manager_idx" != 1 ]]; then
+  if index_1_taken; then
+    tmux move-window -b -s "$tmux_name:$manager_idx" -t "$tmux_name:1"
+  else
+    tmux move-window -s "$tmux_name:$manager_idx" -t "$tmux_name:1"
+  fi
+fi
+
+tmux select-window -t "$tmux_name:1"
 
 if command -v wt.exe >/dev/null 2>&1; then
   wt.exe -w 0 new-tab --title "$name" \

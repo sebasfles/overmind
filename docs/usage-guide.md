@@ -63,7 +63,7 @@ The `om-events` pane isn't used directly; it only shows incoming events and the 
 1. In `overmind`: `/add-project {{ruta}}`.
    It detects whether it's a repo, a monorepo, or a folder of repos.
    If it's a folder of repos without git, it suggests turning it into a docs repo (`{{nombre}}-docs`) that ignores the clones; say yes and give it the remote.
-2. `/resume-project {{nombre}}`: a new tab, the project's tmux session, `om-manager` in window 0.
+2. `/resume-project {{nombre}}`: a new tab, the project's tmux session, `om-manager` in window 1.
    The first time it will say `no docs/tasks/ in this project; run setup first`.
 3. In the `om-manager`: `/setup`.
 

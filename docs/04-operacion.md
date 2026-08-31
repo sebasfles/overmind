@@ -91,12 +91,17 @@ Sebastian already works with one tmux session per project (`diy`, `auvral`, `dri
 Behavior:
 
 1. Reads `projects.yaml` to get `root` and `tmux`.
-2. If the tmux session doesn't exist, creates it with cwd at `root` and the first window `om-manager` running `claude --agent om-manager -n om-{{name}}-manager`.
-3. Opens the tab in the current Windows Terminal window and attaches to the session.
+2. If the tmux session doesn't exist, creates it with cwd at `root` and the window `om-manager` running `claude --agent om-manager -n om-{{name}}-manager`.
+3. Guarantees the `om-manager` window at index 1: if the session already exists without it, or with it at another index, the script inserts or moves it to 1 with `-b`, shifting other windows up.
+4. Selects window 1, opens the tab in the current Windows Terminal window and attaches to the session.
 
 ```bash
 tmux has-session -t "$name" 2>/dev/null || \
   tmux new-session -d -s "$name" -c "$path" -n om-manager "claude --agent om-manager -n om-${name}-manager"
+
+# repair an existing session: om-manager always at index 1
+tmux move-window -b -s "$name:om-manager" -t "$name:1"
+tmux select-window -t "$name:1"
 
 wt.exe -w 0 new-tab --title "$name" \
   wsl.exe -d Ubuntu --cd "$path" \

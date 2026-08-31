@@ -22,7 +22,7 @@ Each failure gets fixed in the skill or agent with `update-method` before moving
 1. `scripts/install`: symlinks. Check that `claude --agent om-manager` starts in any directory and that `/plan-task` appears in `/help`.
 2. `bin/resume-overmind`: the three sessions. Check that `overmind` opens `om-events` if it's missing.
 3. `add-project {{proyecto}}` from `overmind`: layout detection, `{{name}}-docs` repo if multirepo, registration.
-4. `resume-project {{proyecto}}`: tab, tmux, om-manager in window 0 with `check-work` saying "run setup first".
+4. `resume-project {{proyecto}}`: tab, tmux, om-manager in window 1 with `check-work` saying "run setup first".
 5. `setup`: discovery per component (Workflow), module confirmation, interview, per-module documentation (Workflow), TRD, PRD, ARD, `CLAUDE.md`, inferred items, commit. It's the hardest test.
 6. One small, real task: `plan-task` → `create-task` → `consolidate-task` (this is where `--bg`, `attach`, `SendMessage` and the workspace bootstrap get validated) → `delegate-task` → `start-task` → one round → `publish-task` → merge → `clean-task`.
 7. A second task in parallel with the first, to see two workspaces and two pairs at once.
