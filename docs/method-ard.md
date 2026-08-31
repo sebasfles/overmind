@@ -102,3 +102,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the index is fixed at 1 and assumes `base-index 1`; with `base-index 0` the om-manager window still lands at 1 and index 0 stays occupied by another window.
 - Revisit when: a project session needs a fixed window other than the om-manager, or the tmux config changes `base-index`.
 - Files: scripts/resume-project, skills/resume-project/SKILL.md, docs/04-operacion.md, docs/usage-guide.md, docs/06-piloto.md.
+
+## 2026-08-31: The plan draft is always on disk; the om-manager session is disposable
+
+- Decision: `plan-task` writes `docs/tasks/_drafts/{{title}}.md` from the first plan-shaped turn and updates it every turn, with no size condition; on "not now" after approval the draft is the persistence, retakable by `create-task` in any session. `agents/om-manager.md` gains the disposable-session rule: anything decided in conversation lands on disk in the same turn, and with heavy context the om-manager recommends recycling (`/clear`, or kill plus `resume-project`) instead of relying on autocompaction.
+- Alternatives rejected: keeping the "when the conversation grows" condition (the om-manager's judgment of "grown" is exactly what a compaction can arrive before), persisting the whole conversation instead of the plan's current state (noise; the draft is what gets retaken), fighting context limits with compaction tuning (lossy and silent).
+- Reason: every durable state already derives from disk (`check-task`, `check-work`, idempotent `analyze-task`); the only loss window was a plan not yet drafted. Closing it makes recycling the om-manager cost a `check-work` plus a look at `_drafts/`, so context pressure stops being a design concern.
+- Debt created: one draft write per planning turn, negligible; drafts abandoned mid-plan stay in `_drafts/` until `check-work` surfaces them.
+- Revisit when: the pilot shows draft updates adding friction to planning, or a recycled om-manager missing context that was neither in `_drafts/` nor in `docs/tasks/`.
+- Files: skills/plan-task/SKILL.md, agents/om-manager.md, docs/02-orquestacion.md, docs/usage-guide.md.

@@ -99,10 +99,10 @@ Rules:
 
 Ask Sebastian whether the granularity feels right and whether the order is correct.
 
-## 6. Keep a draft on disk when the conversation grows
+## 6. Keep the draft on disk, always
 
-A long planning conversation lives only in context and is lost if the session dies or compacts.
-When the plan gets long, or the direction changes, write the current state to `docs/tasks/_drafts/{{title}}.md` and keep it updated.
+A planning conversation lives only in context and is lost if the session dies, compacts or is recycled.
+From the first turn that produces anything plan-shaped, write the current state to `docs/tasks/_drafts/{{title}}.md`, and update it at the end of every turn that changes the plan.
 It is a draft, not a task: it has no id, no status, and `check-work` ignores `_drafts/`.
 `create-task` accepts it as input and deletes it once the task folder exists.
 Do not publish artifacts on your own; if Sebastian wants one, he will ask.
@@ -111,7 +111,7 @@ Do not publish artifacts on your own; if Sebastian wants one, he will ask.
 
 Iterate until Sebastian approves the plan.
 Then ask: "Create the task?" and, if yes, invoke `create-task` with the approved plan in context.
-If Sebastian says not now, keep the plan in the conversation and remind him it is not on disk yet.
+If Sebastian says not now, update the draft one last time and tell him it is retakable: `create-task` accepts `docs/tasks/_drafts/{{title}}.md` in any future session.
 
 ## Rules
 

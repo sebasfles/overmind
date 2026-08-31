@@ -127,7 +127,7 @@ Path: `docs/tasks/{{id}}_{{title}}/`, for example `docs/tasks/0142_badge_wall/`.
 The folder is the task's source of truth.
 Any new session can pick it back up by reading it; live sessions are an accelerator, not a dependency.
 
-`docs/tasks/_drafts/{{title}}.md` holds plans still in conversation that are not yet a task; `plan-task` writes them when the conversation grows and `create-task` deletes them when it creates the folder.
+`docs/tasks/_drafts/{{title}}.md` holds plans still in conversation that are not yet a task; `plan-task` writes it from the first plan-shaped turn, updates it every turn, and `create-task` deletes it when it creates the folder.
 `check-work` ignores `_drafts/`.
 
 Decided on 2026-08-28: `docs/tasks/` is tracked by git; only `docs/tasks/_drafts/` goes in `.gitignore`.
@@ -234,7 +234,7 @@ om-reviewer and om-developer share the worktree.
 
 1. Sebastian to the om-manager: "I want X".
 2. `plan-task` (om-manager + Sebastian): reads `docs/` following Part 1's reading path and plans.
-   Output: the closed idea, and `docs/tasks/_drafts/{{title}}.md` if the conversation grew.
+   Output: the closed idea, and `docs/tasks/_drafts/{{title}}.md` kept updated every turn.
 3. `create-task` (om-manager + Sebastian): writes the `docs/tasks/{{id}}_{{title}}/` folder in the root checkout with `task.md`, `replication.md` if it is a bug, and `phase_N.md` if there are phases.
    Nothing is committed yet.
 4. `consolidate-task` (om-manager): syncs the base branch, creates the worktree and branch according to `type` from `origin/{{base}}`, opens the tmux window `task-{{id}}` and launches `om-{{id}}-reviewer` inside the worktree, without an om-developer.

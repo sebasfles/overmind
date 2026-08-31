@@ -89,7 +89,7 @@ Everything from the project's `om-manager`.
 
 The om-manager reads `docs/` and asks you only what isn't there, in batches of up to five, always with a recommendation.
 At the end it shows you the plan (Goal, Scope, Acceptance, Approach, Database, Risks) and asks "Create the task?".
-If the conversation grows, it saves a draft in `docs/tasks/_drafts/` so nothing is lost.
+It keeps a draft in `docs/tasks/_drafts/` updated every turn, so nothing is lost if the session dies or is recycled.
 
 ### 2. Create
 
