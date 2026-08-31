@@ -14,5 +14,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-08-31 update ui on listing page @diy
 - [ ] 2026-08-31 send emails/sms of merging accounts @drive-now
 - [ ] 2026-08-31 send sms of missing email @drive-now
+- [ ] 2026-08-31 draft, active and archived state on flow @auvral
 
 ## Done
