@@ -29,5 +29,31 @@ else
 fi
 tmux source-file "$tmux_conf" 2>/dev/null || true
 
+# Permission allow rules the method needs so agent sessions can launch and manage each other.
+# Report only; granting permissions is Sebastian's act, never a script's.
+python3 - <<'PY'
+import json, os
+required = [
+    "Bash(claude --agent *)", "Bash(claude --bg *)", "Bash(claude attach *)",
+    "Bash(claude -r *)", "Bash(claude --resume *)", "Bash(claude stop *)",
+    "Bash(claude agents *)", "Bash(tmux new-window *)", "Bash(tmux new-session *)",
+    "Bash(tmux send-keys *)", "Bash(tmux split-window *)", "Bash(tmux respawn-pane *)",
+    "Bash(tmux select-window *)", "Bash(tmux list-windows *)", "Bash(tmux list-panes *)",
+    "Bash(tmux has-session *)", "Bash(tmux kill-window *)",
+]
+path = os.path.expanduser("~/.claude/settings.json")
+try:
+    allow = json.load(open(path)).get("permissions", {}).get("allow", [])
+except (FileNotFoundError, json.JSONDecodeError):
+    allow = []
+missing = [r for r in required if r not in allow]
+if missing:
+    print("MISSING permission allow rules in ~/.claude/settings.json (agents cannot launch each other without them).")
+    print('Paste into "permissions": { "allow": [ ... ] }:')
+    print(json.dumps(missing, indent=2))
+else:
+    print("ok      permission allow rules present in ~/.claude/settings.json")
+PY
+
 case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac
 echo "done. Cockpit agents (overmind, om-events, om-config) stay project-scoped in $root/.claude/agents."

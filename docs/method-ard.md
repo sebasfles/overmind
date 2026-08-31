@@ -147,3 +147,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the guardrail moves from the harness (disable-model-invocation) to the agent's rules; a sloppy om-manager could read enthusiasm as a yes.
 - Revisit when: an om-manager runs one of the four without an explicit yes in the conversation.
 - Files: skills/plan-task/SKILL.md, skills/create-task/SKILL.md, skills/consolidate-task/SKILL.md, skills/delegate-task/SKILL.md, agents/om-manager.md, docs/03-skills.md.
+
+## 2026-08-31: The method requires user-level allow rules for agent-to-agent launching; install checks, never writes
+
+- Decision: the method depends on `permissions.allow` rules in `~/.claude/settings.json` covering `claude --agent/--bg/attach/-r/--resume/stop/agents` and the tmux window and pane commands, because in auto mode the classifier blocks the om-manager's launch of om-reviewers mid `consolidate-task`. `scripts/install` verifies them and prints the missing ones with the exact JSON to paste; it never writes them, because granting permissions is Sebastian's act. `usage-guide.md` lists them in Requirements.
+- Alternatives rejected: install writing the rules itself (a script silently widening permissions defeats the classifier's intent, and om-config's own classifier blocked exactly that today), per-project `.claude/settings.json` rules (repeated per project and missed on every new one), keeping `--allow-dangerously-skip-permissions` retries until the classifier yields (it does not; the block is deterministic).
+- Reason: the pilot hit it live on 2026-08-31: auvral's `consolidate-task` finished the workspace but could not launch the om-reviewer in either form (`claude --bg`, `tmux send-keys`); explicit allow rules are the supported path around the classifier.
+- Debt created: the required list lives in two places (Sebastian's settings and the install check) and must be kept in sync when a skill starts using a new launch command; `Bash(tmux send-keys *)` is a wide grant that can type into any pane.
+- Revisit when: a skill adds a launch command the list does not cover, or an agent misuses `tmux send-keys` outside launching peers.
+- Files: scripts/install, docs/usage-guide.md.

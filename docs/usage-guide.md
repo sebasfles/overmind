@@ -9,6 +9,8 @@ Everything not covered here is in `01` through `06`.
 - Claude Code with background sessions (`claude --bg`, `claude attach`, `claude agents`).
 - tmux, `gh` authenticated with the account that can open PRs in each project, and Windows Terminal if you work in WSL.
 - This repo cloned, and `~/bin` in the `PATH`.
+- Permission allow rules in `~/.claude/settings.json` (`permissions.allow`) for `claude --agent`, `claude --bg`, `claude attach`, `claude -r`, `claude --resume`, `claude stop`, `claude agents` and the tmux window and pane commands: without them, auto mode's classifier blocks the om-manager from launching om-reviewers mid `consolidate-task`.
+  You add them yourself; `scripts/install` checks and prints the missing ones with the exact JSON to paste.
 
 ## Install
 
