@@ -111,3 +111,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: one draft write per planning turn, negligible; drafts abandoned mid-plan stay in `_drafts/` until `check-work` surfaces them.
 - Revisit when: the pilot shows draft updates adding friction to planning, or a recycled om-manager missing context that was neither in `_drafts/` nor in `docs/tasks/`.
 - Files: skills/plan-task/SKILL.md, agents/om-manager.md, docs/02-orquestacion.md, docs/usage-guide.md.
+
+## 2026-08-31: Recycling is respawn-pane, never /clear; scripts/install owns the tmux binding
+
+- Decision: recycling an agent session is `tmux respawn-pane -k` in its pane, bound to `prefix + R` by `scripts/install` (idempotent append to `~/.tmux.conf`, skipped if a `bind R` exists); tmux relaunches the pane's original command, so the fresh session keeps agent, name and cwd. `/clear` is banned from the om-manager's recycle advice because it starts a session without the name the protocol addresses. `resume-overmind` and `resume-project` stay as the repairers when the window or the tmux session is gone. Supersedes the `/clear` mention in the disposable-session entry of 2026-08-31.
+- Alternatives rejected: `/clear` (loses the session name), `respawn-window -k` (kills sibling panes in the split cockpit window), renaming the old session to free the name (no supported command, and verified unnecessary: exited sessions are unreachable by SendMessage and names resolve only to live sessions), a separate install.md documenting the binding (a doc humans follow by hand drifts; the once-per-machine script is the single setup point).
+- Reason: verified on 2026-08-31: `-n` always creates a new session, an exited session is not reachable by name, and with dead and live sessions sharing a name the message reaches only the live one; `respawn-pane` preserves per-pane original commands even in split windows.
+- Debt created: `scripts/install` now writes to `~/.tmux.conf`, a file it does not own; the guard only checks for an existing `bind R`, not for the exact command.
+- Revisit when: a machine uses a tmux prefix or binding scheme where `R` conflicts, or the pilot shows old transcripts accumulating enough to want cleanup in `clean-task`.
+- Files: scripts/install, agents/om-manager.md, docs/usage-guide.md, docs/04-operacion.md.

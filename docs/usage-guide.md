@@ -17,6 +17,7 @@ scripts/install
 ```
 
 Creates symlinks: `agents/*` to `~/.claude/agents/`, `skills/*` to `~/.claude/skills/`, and `resume-overmind` to `~/bin/`.
+It also adds the tmux binding `prefix + R` (recycle the current pane) to `~/.tmux.conf` if no `bind R` exists.
 `resume-project` is not linked: the `overmind` session runs it for you when you ask to open a project.
 It's idempotent; run it again after a `git pull` that adds skills.
 The three cockpit agents are not symlinked: they only exist inside this repo.
@@ -162,6 +163,10 @@ Nobody stores state; it's inferred:
 - A `[blocker]` in `om-events` means an om-developer or om-reviewer couldn't continue due to missing permissions, credentials, environment, or tools, and neither the om-reviewer nor the om-manager could resolve it.
   It's the only thing that escalates the whole chain.
   Go into the project, look at the task's window, fix what's missing (an `.env`, a `gh` login), and tell the om-manager to continue.
+- A session's context is heavy or about to compact: `prefix + R` in its pane recycles it (`respawn-pane -k` relaunches the original command, so agent, name and cwd stay correct and the context starts empty).
+  The old conversation stays archived on disk; nothing addresses it again.
+  Works on any agent pane: om-manager, om-reviewer, `overmind`, `om-events`, `om-config`.
+  If the window or the whole tmux session is gone, `resume-overmind` and `resume-project` recreate the layout instead.
 - A session died: the state lives in the task's folder, in git, and in the PRs.
   `claude agents` lists live and stopped sessions; `claude attach {{id}}` reopens one with its context.
   If it's completely lost, `/delegate-task` launches a new om-reviewer that reads `Context & decisions` and continues.

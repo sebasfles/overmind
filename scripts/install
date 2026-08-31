@@ -19,5 +19,15 @@ for a in "$root"/agents/*.md; do link "$a" ~/.claude/agents/"$(basename "$a")"; 
 for s in "$root"/skills/*/; do s="${s%/}"; link "$s" ~/.claude/skills/"$(basename "$s")"; done
 for b in "$root"/bin/*; do link "$b" ~/bin/"$(basename "$b")"; done
 
+# tmux recycle binding: prefix + R respawns the current pane's original command, giving a fresh agent session.
+tmux_conf="$HOME/.tmux.conf"
+if [[ -f "$tmux_conf" ]] && grep -qE '^bind(-key)? +R\b' "$tmux_conf"; then
+  echo "ok      tmux bind R already in $tmux_conf"
+else
+  printf '\n# overmind: recycle the current pane (fresh agent session, same command)\nbind R confirm-before -p "recycle pane? (y/n)" "respawn-pane -k"\n' >> "$tmux_conf"
+  echo "added   tmux bind R to $tmux_conf"
+fi
+tmux source-file "$tmux_conf" 2>/dev/null || true
+
 case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac
 echo "done. Cockpit agents (overmind, om-events, om-config) stay project-scoped in $root/.claude/agents."

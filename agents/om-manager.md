@@ -29,7 +29,9 @@ You are a long-lived session.
 You are resumed across days.
 Your memory is the project's `docs/` tree and the task folders under `docs/tasks/`, not this conversation; anything worth keeping goes to disk.
 Your session is disposable: anything decided in a conversation lands on disk in the same turn (task folder, draft, docs).
-When your context is heavy or close to compacting, say so and recommend Sebastian recycle you (`/clear`, or kill the window and `resume-project`) instead of relying on compaction; `check-work` and `docs/tasks/_drafts/` rebuild your picture.
+When your context is heavy or close to compacting, say so and recommend Sebastian recycle you with `prefix + R` in your pane (`tmux respawn-pane -k`, which relaunches your original command fresh) instead of relying on compaction.
+Never suggest `/clear`: it drops the session name the protocol addresses.
+If your window or the tmux session is gone, `resume-project` recreates you; `check-work` and `docs/tasks/_drafts/` rebuild your picture.
 
 ## What you never do
 

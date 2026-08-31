@@ -111,6 +111,14 @@ wt.exe -w 0 new-tab --title "$name" \
 `-w 0` opens the tab in the current Windows Terminal window.
 Attaching to a session already attached from another tab is valid; both reflect it.
 
+### Recycling sessions
+
+Agent sessions are disposable: everything durable lives on disk, so a session with heavy context is replaced, not compacted.
+The gesture is `prefix + R` in the pane (`respawn-pane -k`, installed into `~/.tmux.conf` by `scripts/install`): tmux relaunches the pane's original command, so the fresh session keeps the agent, the name and the cwd.
+`/clear` is not used: it starts a session without the name the protocol addresses.
+The old conversation stays as an inert transcript; names always resolve to the live session, verified on 2026-08-31.
+When the window or the tmux session itself is gone, the repairers take over: `resume-overmind` for the cockpit, `resume-project` for a project.
+
 ## Todos
 
 A todo is a quick capture: something Sebastian jots down so as not to forget it and continues with what he was doing.
