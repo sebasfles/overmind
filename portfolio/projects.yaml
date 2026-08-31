@@ -25,6 +25,17 @@ projects:
         base_branch: main
       - name: dashboard-cdk
         base_branch: main
+  - name: drive-now
+    root: /home/fless/dev/designli/projects/drive-now
+    tmux: drive-now
+    status: active
+    repos:
+      - name: drive-now-platform
+        base_branch: develop
+      - name: drive-now-infra
+        base_branch: main
+      - name: drive-now-legacy
+        base_branch: main
 #  - name: diy
 #    root: /home/fless/dev/designli/projects/diy
 #    tmux: diy
