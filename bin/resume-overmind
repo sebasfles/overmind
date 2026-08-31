@@ -1,21 +1,38 @@
 #!/usr/bin/env bash
 # resume-overmind
-# Opens the overmind tmux session (window "overmind": overmind | om-events; window "config": om-config)
-# in a new Windows Terminal tab, creating what does not exist.
+# Ensures the overmind tmux session has its three Claude sessions
+# (window "overmind": overmind | om-events; window "config": om-config), creating only what is missing,
+# then brings you there: switches if you are already in tmux, opens a Windows Terminal tab otherwise.
 set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 distro="${WSL_DISTRO_NAME:-Ubuntu}"
+S=overmind
 
-if ! tmux has-session -t overmind 2>/dev/null; then
-  tmux new-session -d -s overmind -c "$root" -n overmind "claude --agent overmind -n overmind"
-  tmux split-window -h -t overmind:overmind -c "$root" "claude --agent om-events -n om-events"
-  tmux select-pane -t overmind:overmind.0
-  tmux new-window -t overmind -n config -c "$root" "claude --agent om-config -n om-config"
-  tmux select-window -t overmind:overmind
+if ! tmux has-session -t "$S" 2>/dev/null; then
+  tmux new-session -d -s "$S" -c "$root" -n overmind "claude --agent overmind -n overmind"
 fi
 
-if command -v wt.exe >/dev/null 2>&1; then
-  wt.exe -w 0 new-tab --title overmind wsl.exe -d "$distro" --cd "$root" -- tmux attach -t overmind
+next_index() { echo $(( $(tmux list-windows -t "$S" -F '#I' | sort -n | tail -1) + 1 )); }
+
+if ! tmux list-windows -t "$S" -F '#W' | grep -qx overmind; then
+  tmux new-window -t "$S:$(next_index)" -n overmind -c "$root" "claude --agent overmind -n overmind"
+fi
+
+if [[ "$(tmux list-panes -t "$S:overmind" -F x | wc -l)" -lt 2 ]]; then
+  tmux split-window -h -t "$S:overmind" -c "$root" "claude --agent om-events -n om-events"
+  tmux select-pane -t "$S:overmind.0"
+fi
+
+if ! tmux list-windows -t "$S" -F '#W' | grep -qx config; then
+  tmux new-window -t "$S:$(next_index)" -n config -c "$root" "claude --agent om-config -n om-config"
+fi
+
+tmux select-window -t "$S:overmind"
+
+if [[ -n "${TMUX:-}" ]]; then
+  [[ "$(tmux display-message -p '#S')" == "$S" ]] || tmux switch-client -t "$S"
+elif command -v wt.exe >/dev/null 2>&1; then
+  wt.exe -w 0 new-tab --title "$S" wsl.exe -d "$distro" --cd "$root" -- tmux attach -t "$S"
 else
-  if [[ -n "${TMUX:-}" ]]; then tmux switch-client -t overmind; else tmux attach -t overmind; fi
+  tmux attach -t "$S"
 fi
