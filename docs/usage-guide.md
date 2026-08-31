@@ -27,7 +27,7 @@ The three cockpit agents are not symlinked: they only exist inside this repo.
 resume-overmind
 ```
 
-This opens a tab with the tmux session `overmind`: `overmind` on the left, `om-events` on the right, and a `config` window with `om-config`.
+This attaches your current terminal to the tmux session `overmind` (or switches to it if you are already in tmux), creating whatever is missing: `overmind` on the left, `om-events` on the right, and a `config` window with `om-config`.
 `overmind` starts by itself with `/check-portfolio` and shows:
 
 ```
