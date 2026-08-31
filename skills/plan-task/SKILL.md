@@ -1,8 +1,8 @@
 ---
 name: plan-task
-description: Plan a piece of work with Sebastian into an approved plan. om-manager; Sebastian invokes it before create-task.
+description: Plan a piece of work with Sebastian into an approved plan. om-manager; runs when Sebastian describes work he wants planned.
 argument-hint: "[DESCRIPTION_OR_TICKET]"
-disable-model-invocation: true
+disable-model-invocation: false
 effort: high
 ---
 
@@ -12,7 +12,7 @@ effort: high
 
 Plan a piece of work with Sebastian for this project. Reads the project docs following the reading route, asks
 only what the docs cannot answer, and produces an approved plan (goal, scope, acceptance, approach, phases).
-Ends by offering create-task. om-manager only; Sebastian invokes it.
+Ends by offering create-task. om-manager only; it runs when Sebastian describes work he wants planned, slash command or not.
 
 Input: `$ARGUMENTS`, a free-text description from Sebastian, a ticket reference, or nothing (then ask what he wants to build).
 

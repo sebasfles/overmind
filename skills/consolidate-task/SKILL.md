@@ -1,9 +1,9 @@
 ---
 name: consolidate-task
-description: Create the task workspace, launch the om-reviewer and commit the task as planned. om-manager; Sebastian invokes it after create-task.
+description: Create the task workspace, launch the om-reviewer and commit the task as planned. om-manager; runs on Sebastian's yes to create-task's offer, or when he asks.
 effort: high
 argument-hint: "[TASK_FOLDER]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # consolidate-task
@@ -14,7 +14,7 @@ Take a created task from disk to consolidated. Creates the task workspace (one w
 touches, plus the root repo's worktree in multirepo projects), bootstraps each worktree, opens the tmux
 window, launches the om-reviewer alone inside the workspace, relays the om-reviewer's questions to Sebastian until
 Context & decisions is written, then commits and pushes the task folder as planned with Sebastian's approval.
-Ends by asking whether to delegate now. om-manager only; Sebastian invokes it.
+Ends by asking whether to delegate now. om-manager only; it runs on Sebastian's yes to create-task's offer, or when he asks.
 
 Input: `$ARGUMENTS[0]`, the absolute path of a task folder under `{{ROOT}}/docs/tasks/`, uncommitted, with no workspace yet.
 If the folder is missing or a workspace already exists, stop and say so.

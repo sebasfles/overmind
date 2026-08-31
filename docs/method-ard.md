@@ -138,3 +138,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: discovery gets slower on projects with much prose documentation, since verifiable claims now require a grep against the code.
 - Revisit when: the pilot shows contradiction lists too long to arbitrate one by one, or workers flagging cosmetic differences as contradictions.
 - Files: skills/setup/SKILL.md, agents/om-setup-worker.md, docs/03-skills.md, docs/usage-guide.md.
+
+## 2026-08-31: plan, create, consolidate and delegate are om-manager-invocable; Sebastian's yes is the trigger
+
+- Decision: `plan-task`, `create-task`, `consolidate-task` and `delegate-task` drop `disable-model-invocation`, so the om-manager chains the task flow as one conversation: each skill runs when Sebastian asks for it or answers yes to the question that offers it, never on the om-manager's initiative, and the question is never skipped. `setup`, `reiterate-task`, `clean-task` and `clean-work` stay user-only. Supersedes the 03-skills point 3 rule that marked consolidate-task and delegate-task as invocable only by the user.
+- Alternatives rejected: keeping the slash-only flow (Sebastian retypes a command the conversation already agreed on, which is the friction this removes), making every om-manager skill model-invocable (reiterate and clean are corrections and destructive cleanup, where the explicit command is the safety).
+- Reason: the flow already advances through the om-manager's questions ("consolidate it now?", "delegate now?"); requiring a slash command after each yes duplicated the confirmation without adding safety.
+- Debt created: the guardrail moves from the harness (disable-model-invocation) to the agent's rules; a sloppy om-manager could read enthusiasm as a yes.
+- Revisit when: an om-manager runs one of the four without an explicit yes in the conversation.
+- Files: skills/plan-task/SKILL.md, skills/create-task/SKILL.md, skills/consolidate-task/SKILL.md, skills/delegate-task/SKILL.md, agents/om-manager.md, docs/03-skills.md.

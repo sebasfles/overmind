@@ -1,6 +1,6 @@
 ---
 name: delegate-task
-description: "Hand a consolidated task to its om-reviewer with \"delegated, start\". om-manager; Sebastian invokes it, or consolidate-task chains into it."
+description: "Hand a consolidated task to its om-reviewer with \"delegated, start\". om-manager; runs on Sebastian's yes to consolidate-task's offer, or when he asks."
 effort: medium
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
@@ -13,7 +13,7 @@ disable-model-invocation: false
 Hand a consolidated task to its om-reviewer. Checks depends_on, makes sure the om-reviewer session is running
 (reopening the stopped one with its context intact), rebases the root worktree so the workspace receives the
 task folder with its decisions, and sends "delegated, start". The om-reviewer launches the om-developer. om-manager
-only; Sebastian invokes it, or consolidate-task chains into it.
+only; it runs on Sebastian's yes to consolidate-task's offer, or when he asks.
 
 Input: `$ARGUMENTS[0]`, a consolidated task folder in the root checkout: committed as `planned`, workspace present, `Context & decisions` written.
 If any is missing, stop: the task needs `consolidate-task` first.

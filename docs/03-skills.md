@@ -12,8 +12,9 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
    The agent definition in `~/.claude/agents/{{role}}.md` restricts which skills it has available.
    The om-developer cannot run `review-task`; the om-reviewer cannot run `execute-task`.
    It's by design, not by trust.
-3. Sebastian triggers the om-manager's skills.
-   The ones that change state (`consolidate-task`, `delegate-task`, `reiterate-task`, `clean-task`, `clean-work`) are marked as invocable only by the user.
+3. Sebastian drives the om-manager's skills.
+   `plan-task`, `create-task`, `consolidate-task` and `delegate-task` are invocable by the om-manager so the task flow chains as one conversation: each runs on Sebastian's explicit yes to the question that offers it, never on the om-manager's initiative.
+   `reiterate-task`, `clean-task` and `clean-work` stay invocable only by the user.
    `check-task` and `check-work` can be invoked by the om-manager when Sebastian asks about status.
 4. The om-reviewer's and om-developer's skills run automatically.
    om-reviewer and om-developer are event-driven state machines.
