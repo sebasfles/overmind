@@ -29,7 +29,8 @@ Your brief names the component, its path and the base branch.
 
 1. Read what people already wrote, wherever it is: `README*`, `CONTRIBUTING*`, `ARCHITECTURE*`, `docs/`, `doc/`, `wiki/`, `adr/`, `decisions/`, `rfcs/`, any `.md` outside vendor folders, API specs, schema files, diagrams, long comments at entrypoints, `TODO`, `FIXME`, `HACK` comments, and the last months of merge commit messages.
 2. Read the code: structure, entrypoints, how it groups itself (modules, engines, feature folders), manifests and scripts.
-3. Return exactly the schema the brief gives: component, stack, base branch, docs found (path, what it covers, freshness), layout, candidate modules with their folders and a one-line purpose guess, debt evidence with path and line, verification commands and workspace files as found in scripts and config.
+3. Treat what the docs say as claims: when the code can verify a claim (an entity, an endpoint, a command, a flow) and contradicts it, record the pair as a contradiction (doc claim, code evidence); do not pick a side.
+4. Return exactly the schema the brief gives: component, stack, base branch, docs found (path, what it covers, freshness), layout, candidate modules with their folders and a one-line purpose guess, debt evidence with path and line, contradictions, verification commands and workspace files as found in scripts and config.
 
 Write nothing.
 Guess nothing you cannot point to; leave a field empty rather than invent it.
@@ -49,4 +50,5 @@ You document exactly one module of the application, with the confirmed module li
 - In `document` mode, touch anything outside `docs/modules/{{module}}/`; in `discover` mode, write anything at all.
 - Restate code in the docs: no schemas, no signatures, no column lists.
 - Invent reasons or debt without evidence; mark inferences.
+- Resolve a doc-vs-code contradiction yourself; report both sides.
 - Ask questions; if something is unknowable, write it as `[inferido]` and move on.

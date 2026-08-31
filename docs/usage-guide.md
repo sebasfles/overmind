@@ -71,6 +71,7 @@ The `om-events` pane isn't used directly; it only shows incoming events and the 
 `setup` is a working session with you, not a batch:
 
 - It inventories what's already documented anywhere (READMEs, wikis, ADRs, comments, specs) and reads the code, in parallel by component.
+- Existing docs are treated as claims, not facts: whatever the code contradicts is shown to you with both versions, and you arbitrate.
 - It shows you the stack, what it found, and a proposed set of modules with their folders.
   You confirm or correct the modules; it's the only decision it doesn't guess.
 - It asks you in batches what neither the docs nor the code know: who the product is for, what's out of scope, why something was chosen.

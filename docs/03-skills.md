@@ -27,7 +27,7 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 
 | Skill | What it does |
 |---|---|
-| `setup` | Extracts a project's documentation, wherever it lives (READMEs, wikis, ADRs, comments, code, Sebastian), into the Part 1 convention. It doesn't wait for it as input: it's its output. Two Workflows with `om-setup-worker`: discovery per component (read-only) and documentation per module, with module confirmation with you in between; then TRD, PRD and ARD (empty if there's no history), a short `CLAUDE.md`. Idempotent. |
+| `setup` | Extracts a project's documentation, wherever it lives (READMEs, wikis, ADRs, comments, code, Sebastian), into the Part 1 convention. It doesn't wait for it as input: it's its output. Existing docs are claims: what the code can verify gets checked, and doc-vs-code contradictions are reported for Sebastian to arbitrate, never resolved silently. Two Workflows with `om-setup-worker`: discovery per component (read-only) and documentation per module, with module confirmation with you in between; then TRD, PRD and ARD (empty if there's no history), a short `CLAUDE.md`. Idempotent. |
 | `write-prd` / `write-trd` / `write-ard` | Produce or update each document. `setup` uses them; `document-task` reuses them at the module level. |
 | `plan-task` | Planning conversation with Sebastian following the `docs/` reading path. Ends by offering `create-task`. |
 | `create-task` | Creates the `docs/tasks/{{id}}_{{title}}/` folder in the root checkout with `task.md` (`type`, `Goal`, `Scope`, `Acceptance`), `replication.md` if it's a bug, and, in the rare case of phases, one `phase_N.md` per phase. Doesn't commit. Ends by offering `consolidate-task`. |

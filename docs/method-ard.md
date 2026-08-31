@@ -129,3 +129,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: never.
 - Files: docs/01-documentation.md, docs/02-orchestration.md, docs/04-operation.md, docs/06-pilot.md, docs/03-skills.md, docs/05-layouts.md, docs/usage-guide.md, docs/method-ard.md, README.md, CLAUDE.md references unchanged, .claude/skills/update-method/SKILL.md, skills/setup/SKILL.md, skills/write-trd/SKILL.md, skills/write-trd/templates/TRD.md, scripts/lint-method.
+
+## 2026-08-31: setup treats existing documentation as claims, not facts
+
+- Decision: in `setup`'s discovery, existing documentation is a set of claims: claims the code can verify (entities, endpoints, commands, flows) are checked against the code before being folded in, unverifiable claims (intent, reasons, audience) are folded in citing source and date, and doc-vs-code contradictions travel in the discover schema (`contradictions: [{doc_claim, code_evidence}]`), appear in the step 3 report, and are arbitrated by Sebastian, never resolved silently. The rule is echoed in `om-setup-worker`'s discover mode.
+- Alternatives rejected: trusting docs by freshness alone (a recent doc can still be wrong), letting the worker resolve contradictions (it would silently pick a side with component-local context), verifying every claim including intent (intent is not verifiable against code; only facts are).
+- Reason: the skill already ranked sources (code primary for the TRD, inventory for PRD intent and ARD reasons) but "when a fact is confirmed" never said how; a stale README could reach the PRD unchallenged because the inventory is its primary source.
+- Debt created: discovery gets slower on projects with much prose documentation, since verifiable claims now require a grep against the code.
+- Revisit when: the pilot shows contradiction lists too long to arbitrate one by one, or workers flagging cosmetic differences as contradictions.
+- Files: skills/setup/SKILL.md, agents/om-setup-worker.md, docs/03-skills.md, docs/usage-guide.md.

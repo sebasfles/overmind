@@ -58,7 +58,8 @@ With more than one component, run it as a Workflow (load `workflow-authoring` fi
 ```
 { component, stack, base_branch, docs_found: [{path, covers, freshness}],
   layout: [{path, what}], candidate_modules: [{name, paths, purpose_guess}],
-  debt_evidence: [{path, line, text}], verify_commands: {lint, typecheck, unit, e2e, install, workspace_files} }
+  debt_evidence: [{path, line, text}], contradictions: [{doc_claim, code_evidence}],
+  verify_commands: {lint, typecheck, unit, e2e, install, workspace_files} }
 ```
 
 Fallback without the Workflow tool: `Agent(om-setup-worker)` subagents, at most four at a time.
@@ -80,7 +81,10 @@ The main session merges the results into one inventory (path, what it covers, ho
 Modules of the application often span components (`billing` in api, web and mobile): the merge is where they appear, by matching names, shared entities and call paths across the per-component candidates.
 That merge is your work with Sebastian, never a worker's.
 The inventory is the primary source for PRD intent and ARD reasons; code is the primary source for the TRD.
-Nothing of what exists is deleted or moved; it is read, cited and, when a fact is confirmed, folded into the convention with its source noted.
+Existing documentation is a set of claims, not facts.
+A claim the code can verify (entities, endpoints, commands, flows) is checked against the code before it is folded in; a claim the code cannot verify (intent, reasons, audience) is folded in citing its source and date.
+Contradictions between a doc and the code are collected as `contradictions`, never resolved silently; Sebastian arbitrates them in step 3.
+Nothing of what exists is deleted or moved; it is read, cited and, once verified or attributed, folded into the convention with its source noted.
 Discovery is the first Workflow of `setup`; the module documentation in step 4 is the second.
 They are separate because Sebastian's confirmation of the modules sits between them, and a Workflow cannot stop to ask.
 
@@ -91,11 +95,13 @@ From the merged discovery, one screen to Sebastian:
 ```
 Stack        NestJS 10, Prisma, pnpm          base: develop
 Existing     README (2024), docs/adr/ (6 entries), swagger.json, 14 TODOs
+Contradicts  2: README lists /v1/refunds, code has no such route; ...
 Modules      7 detected: auth, billing, ...   (2 uncertain: shared, legacy)
 docs/        missing                          (or: 4/7 modules documented, 2 stale)
 CLAUDE.md    long (180 lines), not pointing to docs/
 ```
 
+Show each contradiction with both versions (what the doc claims, what the code shows); Sebastian's call decides which one the new docs state.
 Then confirm the module list with him: name, purpose in one line, and which folders in which components belong to it.
 Module boundaries are the one decision you must not guess.
 In `check` mode, stop here.
@@ -154,5 +160,6 @@ git push origin {{base}}
 - Never write a document without first reading the existing documentation and asking Sebastian what neither it nor the code can answer.
 - Never treat the absence of the convention as a problem; extracting it is the job.
 - Never invent decisions or debt without evidence; mark inferences.
+- Never fold in a doc claim the code contradicts; report both versions and let Sebastian arbitrate.
 - Idempotent: running it twice in a row changes nothing the second time except `updated` on stale files.
 - English in every file.
