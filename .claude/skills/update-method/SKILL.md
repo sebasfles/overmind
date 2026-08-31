@@ -3,7 +3,6 @@ name: update-method
 description: Apply a change to the method (skills, agents, docs) consistently, lint it, record why, commit. Project skill of the overmind repo; Sebastian invokes it.
 effort: high
 argument-hint: "[CHANGE]"
-disable-model-invocation: true
 ---
 
 # update-method
@@ -30,7 +29,7 @@ Classify it:
 - Removal or merge of skills.
 - Design: a decision that changes a document in `docs/`.
 
-Read the documents that define the vocabulary before editing: `docs/02-orquestacion.md`, `docs/03-skills.md`, `docs/05-layouts.md`.
+Read the documents that define the vocabulary before editing: `docs/02-orchestration.md`, `docs/03-skills.md`, `docs/05-layouts.md`.
 If the change contradicts a decision recorded there, say so to Sebastian and get his yes before continuing; the ARD entry will say `Supersedes`.
 
 ## 2. Find every place it touches
@@ -43,7 +42,7 @@ List the files before editing; the list goes into the commit message.
 - Renames: exact tokens first (frontmatter `name`, `--agent`, session names, paths), then prose; rerun the grep until it is empty.
 - Rules: in the agent that owns the behavior (`## What you never do`, `## Rules`) and in every skill whose steps it changes; also the row in `docs/03-skills.md` if the skill's contract changed.
 - New skill: folder `skills/{{name}}/SKILL.md` with frontmatter (`name` = folder, `description` under 170 chars saying what and when, `argument-hint` quoted, `disable-model-invocation`), body with `## Purpose`, Input/Output, numbered steps, `## Rules`; templates and references in subfolders; add it to the right agent's skill table and to `docs/03-skills.md`.
-- New agent: `agents/{{name}}.md`; the name must be `overmind` or start with `om-`; add it to `scripts/lint-method`'s allowed list and to `docs/04-operacion.md`.
+- New agent: `agents/{{name}}.md`; the name must be `overmind` or start with `om-`; add it to `scripts/lint-method`'s allowed list and to `docs/04-operation.md`.
 - Removal or merge: delete the folder, move what survives into the target skill, update every reference, add the pair to the name map in `docs/03-skills.md`.
 - Design: edit the document that owns the decision and every skill or agent that implemented the old one.
 

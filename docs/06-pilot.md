@@ -9,7 +9,7 @@ Each failure gets fixed in the skill or agent with `update-method` before moving
 
 | Assumption | Where it's used | If it fails |
 |---|---|---|
-| `claude --agent {{rol}}` loads agents from `~/.claude/agents/` (symlinks) and from the repo's `.claude/agents/` | all launches | move the cockpit ones to global |
+| `claude --agent {{role}}` loads agents from `~/.claude/agents/` (symlinks) and from the repo's `.claude/agents/` | all launches | move the cockpit ones to global |
 | `claude --bg` + `claude attach` in a tmux pane gives the same experience as a direct session | consolidate, start-task, resume-overmind | alternative form documented in `02` |
 | `SendMessage` between local sessions launched with `--bg` gets delivered and processed as a turn | all communication | direct sessions; if that fails too, an on-disk mailbox file |
 | `--allow-dangerously-skip-permissions` with `--bg` leaves om-reviewer and om-developer without the classifier's blocks | consolidate, start-task | `permissionMode: auto` with an allowlist in settings |
@@ -21,8 +21,8 @@ Each failure gets fixed in the skill or agent with `update-method` before moving
 
 1. `scripts/install`: symlinks. Check that `claude --agent om-manager` starts in any directory and that `/plan-task` appears in `/help`.
 2. `bin/resume-overmind`: the three sessions. Check that `overmind` opens `om-events` if it's missing.
-3. `add-project {{proyecto}}` from `overmind`: layout detection, `{{name}}-docs` repo if multirepo, registration.
-4. `resume-project {{proyecto}}`: tab, tmux, om-manager in window 1 with `check-work` saying "run setup first".
+3. `add-project {{project}}` from `overmind`: layout detection, `{{name}}-docs` repo if multirepo, registration.
+4. `resume-project {{project}}`: tab, tmux, om-manager in window 1 with `check-work` saying "run setup first".
 5. `setup`: discovery per component (Workflow), module confirmation, interview, per-module documentation (Workflow), TRD, PRD, ARD, `CLAUDE.md`, inferred items, commit. It's the hardest test.
 6. One small, real task: `plan-task` → `create-task` → `consolidate-task` (this is where `--bg`, `attach`, `SendMessage` and the workspace bootstrap get validated) → `delegate-task` → `start-task` → one round → `publish-task` → merge → `clean-task`.
 7. A second task in parallel with the first, to see two workspaces and two pairs at once.

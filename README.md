@@ -70,12 +70,12 @@ The full walkthrough is in `docs/usage-guide.md`.
 
 | File | What |
 |---|---|
-| `docs/01-documentacion.md` | the documentation convention every project carries |
-| `docs/02-orquestacion.md` | roles, sessions, task folder, cycle, pipeline, PR comment |
+| `docs/01-documentation.md` | the documentation convention every project carries |
+| `docs/02-orchestration.md` | roles, sessions, task folder, cycle, pipeline, PR comment |
 | `docs/03-skills.md` | every skill, by role, with its trigger |
-| `docs/04-operacion.md` | the cockpit, registry, todos, events |
+| `docs/04-operation.md` | the cockpit, registry, todos, events |
 | `docs/05-layouts.md` | single repo, monorepo, multirepo |
-| `docs/06-piloto.md` | what is still unvalidated and the order to validate it |
+| `docs/06-pilot.md` | what is still unvalidated and the order to validate it |
 | `docs/usage-guide.md` | how to operate it day to day |
 | `docs/method-ard.md` | why later decisions were made |
 

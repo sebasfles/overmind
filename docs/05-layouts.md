@@ -1,7 +1,7 @@
 # Part 5: Project layouts (single repo, monorepo, multirepo)
 
 Status: agreed on 2026-08-29.
-Depends on: [02-orquestacion.md](02-orquestacion.md), [03-skills.md](03-skills.md), [04-operacion.md](04-operacion.md).
+Depends on: [02-orchestration.md](02-orchestration.md), [03-skills.md](03-skills.md), [04-operation.md](04-operation.md).
 Where this document contradicts the previous ones, this one governs.
 
 ## Objective
@@ -40,7 +40,7 @@ A project has `root`, `repos` and workspaces.
 
 The project folder is initialized as a git repo that tracks only `CLAUDE.md`, `docs/` and `.gitignore`.
 Code clones and `.workspaces/` go in `.gitignore`; git does not look inside ignored paths, so the nested repos do not cause problems.
-Personal private remote, named `{{proyecto}}-docs` (for example `fless/diy-docs`); the local folder keeps being called `{{proyecto}}`.
+Personal private remote, named `{{project}}-docs` (for example `fless/diy-docs`); the local folder keeps being called `{{project}}`.
 `add-project` creates it when it detects a multirepo without `.git` at the root, asking for the remote.
 
 ```
@@ -61,13 +61,13 @@ In single and mono this does not apply: the code repo already is the root.
 It contains one worktree per repo touched, all on the same branch `{{prefix}}/{{id}}_{{title}}`, and in multirepo also the root's worktree.
 It replaces `{{repo}}/.claude/worktrees/`.
 
-- They are created with `git -C {{repo}} worktree add -b {{rama}} {{root}}/.workspaces/{{task}}/{{repo}} origin/{{base}}`.
+- They are created with `git -C {{repo}} worktree add -b {{branch}} {{root}}/.workspaces/{{task}}/{{repo}} origin/{{base}}`.
   A worktree shares `.git` with its clone; it is not a copy.
 - In single and mono the workspace stays inside the repo; `.workspaces/` goes into the repo's `.gitignore`.
 - Bootstrap per worktree, in `consolidate-task`: copy or link the unversioned files the repo needs (`.env*` and whatever the TRD lists under `Workspace files`) and run the TRD's install command.
   Without this, the first `verify-task` fails for reasons unrelated to the task.
 - Always absolute paths: the shell does not preserve `cd` between commands.
-- When cleaning up: `git -C {{repo}} worktree remove {{ruta}}` for each one, and delete the workspace folder.
+- When cleaning up: `git -C {{repo}} worktree remove {{path}}` for each one, and delete the workspace folder.
 
 ## Documentation
 
@@ -93,7 +93,7 @@ One block per target in `verify.log`.
 ## Publishing
 
 `publish-task` opens one PR per repo touched, plus the root's PR in multirepo.
-The summary (Intent, What changed, Decisions, Risk, Pipeline per target) lives in **the root repo's PR**: in single and mono it is the same code PR; in multirepo it is the `{{proyecto}}-docs` PR.
+The summary (Intent, What changed, Decisions, Risk, Pipeline per target) lives in **the root repo's PR**: in single and mono it is the same code PR; in multirepo it is the `{{project}}-docs` PR.
 Code PRs in multirepo carry a one-line body with the link to the root's PR.
 `What changed` links to each code PR.
 If there is a merge order between repos (infra before platform), it goes in `Decisions`; Sebastian merges in that order and merges the root's last.

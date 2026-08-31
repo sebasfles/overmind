@@ -19,7 +19,7 @@ Input: optional mode (`check` only reports; `fill` reports and then fills, the d
 Output: `docs/` in the convention (created from scratch or reconciled), `CLAUDE.md` short, a list of `[inferido]` items for Sebastian, one commit on the base branch.
 The convention is the target shape, never a precondition: a project may arrive with docs anywhere, in any format, or with none.
 
-The convention (see `docs/01-documentacion.md` of the overmind repo):
+The convention (see `docs/01-documentation.md` of the overmind repo):
 
 ```
 CLAUDE.md

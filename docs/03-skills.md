@@ -1,7 +1,7 @@
 # Part 3: Skills by role
 
 Status: agreed on 2026-08-28.
-Depends on: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-orquestacion.md).
+Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02-orchestration.md).
 
 ## Principles
 
@@ -9,7 +9,7 @@ Depends on: [01-documentacion.md](01-documentacion.md), [02-orquestacion.md](02-
    The flow is Sebastian's convention, not the project's.
    Stack-specific detail goes in `references/{{stack}}.md` inside each skill and in the project's TRD.
 2. Each role can only invoke its own skills.
-   The agent definition in `~/.claude/agents/{{rol}}.md` restricts which skills it has available.
+   The agent definition in `~/.claude/agents/{{role}}.md` restricts which skills it has available.
    The om-developer cannot run `review-task`; the om-reviewer cannot run `execute-task`.
    It's by design, not by trust.
 3. Sebastian triggers the om-manager's skills.
@@ -126,7 +126,7 @@ Final names, which replace the ones used provisionally in earlier conversations:
 
 ## Inventory (2026-08-29)
 
-All written as drafts in `skills/`, pending pilot (see [06-piloto.md](06-piloto.md)).
+All written as drafts in `skills/`, pending pilot (see [06-pilot.md](06-pilot.md)).
 
 | Role | Skills |
 |---|---|

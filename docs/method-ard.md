@@ -6,8 +6,8 @@ The original design decisions are in `01` through `05`; here go the later change
 
 ## 2026-08-29: Roles with the `om-` prefix
 
-- Decision: the agents are called `overmind`, `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker`; the sessions `om-{{proyecto}}-manager`, `om-{{id}}-reviewer`, `om-{{id}}-developer[-phase-n]`.
-- Alternatives rejected: `-agent` suffix; names without a prefix, always writing "the {{rol}} agent" in prose.
+- Decision: the agents are called `overmind`, `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker`; the sessions `om-{{project}}-manager`, `om-{{id}}-reviewer`, `om-{{id}}-developer[-phase-n]`.
+- Alternatives rejected: `-agent` suffix; names without a prefix, always writing "the {{role}} agent" in prose.
 - Reason: without a prefix, the three role names read as people in the prose of 27 skills and in the session lists.
 - Debt created: none.
 - Revisit when: never, unless another agent system shows up on the same machine with the same prefix.
@@ -20,7 +20,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: one person, one machine; a plugin charges a prefix on every invocation and a reload step without giving anything a repo with symlinks doesn't already give.
 - Debt created: the conversion to a plugin remains pending if a second machine or person shows up.
 - Revisit when: two machines, two people, or name collisions with project plugins.
-- Files: docs/04-operacion.md.
+- Files: docs/04-operation.md.
 
 ## 2026-08-29: Project skills to maintain the method
 
@@ -65,7 +65,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: every long-lived session needs a single reason to exist; and the separate inbox lets events be seen without interrupting the conversation with the cockpit.
 - Debt created: `bypassPermissions` removes the classifier's safety net from om-reviewer and om-developer; the mitigation is workspace isolation and each agent's hard rules.
 - Revisit when: an om-developer does something destructive outside its workspace, or the inbox needs more than three types.
-- Files: .claude/agents/, agents/om-manager.md, agents/om-reviewer.md, agents/om-developer.md, bin/resume-overmind, scripts/lint-method, portfolio/events/, docs/04-operacion.md, docs/03-skills.md, .claude/skills/update-method/SKILL.md, CLAUDE.md.
+- Files: .claude/agents/, agents/om-manager.md, agents/om-reviewer.md, agents/om-developer.md, bin/resume-overmind, scripts/lint-method, portfolio/events/, docs/04-operation.md, docs/03-skills.md, .claude/skills/update-method/SKILL.md, CLAUDE.md.
 
 ## 2026-08-29: Singleton sessions named after the agent; models and effort per role
 
@@ -74,7 +74,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: agent and session are different things and that's confusing; making them match where there's a single instance removes one name to remember. The model tracks the cost of the role's error and the effort tracks the reasoning the task calls for.
 - Debt created: none.
 - Revisit when: the pilot shows a mechanical skill that needs more reasoning, or an analysis one that doesn't make use of it.
-- Files: .claude/agents/, skills/*/SKILL.md, docs/04-operacion.md, bin/resume-overmind.
+- Files: .claude/agents/, skills/*/SKILL.md, docs/04-operation.md, bin/resume-overmind.
 
 ## 2026-08-29: Only resume-overmind goes into ~/bin
 
@@ -83,7 +83,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: each script has one operator; the PATH should hold only what Sebastian types.
 - Debt created: none.
 - Revisit when: Sebastian finds himself opening projects without the cockpit often enough to want `resume-project` in the PATH.
-- Files: scripts/install, CLAUDE.md, README.md, docs/usage-guide.md, docs/04-operacion.md.
+- Files: scripts/install, CLAUDE.md, README.md, docs/usage-guide.md, docs/04-operation.md.
 
 ## 2026-08-29: bin/ is what gets linked, scripts/ is internal
 
@@ -101,7 +101,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: Sebastian navigates by number and expects the project's om-manager always on window 1; the same repair pattern already proved itself in `resume-overmind`.
 - Debt created: the index is fixed at 1 and assumes `base-index 1`; with `base-index 0` the om-manager window still lands at 1 and index 0 stays occupied by another window.
 - Revisit when: a project session needs a fixed window other than the om-manager, or the tmux config changes `base-index`.
-- Files: scripts/resume-project, skills/resume-project/SKILL.md, docs/04-operacion.md, docs/usage-guide.md, docs/06-piloto.md.
+- Files: scripts/resume-project, skills/resume-project/SKILL.md, docs/04-operation.md, docs/usage-guide.md, docs/06-pilot.md.
 
 ## 2026-08-31: The plan draft is always on disk; the om-manager session is disposable
 
@@ -110,7 +110,7 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: every durable state already derives from disk (`check-task`, `check-work`, idempotent `analyze-task`); the only loss window was a plan not yet drafted. Closing it makes recycling the om-manager cost a `check-work` plus a look at `_drafts/`, so context pressure stops being a design concern.
 - Debt created: one draft write per planning turn, negligible; drafts abandoned mid-plan stay in `_drafts/` until `check-work` surfaces them.
 - Revisit when: the pilot shows draft updates adding friction to planning, or a recycled om-manager missing context that was neither in `_drafts/` nor in `docs/tasks/`.
-- Files: skills/plan-task/SKILL.md, agents/om-manager.md, docs/02-orquestacion.md, docs/usage-guide.md.
+- Files: skills/plan-task/SKILL.md, agents/om-manager.md, docs/02-orchestration.md, docs/usage-guide.md.
 
 ## 2026-08-31: Recycling is respawn-pane, never /clear; scripts/install owns the tmux binding
 
@@ -119,4 +119,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Reason: verified on 2026-08-31: `-n` always creates a new session, an exited session is not reachable by name, and with dead and live sessions sharing a name the message reaches only the live one; `respawn-pane` preserves per-pane original commands even in split windows.
 - Debt created: `scripts/install` now writes to `~/.tmux.conf`, a file it does not own; the guard only checks for an existing `bind R`, not for the exact command.
 - Revisit when: a machine uses a tmux prefix or binding scheme where `R` conflicts, or the pilot shows old transcripts accumulating enough to want cleanup in `clean-task`.
-- Files: scripts/install, agents/om-manager.md, docs/usage-guide.md, docs/04-operacion.md.
+- Files: scripts/install, agents/om-manager.md, docs/usage-guide.md, docs/04-operation.md.
+
+## 2026-08-31: English filenames and placeholders everywhere
+
+- Decision: the design docs are renamed to English (`01-documentation.md`, `02-orchestration.md`, `04-operation.md`, `06-pilot.md`) and every Spanish placeholder is translated (`{{proyecto}}` to `{{project}}`, `{{nombre}}` to `{{name}}`, `{{ruta}}` to `{{path}}`, `{{rama}}` to `{{branch}}`, `{{rol}}` to `{{role}}`, `{{modulo}}` to `{{module}}`, `{{tus comentarios}}` to `{{your comments}}`, `{{slug-del-directorio}}` to `{{directory-slug}}`); references in past ARD entries were updated mechanically. Along the way a bad earlier rename was fixed: "package om-manager" back to "package manager", with a lint exception so "package manager" is not flagged as a bare role word.
+- Alternatives rejected: keeping the Spanish filenames as legacy (the English-only rule already existed; filenames were the leftover), redirect stubs at the old paths (nothing external links to them).
+- Reason: the repo's convention is English in every file; the doc filenames and a handful of placeholders predated the rule.
+- Debt created: none.
+- Revisit when: never.
+- Files: docs/01-documentation.md, docs/02-orchestration.md, docs/04-operation.md, docs/06-pilot.md, docs/03-skills.md, docs/05-layouts.md, docs/usage-guide.md, docs/method-ard.md, README.md, CLAUDE.md references unchanged, .claude/skills/update-method/SKILL.md, skills/setup/SKILL.md, skills/write-trd/SKILL.md, skills/write-trd/templates/TRD.md, scripts/lint-method.

@@ -1,7 +1,7 @@
 # Part 2: Orchestration with om-manager, om-reviewer and om-developer
 
 Status: agreed on 2026-08-28.
-Depends on: [01-documentacion.md](01-documentacion.md).
+Depends on: [01-documentation.md](01-documentation.md).
 The document [05-layouts.md](05-layouts.md) generalizes worktrees, docs and PRs to single repo, monorepo and multirepo; where this document says `.claude/worktrees/{{task}}/`, read `.workspaces/{{task}}/{{repo}}/`, and where it says "the worktree", read "the workspace".
 
 ## Goal
@@ -57,8 +57,8 @@ Only `reiterate-task` adds new commits to an existing PR.
 
 ## Roles as defined agents
 
-Each role is a `.claude/agents/{{rol}}.md` file with frontmatter (name, description, allowed tools, model) and the system prompt in the body.
-A full session with that role is launched using `claude --agent {{rol}}`.
+Each role is a `.claude/agents/{{role}}.md` file with frontmatter (name, description, allowed tools, model) and the system prompt in the body.
+A full session with that role is launched using `claude --agent {{role}}`.
 The task is passed as a pointer: `claude --agent om-developer "task: docs/tasks/142.md"`.
 The role lives version-controlled; the om-manager does not draft long prompts every time.
 Each role has its own `--permission-mode`: the om-developer autonomous, the om-reviewer without code-writing tools.
@@ -74,7 +74,7 @@ The window is opened by the om-manager in `consolidate-task` with only the om-re
 
 ### Session identity
 
-Each `claude --agent {{rol}}` is an independent process with its own session, history and context.
+Each `claude --agent {{role}}` is an independent process with its own session, history and context.
 Two tasks in parallel are four processes that share nothing.
 They are distinguished by three identifiers, all set by the om-manager when launching them:
 
@@ -84,7 +84,7 @@ They are distinguished by three identifiers, all set by the om-manager when laun
 | Working directory (worktree) | `{{root}}/.workspaces/0142_badge_wall/` | Isolates the code and groups the task's session history in its own folder. |
 | Session ID | UUID | For `claude attach {{id}}` or `claude -r {{id}}`. |
 
-The `task-{{id}}-{{rol}}` convention makes addressing deterministic: the om-reviewer knows who to talk to because it knows its own task id.
+The `task-{{id}}-{{role}}` convention makes addressing deterministic: the om-reviewer knows who to talk to because it knows its own task id.
 
 ### Launch (main form, to validate in the pilot): `--bg` + `attach`
 
@@ -103,13 +103,13 @@ The process survives if the pane is closed.
 
 ### Launch (alternative form, if `--bg` + `attach` does not convince)
 
-In each pane, with cwd in the worktree, `claude --agent {{rol}} -n task-{{id}}-{{rol}} "task: docs/tasks/{{id}}_{{title}}/"` is run directly.
+In each pane, with cwd in the worktree, `claude --agent {{role}} -n task-{{id}}-{{role}} "task: docs/tasks/{{id}}_{{title}}/"` is run directly.
 Functionally it is the same; management with `claude agents / stop / rm` is lost and the process dies with the pane.
 The rest of the design does not change.
 
 ### Where histories live
 
-Claude Code stores each session in `~/.claude/projects/{{slug-del-directorio}}/{{session-id}}.jsonl`, grouped by the directory it ran in.
+Claude Code stores each session in `~/.claude/projects/{{directory-slug}}/{{session-id}}.jsonl`, grouped by the directory it ran in.
 Since om-reviewer and om-developer run inside the worktree, their sessions land in their own folder, for example `~/.claude/projects/-home-fless-dev-designli-projects-diy-diy-platform--claude-worktrees-0142_badge_wall/`.
 That is why they do not show up in the main repo's `claude -r`: the picker filters by directory.
 
@@ -180,7 +180,7 @@ The frontmatter has no status field; no commit exists to change status.
 | Worktree exists, `Context & decisions` empty | `consolidating` |
 | Worktree exists, `Context & decisions` written, no commits ahead of `origin/{{base}}`, no om-developer session | `consolidated` (ready to delegate) |
 | Branch with commits ahead of `origin/{{base}}`, or a `om-{{id}}-developer*` session exists | `in_progress` |
-| `gh pr list --head {{rama}}` returns an open PR | `in_review` |
+| `gh pr list --head {{branch}}` returns an open PR | `in_review` |
 | PR merged and the worktree still exists | `merged` (pending `clean-task`) |
 | PR merged and no worktree | `done` |
 
@@ -223,7 +223,7 @@ Rules:
 ### Worktree
 
 `{{root}}/.workspaces/{{id}}_{{title}}/{{repo}}/`, one worktree per repo touched (see [05-layouts.md](05-layouts.md)).
-It is created by the om-manager in `consolidate-task` with `git worktree add -b {{rama}} {{ruta}} origin/{{base}}` to control the branch name, and it launches the om-reviewer with that cwd.
+It is created by the om-manager in `consolidate-task` with `git worktree add -b {{branch}} {{path}} origin/{{base}}` to control the branch name, and it launches the om-reviewer with that cwd.
 The branch is born without the task folder; it receives it in `delegate-task`'s rebase, after the `planned` push.
 It is created during consolidation and not during delegation because a Claude Code session has a fixed cwd and the om-reviewer needs to live inside the worktree to run lint and tests.
 If Sebastian decides not to delegate yet, the worktree and the branch stay; only the om-reviewer's session is stopped (`claude stop`, which preserves the conversation) and the tmux window is closed.
@@ -354,7 +354,7 @@ Level (Low / Medium / High) and one sentence of justification.
 It only exists during the consolidation phase.
 After that, the om-reviewer decides everything within the task's scope and documents it in the PR's `Decisions`.
 The only way back is `reiterate-task` from Sebastian through the om-manager.
-The only exception that escalates the whole chain (om-developer → om-reviewer → om-manager → `om-events`) is a block due to missing permissions, credentials, environment or tools, typed `blocker`; see [04-operacion.md](04-operacion.md).
+The only exception that escalates the whole chain (om-developer → om-reviewer → om-manager → `om-events`) is a block due to missing permissions, credentials, environment or tools, typed `blocker`; see [04-operation.md](04-operation.md).
 
 ## Parallelism
 

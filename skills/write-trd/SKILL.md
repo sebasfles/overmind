@@ -26,7 +26,7 @@ It says where things are, how they are organized, and how to operate them.
 The TRD describes the whole application; in monorepos and multirepos it has one component section per app or repo.
 Read `templates/TRD.md` and fill every section from evidence:
 
-1. Stack: languages, frameworks, package om-manager, runtime versions, from manifests (`package.json`, `Gemfile`, `pubspec.yaml`, `go.mod`, lockfiles, `.nvmrc`, `.ruby-version`).
+1. Stack: languages, frameworks, package manager, runtime versions, from manifests (`package.json`, `Gemfile`, `pubspec.yaml`, `go.mod`, lockfiles, `.nvmrc`, `.ruby-version`).
 2. Layout: top-level folders and what lives in each; monorepo packages or apps if any.
 3. Modules: the list of modules with one line each and a link to `docs/modules/{{module}}/README.md`. A module is a bounded area of the domain the code already groups (a NestJS module, a Rails engine or namespace, a feature folder); do not invent boundaries the code does not have.
 4. Verification targets: one row per component with path and the exact commands for lint, typecheck, unit and e2e, each with its serial flag. `verify-task` reads this table literally; write `unknown` rather than guessing.

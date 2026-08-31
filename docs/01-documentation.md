@@ -101,7 +101,7 @@ docs/
   TRD.md                   # general technical, declares stack and mechanics
   ARD.md                   # global decisions + debt index
   modules/
-    {{modulo}}/
+    {{module}}/
       README.md            # 20-40 lines: what it does, boundaries, links to the rest
       prd.md
       trd.md               # includes endpoints it owns
@@ -189,5 +189,5 @@ As a second line of freshness, it includes the item: does the touched module hav
 
 - `ds-write-trd` is broken: today it is a copy of the PRD (frontmatter and body). It needs to be rewritten.
 - `write-ard` does not exist. It needs to be created.
-- `~/OPINIONS.md` was dropped (see [04-operacion.md](04-operacion.md)); the cross-cutting criteria live in `~/.claude/CLAUDE.md` and in the role agents.
+- `~/OPINIONS.md` was dropped (see [04-operation.md](04-operation.md)); the cross-cutting criteria live in `~/.claude/CLAUDE.md` and in the role agents.
 - No project in `~/dev` has its own `CLAUDE.md` or `.claude/`. They will be the first candidates for `setup`.

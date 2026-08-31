@@ -2,7 +2,7 @@
 
 Status: partially agreed on 2026-08-28.
 Sections marked "To be defined" have not been discussed yet.
-Depends on: [02-orquestacion.md](02-orquestacion.md), [03-skills.md](03-skills.md).
+Depends on: [02-orchestration.md](02-orchestration.md), [03-skills.md](03-skills.md).
 
 ## Cockpit
 
@@ -162,7 +162,7 @@ The opinions that matter to Sebastian's agents are narrow (code, architecture, p
 | Opinion type | Where it lives |
 |---|---|
 | Short rule, always applies | `~/.claude/CLAUDE.md` |
-| A role's criteria | `~/.claude/agents/{{rol}}.md` |
+| A role's criteria | `~/.claude/agents/{{role}}.md` |
 | A project's decision | project's `ARD.md` |
 
 A fourth place would fall out of sync with the other three.

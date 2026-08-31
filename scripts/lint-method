@@ -29,7 +29,7 @@ def check_common(path, text):
         if re.search(r"<[a-zA-Z][^<>\n]*>", line) and "<!--" not in line and "-->" not in line and not line.strip().startswith(("```", "|")) and "gh api" not in line:
             if not re.search(r"^\s*(claude|git|tmux|wt\.exe|wsl\.exe|cd|mkdir|for|if|printf)\b", line):
                 add(path, i, "angle-bracket placeholder; use {{...}}")
-        if re.search(r"(?<![\w-])(?<!om-)(reviewer|developer|manager)s?(?![\w-])", line, re.I) and "reviewer-summary" not in line and "{{reviewer-id}}" not in line and "{{developer-id}}" not in line:
+        if re.search(r"(?<![\w-])(?<!om-)(?<!package )(reviewer|developer|manager)s?(?![\w-])", line, re.I) and "reviewer-summary" not in line and "{{reviewer-id}}" not in line and "{{developer-id}}" not in line:
             add(path, i, "bare role word; use om- prefixed agent name")
         if ".claude/worktrees" in line and "read" not in line and "05-layouts" not in str(path):
             add(path, i, "old worktree path; use .workspaces/")

@@ -61,10 +61,10 @@ The `om-events` pane isn't used directly; it only shows incoming events and the 
 
 ## Adding a project
 
-1. In `overmind`: `/add-project {{ruta}}`.
+1. In `overmind`: `/add-project {{path}}`.
    It detects whether it's a repo, a monorepo, or a folder of repos.
-   If it's a folder of repos without git, it suggests turning it into a docs repo (`{{nombre}}-docs`) that ignores the clones; say yes and give it the remote.
-2. `/resume-project {{nombre}}`: a new tab, the project's tmux session, `om-manager` in window 1.
+   If it's a folder of repos without git, it suggests turning it into a docs repo (`{{name}}-docs`) that ignores the clones; say yes and give it the remote.
+2. `/resume-project {{name}}`: a new tab, the project's tmux session, `om-manager` in window 1.
    The first time it will say `no docs/tasks/ in this project; run setup first`.
 3. In the `om-manager`: `/setup`.
 
@@ -128,7 +128,7 @@ The comment has everything you need to decide without reading the diff: Intent, 
 If there are several repos, `What changed` links each PR and `Decisions` states the merge order.
 
 - Agree: merge, always you.
-- No: `/reiterate-task {{id}} {{tus comentarios}}` or `/reiterate-task {{id}} read the PR`.
+- No: `/reiterate-task {{id}} {{your comments}}` or `/reiterate-task {{id}} read the PR`.
   The om-reviewer turns your comments into findings and the cycle continues; the PR gets a commit per new round.
 
 ### 7. Clean up
