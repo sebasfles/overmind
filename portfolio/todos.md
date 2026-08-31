@@ -19,5 +19,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-08-31 organization guards requires flows:* permission, which is wrong @auvral
 - [ ] 2026-08-31 role permissions tab renders as empty @auvral
 - [ ] 2026-08-31 script js versioning and use s3 for it @auvral
+- [ ] 2026-08-31 use terraform as single source of truth for infra @auvral
 
 ## Done
