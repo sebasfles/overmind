@@ -1,4 +1,15 @@
-projects: []
+projects:
+  - name: diy
+    root: /home/fless/dev/designli/projects/diy
+    tmux: diy
+    status: active
+    repos:
+      - name: diy-platform
+        base_branch: develop
+      - name: diy-infra
+        base_branch: main
+      - name: diy-pocs
+        base_branch: main
 #  - name: diy
 #    root: /home/fless/dev/designli/projects/diy
 #    tmux: diy
