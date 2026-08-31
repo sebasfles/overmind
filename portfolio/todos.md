@@ -11,5 +11,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-08-31 backoffice should be able to add more super admins to an org @auvral
 - [ ] 2026-08-31 check victor's bug list @auvral
 - [ ] 2026-08-31 cubicasa implementation @diy
+- [ ] 2026-08-31 update ui on listing page @diy
 
 ## Done
