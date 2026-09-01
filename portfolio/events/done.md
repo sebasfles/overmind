@@ -10,3 +10,6 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-01T16:54:51Z auvral 0002 phase 2 PRs ready, last phase (https://github.com/auvral-development/dashboard-backend/pull/21 + https://github.com/auvral-development/auvral-platform/pull/41) (action)
 - [x] 2026-09-01T17:59:32Z auvral 0001 cleaned (info)
 - [x] 2026-09-01T17:59:32Z auvral 0002 cleaned (info)
+- [x] 2026-09-01T20:24:53Z auvral 0003 PRs ready (https://github.com/auvral-development/dashboard-backend/pull/22, https://github.com/auvral-development/auvral-platform/pull/43) (action)
+- [x] 2026-09-01T19:51:26Z auvral 0003 consolidated and delegated (info)
+- [x] 2026-09-01T20:29:28Z auvral 0004 consolidated and delegated (info)
