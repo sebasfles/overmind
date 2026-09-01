@@ -14,7 +14,8 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
    It's by design, not by trust.
 3. Sebastian drives the om-manager's skills.
    `plan-task`, `create-task`, `consolidate-task` and `delegate-task` are invocable by the om-manager so the task flow chains as one conversation: each runs on Sebastian's explicit yes to the question that offers it, never on the om-manager's initiative.
-   `reiterate-task`, `clean-task` and `clean-work` stay invocable only by the user.
+   `reiterate-task` and `clean-work` stay invocable only by the user.
+   `clean-task` is invocable by the om-manager, but only on Sebastian's explicit ask, phrased however he likes; never on its own initiative.
    `check-task` and `check-work` can be invoked by the om-manager when Sebastian asks about status.
 4. The om-reviewer's and om-developer's skills run automatically.
    om-reviewer and om-developer are event-driven state machines.

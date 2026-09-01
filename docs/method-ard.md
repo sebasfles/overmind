@@ -256,3 +256,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: no independent execution of lint or tests happens before a PR; a `verify.log` that lies (or a broken local toolchain) reaches Sebastian's review undetected. Docs arrive in one commit at the end, so a task stopped mid-flight has code without docs.
 - Revisit when: a merged PR turns out red on CI or a lying `verify.log` is caught after publish (restore an independent gate), or end-of-task documentation is systematically thinner than the per-round version was.
 - Files: skills/execute-task/SKILL.md, skills/review-task/SKILL.md, skills/document-task/SKILL.md, skills/verify-task/SKILL.md, skills/publish-task/SKILL.md, agents/om-developer.md, agents/om-reviewer.md, agents/om-manager.md, docs/01-documentation.md, docs/02-orchestration.md, docs/03-skills.md, docs/usage-guide.md.
+
+## 2026-09-01: clean-task is model-invocable on Sebastian's ask
+
+- Decision: `clean-task` drops `disable-model-invocation: true` (edited by Sebastian directly in the skill); the om-manager can invoke it when Sebastian asks in plain words, without needing the slash command. It still runs only on his explicit ask, never on the om-manager's initiative; `agents/om-manager.md` ("wait for his explicit ask") is unchanged and `docs/03-skills.md` point 3 now states the split.
+- Alternatives rejected: keeping it slash-only (asking "clean up task 12" in conversation failed to load the skill, pure friction), making it autonomous after merge (destructive cleanup of sessions, branches and worktrees stays behind Sebastian's word).
+- Reason: the flag blocked the natural way Sebastian asks for cleanup; the safety he wants is "only when I say so", not "only through one syntax".
+- Debt created: none.
+- Revisit when: an om-manager runs `clean-task` without an explicit ask; then the flag comes back.
+- Files: skills/clean-task/SKILL.md, docs/03-skills.md.
