@@ -192,3 +192,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: a summary's collapsed detail is systematically ignored (drop it) or systematically opened (some line deserves promotion).
 - Files: skills/publish-task/templates/pr-summary.md, skills/publish-task/SKILL.md, scripts/lint-method.
+
+## 2026-08-31: Risk assessment carries a severity icon
+
+- Decision: the Risk assessment value in the PR summary is written with its icon: `✅ Low`, `⚠️ Medium`, `🔴 High`.
+- Alternatives rejected: text-only values (the icon makes severity readable at a glance, consistent with the ✅ pipeline lines).
+- Reason: Sebastian asked for icon-coded severity after reviewing the pilot's first summary.
+- Debt created: none.
+- Revisit when: never, unless the severity scale itself changes.
+- Files: skills/publish-task/templates/pr-summary.md, skills/publish-task/SKILL.md.

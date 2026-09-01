@@ -14,7 +14,7 @@
 
 ## Risk assessment
 
-{{Low | Medium | High}}: {{one sentence}}. {{Medium or High only: what to watch after merge.}}
+{{✅ Low | ⚠️ Medium | 🔴 High}}: {{one sentence}}. {{Medium or High only: what to watch after merge.}}
 
 ## Pipeline
 

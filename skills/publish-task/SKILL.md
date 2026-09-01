@@ -52,7 +52,7 @@ Read `templates/pr-summary.md` and fill it:
 - Intent: two or three sentences at goal level, no implementation detail; name a consolidation agreement only if it changes how to read the PR.
 - What changed: at most 10 bullets, one concise line each, no subclauses; in multirepo, group by repo and link each code PR.
 - Decisions: one line per decision or let-pass with its reason; include the merge order between repos if any (for example `merge diy-infra first`).
-- Risk assessment: exactly `Low`, `Medium` or `High`, one sentence; Medium or High say what to watch after merge.
+- Risk assessment: exactly `✅ Low`, `⚠️ Medium` or `🔴 High`, one sentence; Medium or High say what to watch after merge.
 - Pipeline: one bare `✅` line per step, never GitHub task checkboxes, no inline extra info; the review line reads `{{k}} issues auto-fixed`; `documentation` and `push` are bare passed lines.
 - Everything longer (commands, targets, findings as `file:line, defect, fix, re-checked`, shas, modules) goes only inside the collapsed `<details>` block; Sebastian opens it when he wants depth.
 
