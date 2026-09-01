@@ -73,6 +73,9 @@ Tests are part of implementation:
 - Bugs: a regression test that encodes `replication.md`.
 - Use the project's existing test layout and helpers; do not introduce a new test framework or pattern.
 
+Write code comments only when absolutely necessary, which is almost never: a non-obvious invariant or an external workaround the code cannot express.
+Never comment what the code already says; explanation belongs in the module docs and the ARD, not in comments.
+
 Do not widen the scope.
 Adjacent work you notice goes to `om-developer notes` as deferred, not into the code.
 Leave the code better than you found it only inside the files you already had to touch.

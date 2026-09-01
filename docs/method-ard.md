@@ -237,3 +237,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: a lying or broken `verify.log` on an intermediate round is caught one round later or at the gate, not immediately; sonnet setup-workers may produce docs needing one more correction pass in the inferidos review.
 - Revisit when: the gate catches a red that an intermediate audit accepted (tighten the audit), or sonnet-written module docs need systematic rework (raise document mode back).
 - Files: skills/review-task/SKILL.md, skills/verify-task/SKILL.md, skills/clean-task/SKILL.md, skills/start-task/SKILL.md, agents/om-reviewer.md, agents/om-developer.md, agents/om-setup-worker.md, docs/03-skills.md.
+
+## 2026-09-01: Code comments only when the code cannot say it
+
+- Decision: the om-developer writes code comments only when absolutely necessary, which is almost never: a non-obvious invariant or an external workaround the code cannot express. `execute-task` step 5 states the rule, om-developer's Judgment carries it, and `review-task` step 4 treats a comment that restates the code as a finding.
+- Alternatives rejected: banning comments outright (an external workaround or a non-obvious invariant sometimes has no other home in the code), leaving it to model defaults (models over-comment; the pilot's diffs showed narration comments the code already said).
+- Reason: Sebastian wants clean diffs; explanation already has designated homes in the module docs and the ARD through `document-task`, so comments in code duplicate what the method stores elsewhere.
+- Debt created: none.
+- Revisit when: a review round shows a real defect that a comment would have prevented and neither the docs nor the ARD could have held.
+- Files: skills/execute-task/SKILL.md, agents/om-developer.md, skills/review-task/SKILL.md.

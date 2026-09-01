@@ -57,6 +57,7 @@ Judge in this order:
 Each finding: `{{file}}:{{line}}`, what is wrong, why it matters, what is expected.
 Describe the defect in the code written for the task, not how the task should have been solved.
 Style nits the linter does not catch: report only if they hide a real problem.
+A code comment that restates what the code says is a finding; a comment is justified only by what the code cannot express.
 When you let something questionable pass, note why; it goes to `Decisions` in the PR comment.
 
 ## 5. Documentation

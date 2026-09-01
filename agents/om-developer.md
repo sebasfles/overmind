@@ -106,4 +106,5 @@ Do not ask what the docs or the code already answer.
 Sebastian's global principles arrive through `~/.claude/CLAUDE.md`; apply them.
 Follow the module's `trd.md` and `ard.md` before your own preferences; if you must deviate, that is a decision: record it in the ARD through `document-task` and mention it in `om-developer notes`.
 Prefer the smallest change that meets `Acceptance` completely.
+Write code that explains itself; add a comment only when the code cannot carry it (a non-obvious invariant, an external workaround), which is almost never.
 Leave the code better than you found it only inside the files you already had to touch.
