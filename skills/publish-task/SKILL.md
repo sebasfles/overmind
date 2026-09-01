@@ -14,13 +14,24 @@ projects), and write or update the summary as the root repo PR's description (In
 links to each code PR, Decisions, Risk assessment, Pipeline per target). Notifies the om-manager. om-reviewer only;
 runs when review-task finds no issues.
 
-Input: a clean `review-task` on the workspace's current commits.
+Input: a clean `review-task` plus the om-developer's `docs ready, commit {{sha}}`.
 Output: all branches pushed, one PR per repo, the summary as the root PR's description, om-manager notified.
 
 `ROOT_WT` as in `delegate-task`.
 In single and mono the root PR is the code PR; there is only one.
 
-## 1. Push
+## 1. Docs
+
+The om-developer's last commit is the documentation commit; check it before pushing anything.
+For each module in `modules`, plus any module the diff touched:
+
+- `docs/modules/{{module}}/*.md` affected have `updated` today and `source: {{id}}_{{title}}`, or `om-developer notes` justifies in one line why nothing changed.
+- `trd.md` reflects new or changed endpoints; `database.md` reflects new tables, columns or invariants; `flows.md` if a complex flow changed.
+- `ard.md` has an entry for every decision `om-developer notes` records that `Approach` and `Context & decisions` did not.
+
+Missing or stale docs: `SendMessage` the om-developer `docs findings: {{k}} ...`, stop, and rerun this step on the next `docs ready, commit {{sha}}`.
+
+## 2. Push
 
 For each worktree in the workspace with commits ahead of its base:
 
@@ -31,7 +42,7 @@ git -C {{WORKSPACE}}/{{name}} push --force-with-lease            # later rounds;
 
 Never `--force` without `--with-lease`.
 
-## 2. PRs
+## 3. PRs
 
 Code repos first, root last (so the root summary can link them).
 For each repo with a pushed branch, if `gh pr list --head {{branch}}` in that repo is empty:
@@ -42,10 +53,10 @@ gh -R {{owner/repo}} pr create --base {{base}} --head {{branch}} \
   --body "{{body}}"
 ```
 
-Body: for the root PR, a one-line placeholder (`Summary follows.`), replaced by the summary in step 3 once the code PR links exist; for code PRs in multirepo, one line: `Task PR: {{root PR url}}`.
+Body: for the root PR, a one-line placeholder (`Summary follows.`), replaced by the summary in step 4 once the code PR links exist; for code PRs in multirepo, one line: `Task PR: {{root PR url}}`.
 Simplest order that satisfies this: create the root PR with the placeholder body, then code PRs with the link, then rewrite the root PR's description.
 
-## 3. Summary, as the root PR's description
+## 4. Summary, as the root PR's description
 
 Read `templates/pr-summary.md` and fill it:
 
@@ -59,7 +70,7 @@ Read `templates/pr-summary.md` and fill it:
 Write it as the PR's description: `gh -R {{owner/repo}} pr edit {{number}} --body-file {{file}}`.
 On later rounds rewrite the whole description the same way; it is the single source, never add summary comments.
 
-## 4. Notify
+## 5. Notify
 
 `SendMessage` to `om-{{project}}-manager`: `task {{id}}: PRs ready, summary at {{root PR url}} (phase {{k}} of {{m}})`.
 Do not message `overmind`; the om-manager does.

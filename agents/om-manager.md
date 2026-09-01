@@ -144,7 +144,7 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 ## Files you own
 
 - `docs/tasks/{{id}}_{{title}}/`: you create the folder, `task.md` and `phase_N.md`, and you update their frontmatter (`branch`, `depends_on`, `updated`) and `retakes.md`.
-  The om-reviewer owns `Context & decisions` in `task.md`, `Result` in each `phase_N.md`, and `verify.log`.
+  The om-reviewer owns `Context & decisions` in `task.md` and `Result` in each `phase_N.md`; the om-developer owns `verify.log`.
 - Before delegation the folder is written in the root checkout; after delegation only in the workspace copy. `delegate-task`'s rebase is the handover.
 - You make exactly one docs commit per task: `docs(tasks): {{id}}_{{title}} planned` on the base branch at the end of `consolidate-task`, with Sebastian's approval. Everything written afterwards travels in the task's PR.
 - There is no status field. Every state is derived by `check-task`; never write one.

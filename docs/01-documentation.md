@@ -149,9 +149,9 @@ This replaces the four current copies of `implement-specs-*` (nestjs, nextjs, ra
 |---|---|
 | `setup` | Creates or reconciles the documentation convention in a project. Calls `write-prd`, `write-trd` and `write-ard`. |
 | `plan-task` + `create-task` | Planning phase. Reads the documentation following the reading path and produces the task folder on disk. |
-| `execute-task` | Implements the task. Operates according to the stack declared in the TRD. When finished, calls `document-task`. |
-| `document-task` | Updates the PRD, TRD, ARD, database and flows of the touched module, with `updated` and `source`. |
-| `review-task` | Verifies that the task touched what was necessary, including the documentation. |
+| `execute-task` | Implements the task. Operates according to the stack declared in the TRD. When the review is clean, calls `document-task` once. |
+| `document-task` | Updates the PRD, TRD, ARD, database and flows of the touched module, with `updated` and `source`, once per task, when the code is final. |
+| `review-task` | Verifies that the task touched what was necessary; the documentation check happens in `publish-task`. |
 
 The complete list of skills by role is in [03-skills.md](03-skills.md).
 
@@ -172,7 +172,7 @@ In a new project it is nearly instant.
 
 ### document-task
 
-It must be a named, mandatory step at the end of `execute-task`.
+It must be a named, mandatory step, run once per task or phase, on the om-reviewer's clean signal and before publish.
 If it is not explicit, the agent skips it when the context gets long.
 Updates:
 
@@ -181,9 +181,9 @@ Updates:
 - `database.md` and `flows.md` if the change affects them.
 - `updated` and `source` frontmatter on each touched file.
 
-### review-task
+### publish-task
 
-As a second line of freshness, it includes the item: does the touched module have its documentation up to date?
+As a second line of freshness, it checks before pushing: does the touched module have its documentation up to date?
 
 ## Open items
 

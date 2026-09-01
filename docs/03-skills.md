@@ -46,7 +46,7 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 |---|---|---|
 | `analyze-task` | The session starts | Reads the task folder and the modules' `docs/`. If `Context & decisions` is empty, it does the back-and-forth with om-manager and Sebastian once and writes it in the root checkout copy (the only one written before delegation); it can adjust `Scope`, `Acceptance` and the phases. If it's already written (only happens when the original session was lost), it reads it and doesn't ask again. If there's a new `retakes.md`, it incorporates it. Notifies the om-manager "consolidated" and waits for "delegated, start". |
 | `start-task` | Message from the om-manager "delegated, start" | Opens the right pane of the tmux window, launches `om-{{id}}-developer` (or `-developer-phase-1`) with cwd in the worktree and sends it "context ready, start". |
-| `review-task` | Message "round N" from the om-developer | Runs the Pipeline over the worktree: intent, rebase, verification (audits `verify.log` on intermediate rounds; runs `verify-task` itself only as the publish gate), review, documentation. If there are issues, it sends them to the om-developer with file:line, error and what was expected. If there are no issues, it runs `publish-task`. |
+| `review-task` | Message "round N" from the om-developer | Runs the Pipeline over the worktree: intent, rebase, verification (audits `verify.log`; never runs `verify-task` itself), review. If there are issues, it sends them to the om-developer with file:line, error and what was expected. If there are no issues, it sends "round N clean, document" and, on "docs ready", runs `publish-task`. |
 | `publish-task` | `review-task` with no issues | Pushes each branch in the workspace, one PR per touched repo (plus the root one in multirepo), and the summary as the root PR's description with Intent, What changed (with links to each PR), Decisions (including merge order), Risk assessment and Pipeline per target. Writes no state; notifies the om-manager "PRs ready". |
 | `next-phase` | Message from the om-manager "phase N merged, continue" | Kills the phase N om-developer session, creates the phase N+1 branch from `origin/{{base}}` in the worktree, writes phase N's `Result` in `phase_N.md` (it travels in the phase N+1 PR) and runs `start-task`. |
 
@@ -59,8 +59,8 @@ It's the only publication point.
 
 | Skill | Event that triggers it | What it does |
 |---|---|---|
-| `execute-task` | "context ready, start" from the om-reviewer, or a message with findings | Implement mode if there's no task code yet; fix mode if there are findings or retakes. Rebase from `origin/{{base}}`, implements, `verify-task`, `document-task`, squashes into one commit, writes its closing note (what it did, what it left pending) in `task.md` or `phase_N.md`, notifies the om-reviewer "round N". |
-| `document-task` | At the end of `execute-task` | Updates `prd.md`, `trd.md`, `ard.md`, `database.md` and `flows.md` of the touched module with `updated` and `source` (Part 1). |
+| `execute-task` | "context ready, start" from the om-reviewer, a message with findings, or "round N clean, document" | Implement mode if there's no task code yet; fix mode if there are findings or retakes; documentation mode on the clean signal. Rebase from `origin/{{base}}`, implements, `verify-task`, squashes into one commit, writes its closing note (what it did, what it left pending, decisions taken) in `task.md` or `phase_N.md`, notifies the om-reviewer "round N". |
+| `document-task` | "round N clean, document" from the om-reviewer, once per task or phase | Updates `prd.md`, `trd.md`, `ard.md`, `database.md` and `flows.md` of the touched module with `updated` and `source` (Part 1), over the whole task's diff, when the code is final. |
 
 The om-developer never touches the remote.
 Its work ends in a local commit and a message to the om-reviewer.
@@ -70,10 +70,9 @@ It never talks to the om-manager or to Sebastian.
 
 | Skill | Who | What it does |
 |---|---|---|
-| `verify-task` | om-reviewer and om-developer | Iterates the TRD's `Verification targets` (one per repo or app the task touches). Runs lint → typecheck → tests, one at a time and with `--runInBand`. For `type: docs` it doesn't run tests. One block per target in `verify.log`: what ran, when, the result and on which commit. |
+| `verify-task` | om-developer only | Iterates the TRD's `Verification targets` (one per repo or app the task touches). Runs lint → typecheck → tests, one at a time and with `--runInBand`. For `type: docs` it doesn't run tests. One block per target in `verify.log`: what ran, when, the result and on which commit. |
 
-The `verify-task` log is what lets the om-reviewer confirm that lint and tests ran after the last fix.
-The om-reviewer also reruns it on the final commit, which makes irrelevant the order in which the om-developer ran it.
+The `verify-task` log is the om-reviewer's only evidence that lint and tests ran after the last fix; it audits the log and never re-runs the commands.
 
 ## State machines
 
@@ -83,7 +82,8 @@ The om-reviewer also reruns it on the final commit, which makes irrelevant the o
 starts ──> analyze-task ──> "consolidated" ──> waits "delegated, start"
 delegated ──> start-task (launches om-developer) ──> waits
 waits ──(round N)──> review-task ──(issues)──> sends findings ──> waits
-                                 ──(no issues)──> publish-task ──> in_review ──> waits
+                                 ──(no issues)──> "clean, document" ──> waits
+waits ──(docs ready)──> publish-task ──> in_review ──> waits
 in_review ──(phase N merged, phase N+1 exists)──> next-phase ──> start-task ──> waits
 in_review ──(last phase merged, or no phases)──> ends
 ```
@@ -94,6 +94,7 @@ in_review ──(last phase merged, or no phases)──> ends
 starts ──> waits for the om-reviewer's notice
 notice ──> execute-task (implement) ──> "round 1" ──> waits
 findings ──> execute-task (fix) ──> "round N" ──> waits
+clean, document ──> document-task ──> "docs ready" ──> waits
 ```
 
 ## Name map
@@ -133,8 +134,7 @@ All written as drafts in `skills/`, pending pilot (see [06-pilot.md](06-pilot.md
 |---|---|
 | om-manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work` |
 | om-reviewer | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
-| om-developer | `execute-task`, `document-task` |
-| Shared | `verify-task` |
+| om-developer | `execute-task`, `document-task`, `verify-task` |
 | overmind | `add-project` (with `pause` and `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
 | om-config (project skill in `.claude/skills/`) | `update-method` |
 

@@ -1,6 +1,6 @@
 ---
 name: execute-task
-description: "Implement the task or apply findings, verify, document, one commit per round. om-developer; on \"context ready, start\" and on findings."
+description: "Implement the task or apply findings, verify, one commit per round; document once on the clean signal. om-developer; on \"context ready, start\" and each message."
 effort: high
 disable-model-invocation: false
 ---
@@ -10,12 +10,13 @@ disable-model-invocation: false
 ## Purpose
 
 Implement the task (or the current phase) in the worktree, one round at a time: reproduce bugs first, rebase,
-implement with tests, verify-task, document-task, squash to one commit, write om-developer notes, report "round N
-ready" to the om-reviewer. Also applies the om-reviewer's findings on later rounds. om-developer only; runs on "context
-ready, start" and on every findings message.
+implement with tests, verify-task, squash to one commit, write om-developer notes, report "round N
+ready" to the om-reviewer. Also applies the om-reviewer's findings on later rounds, and runs document-task once,
+on the om-reviewer's clean signal. om-developer only; runs on "context ready, start", on every findings message,
+and on "round N clean, document".
 
-Input: `context ready, start` from the om-reviewer (round 1), or a findings message `round N findings: k ...` (round N+1), or `retakes: k findings ...` (reiteration).
-Output: one squashed commit on the task branch in the worktree, `om-developer notes` updated, and the message `round {{N}} ready, commit {{sha}}` to the om-reviewer.
+Input: `context ready, start` from the om-reviewer (round 1), or a findings message `round N findings: k ...` (round N+1), or `retakes: k findings ...` (reiteration), or `round N clean, document` (documentation).
+Output: one squashed commit on the task branch in the worktree, `om-developer notes` updated, and the message `round {{N}} ready, commit {{sha}}` (or `docs ready, commit {{sha}}`) to the om-reviewer.
 
 You work only in your worktree.
 You never push.
@@ -25,8 +26,9 @@ You never push.
 - Round 1: implement.
 - Round N+1: apply every finding, all of them, then re-verify.
 - Reiteration: apply the findings the om-reviewer derived from `retakes.md`.
+- Documentation: on `round {{N}} clean, document`, run only step 10.
 
-The steps are the same; only step 5 changes.
+The first three modes share the steps; only step 5 changes.
 
 ## 1. Read the task
 
@@ -84,14 +86,9 @@ Leave the code better than you found it only inside the files you already had to
 
 Run `verify-task`.
 Fix until everything is green.
-It appends to `verify.log`; the om-reviewer will check your last entry is at your final commit.
+It appends to `verify.log`; the om-reviewer audits that log and never re-runs it, so your last block must be green at your final commit and cover every target the diff touches.
 
-## 7. Document
-
-Run `document-task`.
-Every decision you took that `Approach` and `Context & decisions` did not already record becomes an ARD entry.
-
-## 8. One commit
+## 7. One commit
 
 Squash all work of this round, task folder changes included, into one commit on top of the previous round's commit:
 
@@ -103,16 +100,27 @@ git commit -m "{{type}}({{modules}}): {{what}}, round {{N}}"
 Round 1 has exactly one commit on top of `origin/{{base}}`.
 Never amend a previous round's commit; the om-reviewer references them.
 
-## 9. om-developer notes
+## 8. om-developer notes
 
-In `task.md` (or the phase file), under `om-developer notes`, add a `Round {{N}}` block: what you did, what you left pending, what you deferred, which findings you disagreed with and why.
+In `task.md` (or the phase file), under `om-developer notes`, add a `Round {{N}}` block: what you did, what you left pending, what you deferred, which findings you disagreed with and why, and every decision you took that `Approach` and `Context & decisions` did not already record.
 Then amend that into the round's commit (`git commit --amend --no-edit`), so notes and code travel together.
+Decisions recorded here become ARD entries in step 10; module docs are not touched during rounds.
 
-## 10. Report
+## 9. Report
 
 `SendMessage` to `om-{{id}}-reviewer`: `round {{N}} ready, commit {{sha}}`.
 Then wait.
 Do nothing until a new message arrives.
+
+## 10. Documentation, once, on the clean signal
+
+Runs only when the om-reviewer sends `round {{N}} clean, document`; never before.
+
+Run `document-task` over the whole task's (or phase's) diff against `origin/{{base}}`.
+Every decision recorded in `om-developer notes` that `Approach` and `Context & decisions` did not already record becomes an ARD entry.
+One commit on top of the last round's commit: `docs({{modules}}): {{id}} task docs`.
+Then `SendMessage` to `om-{{id}}-reviewer`: `docs ready, commit {{sha}}`, and wait.
+If the om-reviewer answers `docs findings: ...`, fix only the docs, commit on top, and report `docs ready` again.
 
 ## Questions
 
@@ -125,5 +133,6 @@ Never ask the om-manager or Sebastian.
 
 - Never push, never open a PR, never touch the remote.
 - Never touch the root checkout or other worktrees.
-- Never skip `verify-task` or `document-task`, however small the change.
+- Never skip `verify-task`, however small the change.
+- Never run `document-task` before the om-reviewer's `round {{N}} clean, document`; docs are written once, when the code is final.
 - Never change files in the task folder you do not own: `Context & decisions`, `Result`, `retakes.md`.

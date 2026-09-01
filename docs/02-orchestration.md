@@ -41,14 +41,14 @@ What is decided in that conversation is written by the om-reviewer into the `Con
 After consolidation it is autonomous: it answers the om-developer's questions and makes decisions without escalating them to anyone.
 Its decisions are documented in the `Decisions` section of the PR comment.
 At the end of each om-developer cycle it runs `review-task`.
-When `review-task` passes with no issues, it runs `publish-task`: push, PR and comment.
+When `review-task` passes with no issues, it asks the om-developer for the documentation commit and runs `publish-task`: docs check, push, PR and summary.
 It never modifies code.
 It is the only publishing point: pushing is not writing code.
 
 ### om-developer
 
 It always works in its own worktree.
-It runs `execute-task`, which includes `verify-task` and, at the end, `document-task`.
+It runs `execute-task`, which includes `verify-task` every round and, once the om-reviewer's review is clean, `document-task`, once per task or phase.
 It raises its questions to the om-reviewer, never to the om-manager or Sebastian.
 It never touches the remote: its work ends in a local commit and a "round N" message to the om-reviewer.
 It squashes its work into a single commit before each round.
@@ -248,11 +248,12 @@ om-reviewer and om-developer share the worktree.
    It sends "delegated, start" to the om-reviewer.
    From here everything written to the folder goes to the workspace copy, and the om-manager does not intervene until the om-reviewer publishes.
 6. The om-reviewer launches `om-{{id}}-developer` (or `-developer-phase-1`) in the right pane, with cwd in the worktree, and sends it "context ready, start".
-7. om-developer: `execute-task` → rebase from `origin/{{base}}` → (bug: reproduce with `replication.md`) → implements → `verify-task` → `document-task` → squashes into one commit → `om-developer notes` → `SendMessage` to the om-reviewer: `round 1 ready, commit {{sha}}`.
+7. om-developer: `execute-task` → rebase from `origin/{{base}}` → (bug: reproduce with `replication.md`) → implements → `verify-task` → squashes into one commit → `om-developer notes` → `SendMessage` to the om-reviewer: `round 1 ready, commit {{sha}}`.
 8. om-reviewer runs `review-task` (see Pipeline) on the worktree.
    If there are findings, it sends them to the om-developer; the om-developer fixes them, re-runs `verify-task`, squashes, signals "round 2".
    This repeats until there are no findings.
-   With no findings, the om-reviewer runs `publish-task`: push, opens the PR, writes the comment, notifies the om-manager "PR #{{n}} ready".
+   With no findings, the om-reviewer sends `round {{N}} clean, document`; the om-developer runs `document-task` once over the whole diff and commits the docs on top.
+   On `docs ready`, the om-reviewer runs `publish-task`: docs check, push, opens the PR, writes the summary, notifies the om-manager "PR #{{n}} ready".
 9. om-manager notifies Sebastian, in one line, that the PR is ready.
 10. Sebastian reads the PR comment and decides:
     - Approves and does the merge (he always does it, for now).
@@ -303,22 +304,20 @@ If not: a new pair is launched with the same pointer and it picks up from the fi
 
 ## review-task: the Pipeline
 
-Orden: intent → rebase → lint → test → review → documentation → push.
+Order: intent → rebase → verification audit → review → documentation → push.
 
-Lint and test come before the deep review because a failing test changes what gets reviewed.
+The verification audit comes before the deep review because a failing test changes what gets reviewed.
 
 | Step | What the om-reviewer verifies |
 |---|---|
 | intent | That the code changes correspond to the task's `Goal` and `Scope`, with no deviations or extras. |
 | rebase | That the om-developer rebased from `origin/{{base}}`. It requests it if not done. |
-| lint | Re-runs lint on the final commit, via `verify-task`. |
-| test | Re-runs typecheck and tests on the final commit, via `verify-task` (one by one, `--runInBand`). |
+| verification audit | `verify.log`: the om-developer's last block is at the round's commit, green on every step, and covers every touched target. The om-reviewer never runs lint, typecheck or tests itself. |
 | review | Finds issues in the code created for the task. Documents the error and how it was fixed, not how the task was solved. |
-| documentation | That the om-developer ran `document-task`: the module's docs updated with `updated` and `source`. |
+| documentation | On the clean round the om-developer runs `document-task` once; `publish-task` checks the module's docs (`updated`, `source`, ARD entries) before pushing. |
 | push | Done by the om-reviewer itself in `publish-task` once everything above has passed. |
 
-Re-running lint and tests on the final commit is what makes irrelevant the order in which the om-developer ran them: it proves the last state is green.
-The om-reviewer also checks in `docs/tasks/{{id}}.log` (the `verify-task` log) that lint and test ran after the last fix.
+The om-developer's `verify.log` is the only evidence that lint and tests ran; a block that is missing, stale or red is a finding on its own.
 
 ## publish-task: push, PR and comment
 

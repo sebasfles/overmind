@@ -10,12 +10,12 @@ disable-model-invocation: false
 
 ## Purpose
 
-Run the Pipeline on the om-developer's latest round in the worktree: intent, rebase, verify-task on the final
-commit, code review, documentation, and for bugs the replication steps. Sends findings to the om-developer or,
-when clean, runs publish-task. om-reviewer only; runs on every `round {{N}} ready, commit {{sha}}`.
+Run the Pipeline on the om-developer's latest round in the worktree: intent, rebase, audit of verify.log,
+code review, and for bugs the replication steps. Sends findings to the om-developer or, when clean, asks it
+to document and then runs publish-task. om-reviewer only; runs on every `round {{N}} ready, commit {{sha}}`.
 
 Input: the om-developer's message `round {{N}} ready, commit {{sha}}`.
-Output: either one findings message to the om-developer, or `publish-task`.
+Output: either one findings message to the om-developer, or `round {{N}} clean, document` followed by `publish-task`.
 
 You review the worktree at `{{sha}}`.
 You never modify code.
@@ -39,9 +39,8 @@ If false, finding: `rebase on origin/{{base}} required`.
 
 ## 3. Verify
 
-Intermediate rounds: audit `verify.log`, do not re-run.
+Audit `verify.log`; never run lint, typecheck or tests yourself.
 The om-developer's last block must be at `{{sha}}`, green on every step, and cover every target the diff touches; anything missing, stale or red is a finding on its own.
-Only on the final clean round, as the publish gate, run `verify-task` yourself on `{{sha}}` before `publish-task`; any red result is a finding with the failing command and the last error lines.
 
 ## 4. Review the code
 
@@ -60,24 +59,14 @@ Style nits the linter does not catch: report only if they hide a real problem.
 A code comment that restates what the code says is a finding; a comment is justified only by what the code cannot express.
 When you let something questionable pass, note why; it goes to `Decisions` in the PR comment.
 
-## 5. Documentation
-
-For each module in `modules`:
-
-- `docs/modules/{{module}}/*.md` touched by `document-task` have `updated` today and `source: {{id}}_{{title}}`.
-- `trd.md` reflects new or changed endpoints; `database.md` reflects new tables, columns or invariants; `flows.md` if a complex flow changed.
-- `ard.md` has an entry for every decision the om-developer took that `Approach` and `Context & decisions` did not already record.
-
-Missing or stale docs are findings.
-
-## 6. Bugs only
+## 5. Bugs only
 
 Run `replication.md` steps end-to-end as a user would, on `{{sha}}`.
 The observed behavior must now match Expected.
 Record date, commit and result under `om-reviewer verification` in `replication.md` (workspace copy).
 A fix that does not make the steps pass is a finding.
 
-## 7. Outcome
+## 6. Outcome
 
 Findings: one `SendMessage` to the om-developer:
 
@@ -89,12 +78,12 @@ round {{N}} findings: {{k}}
 
 Then wait for `round {{N+1}} ready`.
 
-No findings: run `publish-task`.
+No findings: `SendMessage` the om-developer `round {{N}} clean, document`, wait for `docs ready, commit {{sha}}`, then run `publish-task` on that commit; `publish-task` checks the docs before pushing.
 
 ## Rules
 
 - Never fix anything yourself.
 - Never soften a finding because the round count is high.
-- Never trust the om-developer's report of lint, tests or docs; audit `verify.log` every round and run `verify-task` yourself before publishing.
-- Never re-run the full verification on intermediate rounds; the publish gate is the one independent run.
+- Never run `verify-task` or any lint, typecheck or test command; audit `verify.log` every round, and treat a missing, stale or red block as a finding. The om-developer's log is the only evidence.
+- Never publish before the om-developer's `docs ready` commit; documentation is checked by `publish-task`, not here.
 - Never review before `round {{N}} ready, commit {{sha}}` arrives; never review a commit other than the one named.

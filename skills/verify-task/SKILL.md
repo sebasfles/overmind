@@ -1,6 +1,6 @@
 ---
 name: verify-task
-description: Run lint, typecheck and tests per verification target, serially, and log to verify.log. om-developer before every round; om-reviewer at the publish gate.
+description: Run lint, typecheck and tests per verification target, serially, and log to verify.log. om-developer only, before every round; the om-reviewer audits the log.
 effort: low
 disable-model-invocation: false
 ---
@@ -11,7 +11,7 @@ disable-model-invocation: false
 
 Run lint, typecheck and tests for every verification target of the task (one per repo or app, declared in
 docs/TRD.md), one command at a time and with --runInBand, and append one block per target to the task's
-verify.log with the commit it ran on. Shared by om-developer and om-reviewer. Never fixes anything.
+verify.log with the commit it ran on. om-developer only; the om-reviewer never runs it, it audits the log. Never fixes anything.
 
 Input: the workspace at its current commits.
 Output: green or red per target and step, and one appended block per target in `{{ROOT_WT}}/docs/tasks/{{TASK}}/verify.log`.
@@ -43,7 +43,7 @@ Capture the exit code and the last relevant lines per step.
 Append per target:
 
 ```
-## {{ISO timestamp}} by {{om-developer | om-reviewer}} target {{name}} on {{sha of that repo}}
+## {{ISO timestamp}} by om-developer target {{name}} on {{sha of that repo}}
 - lint: {{pass | fail}} ({{command}})
 - typecheck: {{pass | fail | n/a}} ({{command}})
 - unit: {{pass | fail}} ({{n}} tests, {{command}})

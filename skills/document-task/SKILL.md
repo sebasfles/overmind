@@ -1,6 +1,6 @@
 ---
 name: document-task
-description: Update the module docs affected by the round, with updated and source. om-developer; at the end of every execute-task round.
+description: Update the module docs affected by the task, with updated and source. om-developer; once per task or phase, on the om-reviewer's clean signal.
 effort: medium
 disable-model-invocation: false
 ---
@@ -9,12 +9,12 @@ disable-model-invocation: false
 
 ## Purpose
 
-Update the module documentation affected by the current round: prd.md, trd.md, ard.md, database.md, flows.md
+Update the module documentation affected by the task (or phase): prd.md, trd.md, ard.md, database.md, flows.md
 of each module touched, with updated and source frontmatter, and one ARD entry per decision not already
-recorded. om-developer only; runs at the end of every execute-task round.
+recorded. om-developer only; runs once, on `round {{N}} clean, document`, when the code is final and before publish.
 
-Input: the diff of the current round against `origin/{{base}}` and the task folder.
-Output: `docs/modules/{{module}}/*.md` updated for every module the round touched, in the worktree.
+Input: the diff of the task (or phase) against `origin/{{base}}`, the task folder and `om-developer notes`.
+Output: `docs/modules/{{module}}/*.md` updated for every module the task touched, in the worktree.
 
 Rule of the convention: do not document what the code already says; document why.
 Derivable facts (columns, types, request and response shapes) are generated elsewhere and are not copied here.
@@ -48,7 +48,7 @@ source: {{id}}_{{title}}
 ## 3. ARD entries
 
 `ard.md` is a log; append, never rewrite.
-One entry per decision taken in this round that `task.md#Approach` or `Context & decisions` did not already record, and one per finding you disagreed with but applied.
+One entry per decision recorded in `om-developer notes` that `task.md#Approach` or `Context & decisions` did not already record, and one per finding you disagreed with but applied.
 Also one entry per piece of technical debt you knowingly created or deferred.
 
 Read `templates/ard-entry.md` and fill it:

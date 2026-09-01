@@ -123,8 +123,8 @@ You can look at the `task-{{id}}` window whenever you want: the om-reviewer on t
 
 ### 5. Wait
 
-The om-developer implements, verifies, documents, and delivers rounds; the om-reviewer runs the Pipeline and returns findings until none are left.
-Then it pushes, opens a PR per repo, and writes the summary as the root PR's description.
+The om-developer implements, verifies, and delivers rounds; the om-reviewer runs the Pipeline and returns findings until none are left.
+Then the om-developer documents once, and the om-reviewer checks the docs, pushes, opens a PR per repo, and writes the summary as the root PR's description.
 You find out through the om-manager (one line) and through `om-events` (`[action] diy: task 0142 PRs ready`).
 
 ### 6. Review and merge
