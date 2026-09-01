@@ -39,9 +39,9 @@ If false, finding: `rebase on origin/{{base}} required`.
 
 ## 3. Verify
 
-Run `verify-task` yourself on `{{sha}}`; it appends to `verify.log`.
-Any red result is a finding with the failing command and the first relevant error lines.
-Also open `verify.log` and check the om-developer's last entry is at `{{sha}}` and green; if the om-developer did not run it after its last change, that is a finding on its own.
+Intermediate rounds: audit `verify.log`, do not re-run.
+The om-developer's last block must be at `{{sha}}`, green on every step, and cover every target the diff touches; anything missing, stale or red is a finding on its own.
+Only on the final clean round, as the publish gate, run `verify-task` yourself on `{{sha}}` before `publish-task`; any red result is a finding with the failing command and the last error lines.
 
 ## 4. Review the code
 
@@ -94,5 +94,6 @@ No findings: run `publish-task`.
 
 - Never fix anything yourself.
 - Never soften a finding because the round count is high.
-- Never trust the om-developer's report of lint, tests or docs; check.
+- Never trust the om-developer's report of lint, tests or docs; audit `verify.log` every round and run `verify-task` yourself before publishing.
+- Never re-run the full verification on intermediate rounds; the publish gate is the one independent run.
 - Never review before `round {{N}} ready, commit {{sha}}` arrives; never review a commit other than the one named.

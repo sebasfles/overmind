@@ -1,7 +1,7 @@
 ---
 name: om-setup-worker
 description: "Subagent of setup: documents one module of a project with a clean context and returns its [inferido] items."
-model: opus
+model: sonnet
 effort: high
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill
 color: cyan

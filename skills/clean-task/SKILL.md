@@ -56,6 +56,7 @@ Then `rmdir {{WORKSPACE}}` (it must be empty; if not, list what is left and stop
 ## 6. Report
 
 One line: `{{id}}_{{title}} cleaned`.
+Then suggest recycling this om-manager session (`prefix + R` in this pane): the finished task's context is dead weight, and `check-work` rebuilds the board from disk.
 
 ## Rules
 

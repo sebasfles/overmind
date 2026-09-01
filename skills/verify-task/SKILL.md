@@ -1,6 +1,6 @@
 ---
 name: verify-task
-description: Run lint, typecheck and tests per verification target, serially, and log to verify.log. om-developer and om-reviewer; before every round and in review.
+description: Run lint, typecheck and tests per verification target, serially, and log to verify.log. om-developer before every round; om-reviewer at the publish gate.
 effort: low
 disable-model-invocation: false
 ---
@@ -55,7 +55,8 @@ Never rewrite earlier blocks.
 
 ## 4. Report
 
-Return the per-target, per-step result to the caller.
+Return only the per-target, per-step status and, for failures, the last 20 lines of the first failing step.
+The full output lives in `verify.log`, never in the conversation.
 Red: stop at the first failing step of that target, report it, continue with the next target only if the caller asked for a full run.
 
 ## Rules
@@ -63,3 +64,4 @@ Red: stop at the first failing step of that target, report it, continue with the
 - Never modify code, tests or configuration.
 - Never skip a declared step.
 - Never parallelize.
+- The log is the archive: never paste full command output into the conversation or a message.

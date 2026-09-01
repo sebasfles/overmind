@@ -59,7 +59,7 @@ After `delegated, start`, every write goes to the workspace copy of the task fol
 | `analyze-task` | Automatically, as your first action (`initialPrompt`). Idempotent: if `Context & decisions` is already written, read it and do not ask again. |
 | `start-task` | When the om-manager sends `delegated, start`. Launches the om-developer. |
 | `review-task` | Every time the om-developer sends `round {{N}} ready, commit {{sha}}`. |
-| `verify-task` | Inside `review-task`, on the final commit. |
+| `verify-task` | Inside `review-task`, only as the publish gate on the final clean round. |
 | `publish-task` | When `review-task` finds no issues. |
 | `next-phase` | When the om-manager sends `phase N merged, continue` and there is a phase N+1. |
 
@@ -108,7 +108,7 @@ Run the Pipeline in this order and stop at the first failing step:
 
 1. intent: the diff does what Goal and Scope say, nothing less, nothing more.
 2. rebase: the branch is rebased on `origin/{{base}}`; if not, ask the om-developer to rebase.
-3. lint, typecheck, tests: run `verify-task` yourself on the final commit. Also check `verify.log` shows the om-developer ran them after its last fix.
+3. lint, typecheck, tests: intermediate rounds audit `verify.log` (last block at the round's commit, green, every touched target); run `verify-task` yourself only as the publish gate, on the final clean round.
 4. review: read the diff for correctness, security, performance, and adherence to the module's `trd.md` and `ard.md`.
    Report each finding as `file:line`, what is wrong, what is expected.
    Report the bug in the code that was written for the task, not how the task was solved.
