@@ -265,3 +265,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: an om-manager runs `clean-task` without an explicit ask; then the flag comes back.
 - Files: skills/clean-task/SKILL.md, docs/03-skills.md.
+
+## 2026-09-01: Model references are bare aliases, never versioned ids
+
+- Decision: every model reference in the method (`model:` frontmatter in agents, `--model` flags in skills) uses the bare alias (`fable`, `opus`, `sonnet`, `haiku`), never a versioned id like `fable-5.1`. The alias resolves to the latest release on its own; a model upgrade (fable 5 to 5.1 today) requires no edit. Recorded as a writing convention in `update-method`.
+- Alternatives rejected: pinning versioned ids (every release forces a repo-wide edit for zero behavior gain), pinning only the expensive models (same maintenance, split rule).
+- Reason: Sebastian asked to update the skills for fable 5.1 and the grep showed nothing to update; making the convention explicit keeps it that way.
+- Debt created: no way to hold a role on an older model if a release regresses; if that happens, the pin is the exception and gets its own ARD entry.
+- Revisit when: a model release degrades a role's output and an explicit pin becomes necessary.
+- Files: .claude/skills/update-method/SKILL.md.

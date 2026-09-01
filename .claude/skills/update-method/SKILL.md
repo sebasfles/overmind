@@ -47,6 +47,7 @@ List the files before editing; the list goes into the commit message.
 - Design: edit the document that owns the decision and every skill or agent that implemented the old one.
 
 Writing conventions: English in every file of the repo, including `docs/`; one sentence per line; no em dash; placeholders as `{{...}}`; roles always by agent name (`om-reviewer`), the person always `Sebastian`.
+Model references are always bare aliases (`fable`, `opus`, `sonnet`, `haiku`), never versioned ids; the alias tracks the latest release on its own.
 
 ## 4. Lint
 
