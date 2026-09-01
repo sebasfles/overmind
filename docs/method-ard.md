@@ -201,3 +201,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: never, unless the severity scale itself changes.
 - Files: skills/publish-task/templates/pr-summary.md, skills/publish-task/SKILL.md.
+
+## 2026-08-31: SendMessage joins the required allow rules
+
+- Decision: the required `permissions.allow` list gains the `SendMessage` tool; `scripts/install` checks it and `usage-guide.md` Requirements names it.
+- Alternatives rejected: relying on bypass mode alone (the om-manager runs in auto mode by design, and om-reviewers born before the bypass acceptance stay guarded until recycled; both send protocol messages), per-target approvals (the protocol sends between ephemeral task sessions, so a one-off approval never generalizes).
+- Reason: the pilot hit it on 2026-08-31 in auvral's task-0002: the om-reviewer's `context ready, start` to the om-developer was denied twice by the classifier; the existing rules only covered Bash commands and the protocol's messaging is a tool.
+- Debt created: `SendMessage` is allowed globally for Sebastian's sessions, including sends to sessions outside the method.
+- Revisit when: permission rules learn to scope SendMessage by target pattern (then scope it to `om-*` and `overmind`).
+- Files: scripts/install, docs/usage-guide.md.

@@ -40,6 +40,7 @@ required = [
     "Bash(tmux send-keys *)", "Bash(tmux split-window *)", "Bash(tmux respawn-pane *)",
     "Bash(tmux select-window *)", "Bash(tmux list-windows *)", "Bash(tmux list-panes *)",
     "Bash(tmux has-session *)", "Bash(tmux kill-window *)",
+    "SendMessage",
 ]
 path = os.path.expanduser("~/.claude/settings.json")
 try:
