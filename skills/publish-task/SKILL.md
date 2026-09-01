@@ -49,11 +49,12 @@ Simplest order that satisfies this: create the root PR with the placeholder body
 
 Read `templates/pr-summary.md` and fill it:
 
-- Intent: one paragraph from Goal plus what was agreed in `Context & decisions`.
-- What changed: at most 10 concise bullets; in multirepo, group by repo and link each code PR.
-- Decisions: what you decided on your own after consolidation, what you let pass and why, and the merge order between repos if any (for example `merge diy-infra first`).
-- Risk assessment: Low, Medium or High, one sentence; Medium or High say what to watch after merge.
-- Pipeline: one block per verification target, plus the review findings across rounds as `file:line, defect, fix, re-checked`.
+- Intent: two or three sentences at goal level, no implementation detail; name a consolidation agreement only if it changes how to read the PR.
+- What changed: at most 10 bullets, one concise line each, no subclauses; in multirepo, group by repo and link each code PR.
+- Decisions: one line per decision or let-pass with its reason; include the merge order between repos if any (for example `merge diy-infra first`).
+- Risk assessment: exactly `Low`, `Medium` or `High`, one sentence; Medium or High say what to watch after merge.
+- Pipeline: one bare `✅` line per step, never GitHub task checkboxes, no inline extra info; the review line reads `{{k}} issues auto-fixed`; `documentation` and `push` are bare passed lines.
+- Everything longer (commands, targets, findings as `file:line, defect, fix, re-checked`, shas, modules) goes only inside the collapsed `<details>` block; Sebastian opens it when he wants depth.
 
 Write it as the PR's description: `gh -R {{owner/repo}} pr edit {{number}} --body-file {{file}}`.
 On later rounds rewrite the whole description the same way; it is the single source, never add summary comments.

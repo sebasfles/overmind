@@ -183,3 +183,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none; `gh pr edit` needs the same auth `gh pr comment` needed.
 - Revisit when: a task needs per-round history visible in the PR, which the rewritten description no longer shows (the rounds remain in the commits and in `verify.log`).
 - Files: skills/publish-task/SKILL.md, skills/publish-task/templates/pr-summary.md, agents/om-reviewer.md, agents/om-manager.md, docs/03-skills.md, docs/usage-guide.md, README.md, scripts/lint-method.
+
+## 2026-08-31: PR summary format: scannable lines, detail collapsed
+
+- Decision: the PR summary template writes Intent at goal level (two or three sentences, no implementation detail), one concise line per bullet in What changed and Decisions, and a Pipeline of bare `✅` lines (never GitHub task checkboxes) with the review line as `{{k}} issues auto-fixed` and `documentation` and `push` as bare passed lines; every longer detail (commands, targets, findings, shas, modules) lives only in a collapsed `<details>` block. Risk assessment keeps exactly `Low | Medium | High`. `lint-method` allows `<details>` and `<summary>` tags.
+- Alternatives rejected: keeping the long inline format (the first real PR summary of the pilot was too long to read; density per line is what kills it), dropping the detail entirely (the findings and shas matter when something looks off; collapsing keeps them one click away).
+- Reason: Sebastian reviewed auvral's first published summary on 2026-08-31 and asked for exactly this shape; the summary must let him decide in one screen, with depth opt-in.
+- Debt created: none.
+- Revisit when: a summary's collapsed detail is systematically ignored (drop it) or systematically opened (some line deserves promotion).
+- Files: skills/publish-task/templates/pr-summary.md, skills/publish-task/SKILL.md, scripts/lint-method.

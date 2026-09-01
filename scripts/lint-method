@@ -26,7 +26,7 @@ def check_common(path, text):
     for i, line in enumerate(text.splitlines(), 1):
         if "—" in line:
             add(path, i, "em dash")
-        if re.search(r"<[a-zA-Z][^<>\n]*>", line) and "<!--" not in line and "-->" not in line and not line.strip().startswith(("```", "|")) and "gh api" not in line:
+        if re.search(r"<[a-zA-Z][^<>\n]*>", line) and "<!--" not in line and "-->" not in line and not line.strip().startswith(("```", "|")) and "gh api" not in line and not re.search(r"</?(details|summary)>", line):
             if not re.search(r"^\s*(claude|git|tmux|wt\.exe|wsl\.exe|cd|mkdir|for|if|printf)\b", line):
                 add(path, i, "angle-bracket placeholder; use {{...}}")
         if re.search(r"(?<![\w-])(?<!om-)(?<!package )(reviewer|developer|manager)s?(?![\w-])", line, re.I) and "{{reviewer-id}}" not in line and "{{developer-id}}" not in line:

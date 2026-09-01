@@ -1,29 +1,41 @@
 ## Intent
 
-{{One paragraph: what the task set out to do and why, including what was agreed in consolidation.}}
+{{Two or three sentences: what the task set out to achieve and why, at goal level. No implementation detail; name a consolidation agreement only if it changes how to read the PR.}}
 
 ## What changed
 
-- {{behavior-level bullet}}
+- {{one concise line, behavior-level, no subclauses}}
 - {{...}} (max 10)
 
 ## Decisions
 
-- {{decision taken by the om-reviewer after consolidation}}: {{reason}}
-- Let pass: {{questionable thing}}: {{why it is acceptable}}
+- {{decision taken after consolidation}}: {{why, one line}}
+- Let pass: {{questionable thing}}: {{why acceptable, one line}}
 
 ## Risk assessment
 
-{{Low | Medium | High}}: {{one sentence}}. {{For Medium or High: what to watch after merge.}}
+{{Low | Medium | High}}: {{one sentence}}. {{Medium or High only: what to watch after merge.}}
 
 ## Pipeline
 
-- [x] intent: passed
-- [x] rebase: passed
-- [x] lint: passed
-- [x] test: passed ({{n}} tests, `--runInBand`)
-- [x] review: {{k}} issues found, fixed
-  - `{{file}}:{{line}}`: {{defect}}. Fix: {{fix}}. Re-checked.
-- [x] documentation: {{modules}} updated, ARD entries: {{n}}
-- [x] replication: passed ({{bugs only}})
-- [x] push: `{{sha}}`
+- ✅ intent
+- ✅ rebase
+- ✅ lint
+- ✅ typecheck
+- ✅ test
+- ✅ review: {{k}} issues auto-fixed
+- ✅ documentation
+- ✅ replication {{bugs only; otherwise n/a}}
+- ✅ push
+
+<details>
+<summary>Pipeline detail</summary>
+
+- intent: {{scope check, one line}}
+- rebase: {{base and head sha}}
+- lint / typecheck / test: {{commands, targets, counts; one line per verification target}}
+- review: {{file}}:{{line}}, {{defect}}, {{fix}}, re-checked (one line per finding, all rounds)
+- documentation: {{modules updated}}, ARD entries: {{n}}
+- push: {{sha per repo}}
+
+</details>
