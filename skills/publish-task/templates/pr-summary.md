@@ -1,4 +1,3 @@
-<!-- reviewer-summary -->
 ## Intent
 
 {{One paragraph: what the task set out to do and why, including what was agreed in consolidation.}}

@@ -36,7 +36,7 @@ om-reviewer  om-developer                                         (one pair per 
 
 ## A task, end to end
 
-`plan-task` (conversation) → `create-task` (folder on disk) → `consolidate-task` (workspace, reviewer alone, questions answered once, one docs commit) → `delegate-task` (reviewer launches the developer) → rounds of implement, verify, document, review → `publish-task` (one PR per repo, one summary comment) → Sebastian merges → `clean-task`.
+`plan-task` (conversation) → `create-task` (folder on disk) → `consolidate-task` (workspace, reviewer alone, questions answered once, one docs commit) → `delegate-task` (reviewer launches the developer) → rounds of implement, verify, document, review → `publish-task` (one PR per repo, the summary as the root PR's description) → Sebastian merges → `clean-task`.
 
 State is never written: `planned`, `consolidated`, `in_progress`, `in_review`, `merged`, `done` are derived from the task folder, git and `gh`.
 

@@ -174,3 +174,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: each `scripts/install` run spends one haiku turn and a few seconds on the probe; run from inside an agent session the probe may be blocked by that session's classifier and report a false MISSING, so the script is for Sebastian's shell.
 - Revisit when: Claude Code exposes a supported way to query the acceptance without launching a session.
 - Files: scripts/install, docs/usage-guide.md.
+
+## 2026-08-31: The summary is the root PR's description, not a comment
+
+- Decision: `publish-task` writes the summary (Intent, What changed, Decisions, Risk assessment, Pipeline) as the root PR's description with `gh pr edit --body-file`, rewriting it in place on later rounds; the root PR is created with a one-line placeholder body, code PRs link to it, and no summary comment exists. The template renames to `templates/pr-summary.md` and drops the `<!-- reviewer-summary -->` marker, which existed only to find the comment.
+- Alternatives rejected: keeping the editable comment (Sebastian reads PRs from the description; a body-empty PR with the substance in a comment reads backwards in every GitHub surface, including notifications and merge screens), summary in both places (two copies drift).
+- Reason: Sebastian wants the PR description to carry the decision material; the description is what GitHub shows first and what the merge commit can inherit.
+- Debt created: none; `gh pr edit` needs the same auth `gh pr comment` needed.
+- Revisit when: a task needs per-round history visible in the PR, which the rewritten description no longer shows (the rounds remain in the commits and in `verify.log`).
+- Files: skills/publish-task/SKILL.md, skills/publish-task/templates/pr-summary.md, agents/om-reviewer.md, agents/om-manager.md, docs/03-skills.md, docs/usage-guide.md, README.md, scripts/lint-method.
