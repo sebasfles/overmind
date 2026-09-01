@@ -274,3 +274,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: no way to hold a role on an older model if a release regresses; if that happens, the pin is the exception and gets its own ARD entry.
 - Revisit when: a model release degrades a role's output and an explicit pin becomes necessary.
 - Files: .claude/skills/update-method/SKILL.md.
+
+## 2026-09-01: om-reviewer runs on opus; om-manager stays on fable
+
+- Decision: `agents/om-reviewer.md` moves from `model: fable` to `model: opus`; `om-manager` stays on fable, `om-developer` stays on opus. Skill efforts are unchanged (`analyze-task` and `review-task` at xhigh).
+- Supersedes: 2026-09-01 "Token economy", the rejected alternative "downgrading om-manager or om-reviewer models", for the om-reviewer only.
+- Alternatives rejected: om-manager to opus with om-reviewer on fable (the om-manager is the cheap session: few turns, waits for Sebastian, its large prefix is paid as cache reads, and fable reads cost half of opus reads; planning and `setup` are the highest-leverage output per token, so fable earns its price there and not in the volume role), both to opus (planning quality is where a wrong Approach costs a whole task), keeping both on fable (two tasks on 2026-09-01 measured the om-reviewer at $22 and $29 per task against $12 and $19 for the om-developer, with 78 to 80 percent of the om-reviewer's cost in cache writes at fable's 2x write price, and the 5-hour window hit every day).
+- Reason: the om-reviewer is the volume role of the pipeline (7 to 10M tokens per task, and a full ~150k re-cache every time it idles past the cache TTL while waiting for a round), so its model price drives the daily quota; the "only unchecked gate" argument for fable stands but is mitigated by an opus om-developer, mandatory tests per acceptance criterion, `verify-task` on every round and Sebastian reading `Decisions`; no case is recorded of fable catching a finding opus would have missed.
+- Debt created: the final gate before a PR now runs on the same tier as the code it reviews; a missed finding reaches Sebastian without a stronger model behind it.
+- Revisit when: a merged PR breaks on something the Pipeline should have caught, or Sebastian spots in a PR a finding the om-reviewer missed; then the om-reviewer returns to fable with that case as evidence. Also if the fable weekly quota stops being the constraint.
+- Files: agents/om-reviewer.md.
