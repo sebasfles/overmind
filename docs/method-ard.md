@@ -156,3 +156,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the required list lives in two places (Sebastian's settings and the install check) and must be kept in sync when a skill starts using a new launch command; `Bash(tmux send-keys *)` is a wide grant that can type into any pane.
 - Revisit when: a skill adds a launch command the list does not cover, or an agent misuses `tmux send-keys` outside launching peers.
 - Files: scripts/install, docs/usage-guide.md.
+
+## 2026-08-31: The bypass-permissions disclaimer is a machine requirement; install checks, never accepts
+
+- Decision: om-reviewer and om-developer running with `permissionMode: bypassPermissions` requires the bypass disclaimer accepted once per machine (`bypassPermissionsModeAccepted` in `~/.claude.json`); without it, `--bg` launches fail non-interactively and the sessions fall back to guarded modes whose classifiers block `SendMessage` between them. `scripts/install` checks the flag and prints the one-time command (`claude --dangerously-skip-permissions`, accept, exit); it never accepts for Sebastian, because the disclaimer is interactive by design. `usage-guide.md` lists it in Requirements.
+- Alternatives rejected: install accepting the disclaimer by writing the flag (defeats an interactive safety acknowledgment), dropping `bypassPermissions` from om-reviewer and om-developer (the 2026-08-29 entry already weighed that; workspace isolation is the mitigation and the flow cannot stop for permission prompts), keeping the send-keys workaround the om-reviewer improvised (it types into panes instead of using the message protocol).
+- Reason: the pilot hit it live on 2026-08-31 in auvral's `start-task`: the `--bg` launch failed with "bypass disclaimer not accepted" and the om-reviewer's classifier then blocked `SendMessage`, forcing a fragile send-keys workaround.
+- Debt created: the check greps for a key name that Claude Code may rename across versions; the message says so and the functional symptom (failed `--bg` launch) remains the ground truth.
+- Revisit when: the key name changes, or Claude Code offers a supported non-interactive way to verify the acceptance.
+- Files: scripts/install, docs/usage-guide.md.

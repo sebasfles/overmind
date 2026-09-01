@@ -55,5 +55,16 @@ else:
     print("ok      permission allow rules present in ~/.claude/settings.json")
 PY
 
+# om-reviewer and om-developer run with permissionMode bypassPermissions, which needs the
+# disclaimer accepted once per machine; without it, --bg launches fail non-interactively.
+# Report only; accepting the disclaimer is Sebastian's act, interactive by design.
+if grep -q '"bypassPermissionsModeAccepted": *true' "$HOME/.claude.json" 2>/dev/null; then
+  echo "ok      bypass-permissions disclaimer accepted"
+else
+  echo "MISSING bypass-permissions acceptance (or the key name changed in this Claude Code version)."
+  echo "        Run 'claude --dangerously-skip-permissions' once in a terminal, accept, exit."
+  echo "        Without it, om-reviewer and om-developer cannot start bypassed and --bg launches fail."
+fi
+
 case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac
 echo "done. Cockpit agents (overmind, om-events, om-config) stay project-scoped in $root/.claude/agents."
