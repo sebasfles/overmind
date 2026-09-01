@@ -340,13 +340,13 @@ This is what Sebastian reads to decide between approving and a retake.
 Level (Low / Medium / High) and one sentence of justification.
 
 ## Pipeline
-- [x] intent
-- [x] rebase
-- [x] lint
-- [x] test
-- [x] review: N issues → fixed (detail per issue: file:line, error, fix, re-check)
-- [x] documentation
-- [x] push
+- ✅ intent
+- ✅ rebase
+- ✅ lint
+- ✅ test
+- ✅ review: N issues auto-fixed (detail per issue collapsed: file:line, error, fix, re-check)
+- ✅ documentation
+- ✅ push
 ```
 
 ## Escalation

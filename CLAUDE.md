@@ -11,7 +11,7 @@ Method and state live together here; `~/.claude` only holds symlinks into this r
 - `skills/`: one folder per skill. Symlinked from `~/.claude/skills/`.
 - `bin/`: commands Sebastian types; everything here is symlinked into `~/bin/` (`resume-overmind`).
 - `scripts/`: what agents and the repo run: `install` (once per machine), `resume-project` (run by the `overmind` session), `lint-method` (run by `om-config`).
-- `portfolio/`: state. `projects.yaml` is the project registry, `todos.md` the quick-capture list, `events/{blockers,actions,info}.md` the inbox.
+- `portfolio/`: state. `projects.yaml` is the project registry, `todos.md` the quick-capture list, `events/{blockers,actions,info}.md` the inbox. Hot files hold only open lines; resolved ones move to `events/done.md` and `todos-done.md`.
 - `.claude/skills/update-method/`: the project skill that changes the method consistently.
 
 ## Rules for agents working in this repo

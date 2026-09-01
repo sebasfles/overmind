@@ -31,13 +31,13 @@ If the type is missing or unknown, file it as `info` and note `(untyped)`.
 ## On every event
 
 1. Append one line to the file of its type:
-   `- [ ] {{ISO timestamp}} {{project}} {{id}} {{event}}`
+   `- {{ISO timestamp}} {{project}} {{id}} {{event}}`
 2. Print the stacked counts of open items, one line:
    `blockers 2 | actions 1 | info 3   <- new: [info] diy: task 0142 consolidated`
 3. Nothing else.
 
-Open items are the unchecked lines.
-The `overmind` session checks items off; you never do.
+Every line in these files is open; counting open items is counting lines.
+The `overmind` session resolves items by moving their lines to `portfolio/events/done.md`; you never touch that file.
 
 ## Rules
 

@@ -219,3 +219,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: om-events holds Bash with no permission gate; the mitigation is its narrow rules (append one line, print counts, nothing else).
 - Revisit when: an event's content ever makes om-events run something beyond filing and counting.
 - Files: .claude/agents/om-events.md.
+
+## 2026-09-01: Events and todos split open from done by file
+
+- Decision: `portfolio/events/{blockers,actions,info}.md` and `portfolio/todos.md` hold only open items as plain lines without checkboxes; being in the file means open, and counting open items is counting lines. Resolving moves the line: events to `portfolio/events/done.md` as `- {{ISO timestamp}} [{{type}}] {{project}} {{id}} {{event}} (done {{YYYY-MM-DD}})` (moved by the `overmind` session, never by om-events), todos to `portfolio/todos-done.md` via `complete-todo`. The `## Open` and `## Done` sections of `todos.md` disappear.
+- Alternatives rejected: checking lines off in place (hot files grow forever mixing open and resolved, and om-events must distinguish `[ ]` from `[x]` to count), one file per event or todo (one-line items; per-item files multiply creation, listing and cleanup with no reader gain).
+- Reason: Sebastian wants the hot files scannable; reading a file should be reading only what is open, and om-events on haiku gets a dumber, more reliable job.
+- Debt created: the existing `portfolio/` files still have the old format; migrating them (strip checkboxes, move `[x]` lines to the done files) is the `overmind` session's task, not the method's.
+- Revisit when: `done.md` or `todos-done.md` grow enough to need rotation by year.
+- Files: .claude/agents/om-events.md, .claude/agents/overmind.md, skills/add-todo/SKILL.md, skills/complete-todo/SKILL.md, docs/04-operation.md, docs/02-orchestration.md, CLAUDE.md.

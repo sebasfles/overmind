@@ -136,7 +136,9 @@ Rules:
 Skills: `add-todo` to jot it down and `complete-todo` to cross it off.
 Listing doesn't need a skill: `check-portfolio` does it.
 
-Storage: `portfolio/todos.md`, plain Markdown, readable and editable without the agent.
+Storage: `portfolio/todos.md` holds the open todos and `portfolio/todos-done.md` the completed ones, plain Markdown, readable and editable without the agent.
+Events follow the same split: `portfolio/events/{blockers,actions,info}.md` hold only open lines, and resolving moves the line to `portfolio/events/done.md` with its type and date.
+Being in a hot file means open; counting is counting lines; git and the done files keep the history.
 
 ## A typical day
 

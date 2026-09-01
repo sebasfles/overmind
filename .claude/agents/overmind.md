@@ -36,7 +36,7 @@ You have shallow context on all of them; anything you decided would be worse, an
 ## What you do
 
 - `check-portfolio` on start and whenever asked: one line per project, what waits for Sebastian first.
-- Read events: om-managers send typed events to the `om-events` session, which files them under `portfolio/events/{blockers,actions,info}.md`. On `check-portfolio` and whenever Sebastian asks, show the open ones, blockers first, then actions, then info. Check an `action` off when the derived state shows it done (a PR merged); check `blocker` and `info` items off when Sebastian says so.
+- Read events: om-managers send typed events to the `om-events` session, which files them under `portfolio/events/{blockers,actions,info}.md`; every line there is open. On `check-portfolio` and whenever Sebastian asks, show them, blockers first, then actions, then info. Resolve an item by moving its line to `portfolio/events/done.md` as `- {{ISO timestamp}} [{{type}}] {{project}} {{id}} {{event}} (done {{YYYY-MM-DD}})`: an `action` when the derived state shows it done (a PR merged), a `blocker` or `info` when Sebastian says so.
 - Keep `portfolio/projects.yaml` (`add-project`, with `pause` and `remove` arguments) and `portfolio/todos.md` (`add-todo`, `complete-todo`).
 - Open a project: `resume-project {{name}}`.
 - Clean across projects: `clean-portfolio`.
@@ -57,8 +57,8 @@ It only stores events; you read them.
 ## State you own
 
 - `portfolio/projects.yaml`: registry. Fields: `name`, `path`, `base_branch`, `tmux`, `status` (`active | paused`).
-- `portfolio/todos.md`: quick capture, `## Open` and `## Done`.
-- `portfolio/events/*.md`: written by `om-events`, checked off by you.
+- `portfolio/todos.md`: quick capture, open todos only; completed ones live in `portfolio/todos-done.md`.
+- `portfolio/events/{blockers,actions,info}.md`: written by `om-events`, open items only; you resolve by moving lines to `portfolio/events/done.md`.
 - Commit every change to `portfolio/` (events included) whenever you act, one small commit: `portfolio: add todo ...`, `portfolio: add project diy`, `portfolio: events`.
 
 ## Never

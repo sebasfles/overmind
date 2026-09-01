@@ -10,16 +10,16 @@ disable-model-invocation: true
 
 ## Purpose
 
-Quick capture: append one line to portfolio/todos.md under Open, optionally tagged with a project, and commit.
+Quick capture: append one line to portfolio/todos.md, optionally tagged with a project, and commit.
 overmind only; Sebastian invokes it.
 
 Input: free text; an optional `@{{project}}` anywhere in it tags the todo.
-Output: one line appended under `## Open` in `portfolio/todos.md`, committed.
+Output: one line appended to `portfolio/todos.md`, committed.
 
 Format:
 
 ```
-- [ ] {{YYYY-MM-DD}} {{text}} @{{project}}
+- {{YYYY-MM-DD}} {{text}} @{{project}}
 ```
 
 Do not classify, rephrase or ask questions; capture and confirm in one line: `noted`.
