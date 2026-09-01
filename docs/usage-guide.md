@@ -11,7 +11,7 @@ Everything not covered here is in `01` through `06`.
 - This repo cloned, and `~/bin` in the `PATH`.
 - Permission allow rules in `~/.claude/settings.json` (`permissions.allow`) for `claude --agent`, `claude --bg`, `claude attach`, `claude -r`, `claude --resume`, `claude stop`, `claude agents` and the tmux window and pane commands: without them, auto mode's classifier blocks the om-manager from launching om-reviewers mid `consolidate-task`.
   You add them yourself; `scripts/install` checks and prints the missing ones with the exact JSON to paste.
-- The bypass-permissions disclaimer accepted once per machine: run `claude --dangerously-skip-permissions` in a terminal, accept, exit.
+- The bypass-permissions disclaimer accepted once per machine: run `claude --dangerously-skip-permissions` in a terminal, accept the bypass warning (it is a different dialog from the folder trust one), exit.
   om-reviewer and om-developer run with `permissionMode: bypassPermissions`, and without the acceptance their `--bg` launches fail and their classifiers block `SendMessage` between them.
   You accept it yourself; `scripts/install` checks and reminds you if it is missing.
 

@@ -57,13 +57,20 @@ PY
 
 # om-reviewer and om-developer run with permissionMode bypassPermissions, which needs the
 # disclaimer accepted once per machine; without it, --bg launches fail non-interactively.
-# Report only; accepting the disclaimer is Sebastian's act, interactive by design.
-if grep -q '"bypassPermissionsModeAccepted": *true' "$HOME/.claude.json" 2>/dev/null; then
-  echo "ok      bypass-permissions disclaimer accepted"
-else
-  echo "MISSING bypass-permissions acceptance (or the key name changed in this Claude Code version)."
-  echo "        Run 'claude --dangerously-skip-permissions' once in a terminal, accept, exit."
-  echo "        Without it, om-reviewer and om-developer cannot start bypassed and --bg launches fail."
+# Functional check (the persisted key is not greppable in current versions): try one throwaway
+# --bg bypass launch and clean it up. Accepting the disclaimer stays Sebastian's interactive act.
+if command -v claude >/dev/null 2>&1; then
+  bg_out="$(claude --bg --dangerously-skip-permissions --model haiku "say ok and nothing else" 2>&1 || true)"
+  bg_id="$(printf '%s' "$bg_out" | grep -oE 'backgrounded · [a-z0-9]+' | awk '{print $3}')"
+  if [[ -n "$bg_id" ]]; then
+    claude stop "$bg_id" >/dev/null 2>&1 || true
+    claude rm "$bg_id" >/dev/null 2>&1 || true
+    echo "ok      bypass-permissions launches work"
+  else
+    echo "MISSING bypass-permissions acceptance."
+    echo "        Run 'claude --dangerously-skip-permissions' once in a terminal, accept the bypass warning (not just the folder trust dialog), exit."
+    echo "        Without it, om-reviewer and om-developer cannot start bypassed and --bg launches fail."
+  fi
 fi
 
 case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac

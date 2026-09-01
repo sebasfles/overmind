@@ -165,3 +165,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the check greps for a key name that Claude Code may rename across versions; the message says so and the functional symptom (failed `--bg` launch) remains the ground truth.
 - Revisit when: the key name changes, or Claude Code offers a supported non-interactive way to verify the acceptance.
 - Files: scripts/install, docs/usage-guide.md.
+
+## 2026-08-31: The bypass acceptance check is functional, not a key grep
+
+- Decision: `scripts/install` verifies the bypass-permissions acceptance by launching one throwaway `claude --bg --dangerously-skip-permissions` haiku session and cleaning it up (`claude stop` and `claude rm`), instead of grepping `bypassPermissionsModeAccepted` in `~/.claude.json`. Supersedes the check mechanism of the previous entry; the requirement itself stands.
+- Alternatives rejected: the key grep (Sebastian accepted the disclaimer and the key exists in no state file this version writes; searched `bypass`, `dangerous`, `skip`, `accepted` across `~/.claude.json`, settings and policy files), asking Sebastian to test by hand each machine (the script exists to do that).
+- Reason: the functional test is the ground truth the pilot exposed: the grep said MISSING on a machine where the `--bg` bypass launch demonstrably works.
+- Debt created: each `scripts/install` run spends one haiku turn and a few seconds on the probe; run from inside an agent session the probe may be blocked by that session's classifier and report a false MISSING, so the script is for Sebastian's shell.
+- Revisit when: Claude Code exposes a supported way to query the acceptance without launching a session.
+- Files: scripts/install, docs/usage-guide.md.
