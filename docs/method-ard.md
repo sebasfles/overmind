@@ -210,3 +210,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: `SendMessage` is allowed globally for Sebastian's sessions, including sends to sessions outside the method.
 - Revisit when: permission rules learn to scope SendMessage by target pattern (then scope it to `om-*` and `overmind`).
 - Files: scripts/install, docs/usage-guide.md.
+
+## 2026-08-31: om-events runs bypassed
+
+- Decision: `om-events` moves from `permissionMode: acceptEdits` to `bypassPermissions`.
+- Alternatives rejected: auto mode (unavailable on haiku, the model om-events runs on), keeping acceptEdits (it only auto-accepts file edits, so any Bash call, even the ISO timestamp, prompts in a pane nobody watches and the inbox hangs silently), upgrading to sonnet for auto mode (pays reasoning for a one-line append job).
+- Reason: an unattended inbox cannot stop to ask; its writes are appends under `portfolio/events/` and its inputs come from Sebastian's own om-managers.
+- Debt created: om-events holds Bash with no permission gate; the mitigation is its narrow rules (append one line, print counts, nothing else).
+- Revisit when: an event's content ever makes om-events run something beyond filing and counting.
+- Files: .claude/agents/om-events.md.
