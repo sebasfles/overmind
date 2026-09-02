@@ -32,3 +32,8 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-02T05:33:49Z auvral 0007 consolidated and delegated (info)
 - [x] 2026-09-02T05:42:33Z diy 0002 consolidated and delegated (bugfix/0002_lockbox_relink_fails, om-0002-reviewer) (info)
 - [x] 2026-09-02T06:05:55Z auvral 0008 consolidated and delegated (info)
+- [x] 2026-09-02T15:07:47Z diy 0002 PR ready (https://github.com/designli/diy-platform/pull/482) (action)
+- [x] 2026-09-02T16:06:11Z diy 0003 phase 1 PR ready (https://github.com/designli/diy-platform/pull/483) (action)
+- [x] 2026-09-02T17:02:19Z diy 0003 phase 1 PR re-published after retake 1, conflicts resolved (https://github.com/designli/diy-platform/pull/483) (action)
+- [x] 2026-09-02T18:09:42Z diy 0002 retake 1 PR ready (https://github.com/designli/diy-platform/pull/484); #482 was merged mid-task, #484 carries rounds 5 to 7 (action)
+- [x] 2026-09-02T19:12:09Z diy 0003 phase 2 PR ready, last phase (https://github.com/designli/diy-platform/pull/485) (action)
