@@ -18,5 +18,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 organization shows the plan @auvral
 - [ ] 2026-09-02 delete comments @auvral
 - [ ] 2026-09-02 configuration set for email open rate @drive-now
+- [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 
 ## Done
