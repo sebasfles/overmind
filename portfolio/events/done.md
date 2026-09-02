@@ -14,3 +14,8 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-01T19:51:26Z auvral 0003 consolidated and delegated (info)
 - [x] 2026-09-01T20:29:28Z auvral 0004 consolidated and delegated (info)
 - [x] 2026-09-01T20:39:14Z auvral 0003 cleaned (info)
+- [x] 2026-09-01T21:08:07Z auvral 0004 retake 1 sent (info)
+- [x] 2026-09-01T22:18:27Z auvral 0004 cleaned (info)
+- [x] 2026-09-01T22:28:47Z auvral 0005 consolidated and delegated (info)
+- [x] 2026-09-01T23:58:34Z auvral 0005 cleaned (info)
+- [x] 2026-09-02T00:41:17Z auvral 0006 consolidated (info)
