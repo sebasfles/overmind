@@ -56,6 +56,16 @@ else:
     print("ok      permission allow rules present in ~/.claude/settings.json")
 PY
 
+# Tools the skills call from Bash: jq (clean-task, delegate-task and next-phase parse
+# 'claude agents --all --json') and gh (check-task, publish-task). Report, do not install.
+for tool in jq gh; do
+  if command -v "$tool" >/dev/null 2>&1; then
+    echo "ok      $tool present"
+  else
+    echo "MISSING $tool: install it; the skills that list sessions or PRs from Bash need it."
+  fi
+done
+
 # om-reviewer and om-developer run with permissionMode bypassPermissions, which needs the
 # disclaimer accepted once per machine; without it, --bg launches fail non-interactively.
 # Functional check (the persisted key is not greppable in current versions): try one throwaway
