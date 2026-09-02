@@ -20,5 +20,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 configuration set for email open rate @drive-now
 - [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 - [ ] 2026-09-02 fix timezone errors on the showings on visits and on the showings tab and on the listing detail @diy
+- [ ] 2026-09-02 add more information to the showings detail page @diy
 
 ## Done
