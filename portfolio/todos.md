@@ -15,7 +15,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-08-31 script js versioning and use s3 for it @auvral
 - [ ] 2026-08-31 use terraform as single source of truth for infra @auvral
 - [ ] 2026-09-01 send HR email about Walter's compensation @bseen
-- [ ] 2026-09-02 add check for i18n @auvral
 - [ ] 2026-09-02 show errors if login fails @auvral
 - [ ] 2026-09-02 organization shows the plan @auvral
 - [ ] 2026-09-02 loaders en signup estan en español @auvral
