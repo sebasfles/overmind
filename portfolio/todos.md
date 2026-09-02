@@ -17,7 +17,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-01 send HR email about Walter's compensation @bseen
 - [ ] 2026-09-02 show errors if login fails @auvral
 - [ ] 2026-09-02 organization shows the plan @auvral
-- [ ] 2026-09-02 loaders en signup estan en español @auvral
 - [ ] 2026-09-02 add i18n to docs and backoffice @auvral
 
 ## Done
