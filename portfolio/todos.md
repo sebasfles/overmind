@@ -23,5 +23,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 add more information to the showings detail page @diy
 - [ ] 2026-09-02 jorge fix PTO request @bseen
 - [ ] 2026-09-02 forgot password issue @bseen
+- [ ] 2026-09-02 review portia user in stg @bseen
 
 ## Done
