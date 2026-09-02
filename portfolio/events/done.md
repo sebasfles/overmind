@@ -31,3 +31,4 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-02T03:24:39Z auvral 0006 cleaned (info)
 - [x] 2026-09-02T05:33:49Z auvral 0007 consolidated and delegated (info)
 - [x] 2026-09-02T05:42:33Z diy 0002 consolidated and delegated (bugfix/0002_lockbox_relink_fails, om-0002-reviewer) (info)
+- [x] 2026-09-02T06:05:55Z auvral 0008 consolidated and delegated (info)
