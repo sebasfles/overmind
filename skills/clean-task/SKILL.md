@@ -29,12 +29,18 @@ This brings the final task folder and module docs that traveled in the root PR.
 
 ## 3. Sessions
 
+Killing the tmux window does not stop a `--bg` session: it keeps running detached and recreates `{{WORKSPACE}}/.claude/` after step 4.
+Derive every session of the task from its cwd; nothing stores the ids:
+
 ```
-claude stop {{reviewer-id}} ; claude rm {{reviewer-id}}
-claude stop {{developer-id}} ; claude rm {{developer-id}}     # one per phase if any remain
+claude agents --all --json | jq -r '.[] | select(.cwd | startswith("{{WORKSPACE}}")) | .id'
 ```
 
-Direct form: `claude project purge {{WORKSPACE}}` after step 4.
+For each id: `claude stop {{id}}`, then `claude rm {{id}}`.
+If the answer is "background service may be restarting", wait a few seconds and run the same command again.
+Rerun the listing; continue to step 4 only when it returns nothing.
+
+Direct form (sessions launched without `--bg`): `claude project purge {{WORKSPACE}}` after step 4.
 
 ## 4. Worktrees, workspace, branches
 
@@ -62,4 +68,5 @@ Then suggest recycling this om-manager session (`prefix + R` in this pane): the 
 - No commit.
 - Never delete a branch with commits not in its base.
 - Never touch another task's workspace or window.
+- Sessions first, files second: a live session recreates what step 4 removes.
 - Absolute paths in every command.

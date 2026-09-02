@@ -18,14 +18,14 @@ Output: one screen.
 
 ## 1. Per active project in `portfolio/projects.yaml`
 
-Derive task states exactly as the om-manager's `check-task` does, but from here: read `{{path}}/docs/tasks/*/task.md` frontmatter, `git -C {{path}} worktree list`, commits ahead of the base per branch, `claude agents` for om-developer sessions, `gh -C {{path}} pr list --state all`.
+Derive task states exactly as the om-manager's `check-task` does, but from here: read `{{path}}/docs/tasks/*/task.md` frontmatter, `git -C {{path}} worktree list`, commits ahead of the base per branch, `claude agents --json` for om-developer sessions, `gh -C {{path}} pr list --state all` (a `gh` failure prints as `gh failed`, never as zero PRs).
 Do not message any om-manager.
 
 Also:
 
 - Doc drift: modules whose code changed after their docs' `updated` (`git log -1 --format=%cs -- {{module path}}` newer than the frontmatter). Count only.
 - Leftovers: orphan worktrees, `merged` tasks not cleaned.
-- om-manager alive: a `om-{{name}}-manager` session in `claude agents` or a tmux session `{{tmux}}`.
+- om-manager alive: a `om-{{name}}-manager` session in `claude agents --json` or a tmux session `{{tmux}}`.
 
 ## 2. Print
 

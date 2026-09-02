@@ -31,7 +31,7 @@ Report, without deleting:
 
 - Orphan workspaces under `.workspaces/` with no task folder.
 - Local branches with the task prefixes whose remote is gone (`git branch -vv | grep ': gone]'`).
-- Stopped Claude sessions (`claude agents --all`) for tasks already `done`.
+- Stopped Claude sessions (`claude agents --all --json`) for tasks already `done`.
 
 Ask Sebastian before removing any of them; they were not created by a task you can verify.
 

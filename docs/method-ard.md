@@ -302,3 +302,39 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: the checker prompt is extracted to a shared file (see the per-project review checks entry); the `--` moves with it.
 - Files: skills/review-task/SKILL.md, skills/add-check/SKILL.md, docs/method-ard.md.
+
+## 2026-09-02: Task sessions are derived from `claude agents --all --json`; clean-task stops them before touching files
+
+- Decision: no skill stores a `--bg` session id. Whenever one is needed (`clean-task`, `delegate-task`, `next-phase`), it is read from `claude agents --all --json`, whose entries carry `id`, `name` and `cwd`: by `name` for one session, by `cwd` under the workspace for every session of a task. `clean-task` step 3 stops and removes every session whose cwd is the workspace, retries on "background service may be restarting", and only proceeds to remove worktrees when the listing is empty. Every skill that lists sessions from Bash uses `--json`; the bare `claude agents` needs a TTY and fails.
+- Alternatives rejected: `consolidate-task` writing the id to `{{WORKSPACE}}/.session` or into the task folder (state that can drift from reality and one more file to keep consistent; the CLI already knows, and the method derives state rather than recording it), keeping the id in the om-manager's reply (lost on every recycle; this is how auvral 0006 ended with a detached om-reviewer recreating `.claude/` inside a removed workspace).
+- Reason: on auvral 0006 the om-manager killed the tmux window believing it stopped the om-reviewer; `--bg` sessions survive the pane by design, so the cleanup has to address the process, and it can only do that with an id it can find after a recycle.
+- Debt created: `jq` is assumed on the machine; `scripts/install` should check it.
+- Revisit when: `claude rm` learns to take a name or a cwd, or `claude agents` gains a filter flag.
+- Files: skills/clean-task/SKILL.md, skills/consolidate-task/SKILL.md, skills/delegate-task/SKILL.md, skills/next-phase/SKILL.md, skills/start-task/SKILL.md, skills/check-task/SKILL.md, skills/check-portfolio/SKILL.md, skills/clean-work/SKILL.md, docs/02-orchestration.md, docs/03-skills.md.
+
+## 2026-09-02: A `gh` failure is an unknown signal, never an empty one
+
+- Decision: `check-task`, `check-work` and `check-portfolio` report a `gh` failure in the output (`gh failed: {{error}}`, with the active account from `gh auth status`) and never derive `in_review`, `merged` or `done` from it.
+- Alternatives rejected: declaring the gh account per project in `TRD.md` and switching before every call (the method should not manage credentials; Sebastian switches once), retrying with `GH_TOKEN` (same problem, more secrets in prompts).
+- Reason: on auvral the active gh account was `sflores-designli` instead of `auvral-development`; `gh pr list` failed and the board read the failure as "no PRs", showing merged tasks as in progress.
+- Debt created: none.
+- Revisit when: `gh` supports per-directory accounts natively; then the hint changes.
+- Files: skills/check-task/SKILL.md, skills/check-work/SKILL.md, skills/check-portfolio/SKILL.md, docs/03-skills.md.
+
+## 2026-09-02: add-check dry run is bounded and has a positive test
+
+- Decision: `add-check` step 4 diffs from the last merge into the base, looks at `--stat` first and narrows anything over 30 files or 200 KB; then runs one positive test on a reversed diff from before the rule was applied, comparing blobs by path (`git diff {{old}}:{{old path}} HEAD:{{new path}}`) for files that were moved.
+- Alternatives rejected: keeping the fixed `HEAD~20` window (on auvral it produced a 900 KB diff of a `[locale]` migration), skipping the positive test (zero findings on a clean diff proves nothing about the check).
+- Reason: the dry run exists to calibrate the check; it needs one diff that should be clean and one that should not, both small enough to read the checker's output.
+- Debt created: none.
+- Revisit when: the checker prompt moves to a shared file; the dry run can then become a script.
+- Files: skills/add-check/SKILL.md.
+
+## 2026-09-02: om-manager writes memory with the absolute path only
+
+- Decision: `agents/om-manager.md` Environment states that memory files are written to the absolute directory given in its memory instructions, never relatively, because its cwd may sit in a workspace.
+- Alternatives rejected: ignoring `.claude/agent-memory/` in every project (hides the symptom; the write is still wrong), a rule in `execute-task` telling the om-developer not to commit foreign files (the om-developer cannot tell a foreign file from a task file).
+- Reason: on auvral a memory write with cwd inside a worktree landed in the task branch and the om-developer committed it.
+- Debt created: none.
+- Revisit when: the harness resolves the memory directory itself regardless of cwd.
+- Files: agents/om-manager.md.

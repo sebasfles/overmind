@@ -33,9 +33,11 @@ If any is not `done`, stop and say which task blocks this one.
 
 | State | How you know | Action |
 |---|---|---|
-| Running | `claude agents` lists `{{SESSION}}` running, or a live pane in `{{WINDOW}}` | nothing |
-| Stopped | `claude agents --all` lists it stopped, or its transcript exists under `~/.claude/projects/{{slug of WORKSPACE}}/` | `tmux new-window -t {{PROJECT}} -n {{WINDOW}} -c {{WORKSPACE}}`, then `claude attach {{id}}` (or `claude -r {{session-id}}`) in the pane; context intact |
+| Running | `claude agents --json` lists `{{SESSION}}`, or a live pane in `{{WINDOW}}` | nothing |
+| Stopped | `claude agents --all --json` lists `{{SESSION}}` (take its `id`), or its transcript exists under `~/.claude/projects/{{slug of WORKSPACE}}/` | `tmux new-window -t {{PROJECT}} -n {{WINDOW}} -c {{WORKSPACE}}`, then `claude attach {{id}}` (or `claude -r {{session-id}}`) in the pane; context intact |
 | Lost | none of the above | launch a new om-reviewer as `consolidate-task` step 4 does; its `analyze-task` finds `Context & decisions` written and does not ask; wait for `consolidated` |
+
+The bare `claude agents` needs a TTY and fails from Bash; always pass `--json`.
 
 ## 3. Bring the task folder into the workspace
 

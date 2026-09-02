@@ -33,7 +33,7 @@ TASK_DIR  = {{ROOT_WT}}/docs/tasks/{{TASK}}
 
 - `{{TASK_DIR}}` exists with `Context & decisions` written (the root worktree was rebased by `delegate-task`).
   If it is missing, the om-manager skipped the rebase; message the om-manager `task {{id}}: worktree has no task folder, rebase needed` and stop.
-- No om-developer session for this task is running (`claude agents`, or a live pane in `{{WINDOW}}`).
+- No om-developer session for this task is running (`claude agents --json`, or a live pane in `{{WINDOW}}`).
   If one is, do not launch another; message it `context ready, start` and finish.
 
 ## 2. Launch

@@ -28,6 +28,8 @@ If not, message the om-manager `phase {{N}} PR is not merged` and stop.
 claude stop {{dev-id}} && claude rm {{dev-id}}     # --bg form
 ```
 
+`{{dev-id}}` is the `id` of the entry named `{{DEV}}` in `claude agents --all --json`; retry if the answer is "background service may be restarting".
+
 Direct form: close its pane (`tmux kill-pane -t {{PROJECT}}:{{WINDOW}}.1`).
 One om-developer per phase; the next one starts with a clean context.
 

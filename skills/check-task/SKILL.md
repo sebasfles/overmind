@@ -29,8 +29,11 @@ Repos to inspect: `repos` plus the root in multirepo.
 | workspace | `WORKSPACE` exists |
 | context | `Context & decisions` non-empty (root workspace copy if the workspace exists, else root checkout copy) |
 | ahead | any repo: `git -C {{WORKSPACE}}/{{name}} rev-list --count origin/{{base}}..HEAD` > 0 |
-| om-developer | `claude agents` or panes of `task-{{id}}` show `om-{{id}}-developer*` |
+| om-developer | `claude agents --json` lists `om-{{id}}-developer*` with cwd under `WORKSPACE`, or panes of `task-{{id}}` show it |
 | prs | per repo: `gh -R {{owner/repo}} pr list --head {{branch}} --state all --json number,state,mergedAt,url` |
+
+If `gh` fails (not logged in, the active account has no access to the repo, network), `prs` is unknown, not empty: never derive `in_review`, `merged` or `done` from it.
+Say so in the line (`PRs: gh failed: {{first line of the error}}`) and add one line with the active account from `gh auth status`; `gh auth switch --user {{account}}` fixes the wrong-account case.
 
 With phases, evaluate `ahead` and `prs` per phase branch; the current phase is the first without all PRs merged.
 
@@ -61,3 +64,4 @@ If Sebastian asked "why", add at most three lines of evidence.
 
 - Never message a session; only check whether it exists.
 - Never change anything.
+- A `gh` failure is reported, never read as "no PRs".

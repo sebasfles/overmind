@@ -98,8 +98,9 @@ The `task-{{id}}-{{role}}` convention makes addressing deterministic: the om-rev
    They alternate; they never write at the same time because the om-reviewer does not write code.
 
 The om-reviewer and om-developer agents run with `permissionMode: bypassPermissions`: they work isolated in their workspace and must not be held back by the classifier; with `--bg` they must be launched with `--allow-dangerously-skip-permissions`.
-Advantages: `claude agents` lists the live sessions, `claude stop {{id}}` pauses, `claude rm {{id}}` deletes the session and its worktree, `claude attach {{id}}` reopens it.
-The process survives if the pane is closed.
+Advantages: `claude agents --json` lists the live sessions, `claude stop {{id}}` pauses, `claude rm {{id}}` deletes the session and its worktree, `claude attach {{id}}` reopens it.
+The process survives if the pane is closed, and killing the pane or the window does not stop it.
+The bare `claude agents` needs a TTY; from Bash the skills use `--json`, whose entries carry `id`, `name` and `cwd`, so every session of a task is derivable by `cwd` under its workspace and no skill stores an id.
 
 ### Launch (alternative form, if `--bg` + `attach` does not convince)
 
@@ -267,8 +268,8 @@ om-reviewer and om-developer share the worktree.
 With `--bg`:
 
 ```
-claude rm {{id-reviewer}}                                  # session (and worktree when it is safe)
-claude rm {{id-developer}}                                  # one per phase if there were any
+claude agents --all --json | jq -r '.[] | select(.cwd | startswith("{{root}}/.workspaces/0142_badge_wall")) | .id'
+claude stop {{id}} ; claude rm {{id}}                       # for each id listed, before touching files
 git -C {{root}}/{{repo}} worktree remove {{root}}/.workspaces/0142_badge_wall/{{repo}}   # for each repo; then rmdir of the workspace
 git branch -d feat/0142_badge_wall
 tmux kill-window -t task-0142

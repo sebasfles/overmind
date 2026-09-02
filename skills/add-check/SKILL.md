@@ -48,11 +48,15 @@ Write it to `docs/checks/{{name}}.md` in the root checkout.
 
 ## 4. Dry run
 
-Run the check once the way `review-task` will, over the files that match `paths` in the last 20 commits (or all matching files if fewer than 30):
+Run the check once the way `review-task` will, over a bounded diff of files that match `paths`:
 
 ```
-cd {{ROOT}} && git diff HEAD~20...HEAD -- {{matching files}} | claude -p --model {{model}} --allowedTools Read,Grep,Glob -- "$(cat docs/checks/{{name}}.md) ... "
+cd {{ROOT}} && git diff {{from}}...HEAD -- {{matching files}} | claude -p --model {{model}} --allowedTools Read,Grep,Glob -- "$(cat docs/checks/{{name}}.md) ... "
 ```
+
+Pick `{{from}}` as the last merge into `{{base}}` and look at `git diff --stat` first; more than 30 files or 200 KB is not a review-sized diff, narrow it (fewer commits or a subset of files).
+Then one positive test on a diff that must produce findings, typically the reversed diff from before the rule was applied (`git diff HEAD {{old commit}} -- {{files}}`).
+Files that were moved come out of a reversed diff as whole-file deletions with no `+` lines and read as clean; for those compare blobs by path: `git diff {{old commit}}:{{old path}} HEAD:{{new path}}`.
 
 Use the checker prompt from `review-task` step 0 literally, including the `--` before it (the frontmatter `---` would otherwise be parsed as an option).
 Report the count and a sample of findings to Sebastian, one line each.

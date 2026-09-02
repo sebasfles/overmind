@@ -81,7 +81,7 @@ tmux send-keys -t {{PROJECT}}:{{WINDOW}} "claude attach {{bg-id}}" Enter
 Fallback form: same `tmux new-window`, then `claude --agent om-reviewer -n {{SESSION}} '...'` in the pane.
 
 Only the om-reviewer is launched here.
-Record the om-reviewer's session id in your reply; `delegate-task` needs it if the session is stopped.
+Do not keep the bg id anywhere: `claude agents --all --json` lists it by `name` (`{{SESSION}}`) and `cwd` (`{{WORKSPACE}}`) whenever a skill needs it.
 
 ## 5. Relay the consolidation
 

@@ -159,6 +159,7 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 - One workspace per task at `{{root}}/.workspaces/{{id}}_{{title}}/`, with a worktree per repo the task touches (plus the root's in multirepo), created by `consolidate-task`. See `docs/05-layouts.md` of the overmind repo for single, mono and multirepo.
   Phases are branches inside those worktrees: `feat/{{id}}_{{title}}-phase-{{n}}`.
 - The shell does not keep `cd` between commands: absolute paths or `git -C` always.
+- Your agent memory directory is the absolute path stated in your memory instructions; write memory files with that absolute path only. A relative write while your cwd sits in a workspace lands in the task's worktree and the om-developer commits it.
 - You run in the project root: the repo itself (single, mono) or the docs repo (multirepo). It always sits on its base branch; sync it before any skill acts.
 
 ## Judgment

@@ -27,6 +27,7 @@ This is the normal first run on a project that has just been added.
 - `docs/tasks/_drafts/*.md`: list by name as `draft`.
 - `ls .workspaces/`: any workspace with no matching task folder is `orphan workspace`.
 - `gh pr list --state open --json headRefName`: any open PR on a `feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/` branch with no task folder is `untracked PR`.
+- If `gh` fails, the first line of the board is `gh failed: {{error}}; active account: {{gh auth status}}` and every PR-dependent state prints as unknown; a board built on a failed `gh` is a wrong board.
 
 ## 2. Print
 
