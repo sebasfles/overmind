@@ -30,3 +30,4 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-02T03:07:27Z auvral 0006 retake PRs ready (https://github.com/auvral-development/auvral-platform/pull/47) (action)
 - [x] 2026-09-02T03:24:39Z auvral 0006 cleaned (info)
 - [x] 2026-09-02T05:33:49Z auvral 0007 consolidated and delegated (info)
+- [x] 2026-09-02T05:42:33Z diy 0002 consolidated and delegated (bugfix/0002_lockbox_relink_fails, om-0002-reviewer) (info)
