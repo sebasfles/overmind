@@ -33,7 +33,7 @@ For each applying check, launch it in the background, one process per check, out
 ```
 mkdir -p {{WORKSPACE}}/.checks
 git -C {{WORKSPACE}}/{{repo}} diff origin/{{base}}...HEAD -- {{matching files}} \
-  | (cd {{WORKSPACE}}/{{repo}} && claude -p --model {{model}} --allowedTools Read,Grep,Glob \
+  | (cd {{WORKSPACE}}/{{repo}} && claude -p --model {{model}} --allowedTools Read,Grep,Glob -- \
       "$(cat {{ROOT_WT}}/docs/checks/{{name}}.md)
 
 Reference document:
@@ -47,6 +47,7 @@ No prose, no summary, no fixes, no praise." \
       > {{WORKSPACE}}/.checks/{{name}}.round-{{N}}.out 2>&1 &)
 ```
 
+The `--` before the prompt is required: the check file starts with a `---` frontmatter line and without it the CLI reads the prompt as an unknown option.
 Do not wait for them; continue with step 1.
 No `docs/checks/`, or no check whose `paths` match the diff: skip this step and step 5 reports `checks: n/a`.
 

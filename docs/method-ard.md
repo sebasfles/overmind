@@ -293,3 +293,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the checker prompt lives inline in `review-task` step 0 and `add-check` step 4 asks to use it literally; if it grows, it moves to a shared file. Glob matching of `paths` against the diff is done by the om-reviewer by hand, not by a script. `.checks/` outputs in the workspace are deleted with the workspace and never travel in the PR.
 - Revisit when: a check keeps producing false positives the om-reviewer must drop every round (tighten its body or delete it), when two projects copy the same check verbatim (promote it to a reference in `add-check`), or when the inline prompt drifts between `review-task` and `add-check` (extract it).
 - Files: skills/add-check/SKILL.md, skills/add-check/templates/check.md, skills/add-check/references/{i18n,style,patterns}.md, skills/review-task/SKILL.md, skills/publish-task/SKILL.md, skills/publish-task/templates/pr-summary.md, agents/om-reviewer.md, agents/om-manager.md, docs/01-documentation.md, docs/02-orchestration.md, docs/03-skills.md, docs/method-ard.md.
+
+## 2026-09-01: Checker command passes the prompt after `--`
+
+- Decision: the `claude -p` command in `review-task` step 0 and the dry run in `add-check` step 4 put `--` before the positional prompt: `claude -p --model {{model}} --allowedTools Read,Grep,Glob -- "$(cat docs/checks/{{name}}.md) ..."`.
+- Alternatives rejected: stripping the frontmatter from the check file before injecting it (extra plumbing in two places for the same effect, and the frontmatter is useful to the checker as a statement of its scope), piping the prompt on stdin (stdin already carries the diff), passing the prompt through a temp file (more state in the workspace for no gain).
+- Reason: a check file starts with a `---` frontmatter line, so the expanded prompt begins with `---` and the CLI parses it as an unknown option and exits 1 (`error: unknown option '---'`). Found by the auvral om-manager while dry-running `docs/checks/i18n.md` through `add-check`; every check would have failed the same way at review time.
+- Debt created: none.
+- Revisit when: the checker prompt is extracted to a shared file (see the per-project review checks entry); the `--` moves with it.
+- Files: skills/review-task/SKILL.md, skills/add-check/SKILL.md, docs/method-ard.md.

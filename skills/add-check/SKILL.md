@@ -51,10 +51,10 @@ Write it to `docs/checks/{{name}}.md` in the root checkout.
 Run the check once the way `review-task` will, over the files that match `paths` in the last 20 commits (or all matching files if fewer than 30):
 
 ```
-cd {{ROOT}} && git diff HEAD~20...HEAD -- {{matching files}} | claude -p --model {{model}} --allowedTools Read,Grep,Glob "$(cat docs/checks/{{name}}.md) ... "
+cd {{ROOT}} && git diff HEAD~20...HEAD -- {{matching files}} | claude -p --model {{model}} --allowedTools Read,Grep,Glob -- "$(cat docs/checks/{{name}}.md) ... "
 ```
 
-Use the checker prompt from `review-task` step 0 literally.
+Use the checker prompt from `review-task` step 0 literally, including the `--` before it (the frontmatter `---` would otherwise be parsed as an option).
 Report the count and a sample of findings to Sebastian, one line each.
 Many findings on existing code mean one of two things and Sebastian decides which: the rule is not followed today (record the debt in `docs/ARD.md`, the check stays), or the check is stricter than the rule (tighten the body and rerun).
 Zero findings on code that should have some means the body is too vague; sharpen it.
