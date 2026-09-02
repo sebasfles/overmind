@@ -24,6 +24,7 @@
 - ✅ typecheck
 - ✅ test
 - ✅ review: {{k}} issues auto-fixed
+- ✅ checks: {{i18n, style: k findings auto-fixed | n/a}}
 - ✅ documentation
 - ✅ replication {{bugs only; otherwise n/a}}
 - ✅ push
@@ -35,6 +36,7 @@
 - rebase: {{base and head sha}}
 - lint / typecheck / test: {{commands, targets, counts; one line per verification target}}
 - review: {{file}}:{{line}}, {{defect}}, {{fix}}, re-checked (one line per finding, all rounds)
+- checks: {{name}}: {{rounds run}}, {{findings confirmed}}, {{let pass}} (one line per check)
 - documentation: {{modules updated}}, ARD entries: {{n}}
 - push: {{sha per repo}}
 

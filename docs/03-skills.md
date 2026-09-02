@@ -15,7 +15,7 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 3. Sebastian drives the om-manager's skills.
    `plan-task`, `create-task`, `consolidate-task` and `delegate-task` are invocable by the om-manager so the task flow chains as one conversation: each runs on Sebastian's explicit yes to the question that offers it, never on the om-manager's initiative.
    `reiterate-task` and `clean-work` stay invocable only by the user.
-   `clean-task` is invocable by the om-manager, but only on Sebastian's explicit ask, phrased however he likes; never on its own initiative.
+   `clean-task` and `add-check` are invocable by the om-manager, but only on Sebastian's explicit ask, phrased however he likes; never on its own initiative.
    `check-task` and `check-work` can be invoked by the om-manager when Sebastian asks about status.
 4. The om-reviewer's and om-developer's skills run automatically.
    om-reviewer and om-developer are event-driven state machines.
@@ -31,6 +31,7 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 |---|---|
 | `setup` | Extracts a project's documentation, wherever it lives (READMEs, wikis, ADRs, comments, code, Sebastian), into the Part 1 convention. It doesn't wait for it as input: it's its output. Existing docs are claims: what the code can verify gets checked, and doc-vs-code contradictions are reported for Sebastian to arbitrate, never resolved silently. Two Workflows with `om-setup-worker`: discovery per component (read-only) and documentation per module, with module confirmation with you in between; then TRD, PRD and ARD (empty if there's no history), a short `CLAUDE.md`. Idempotent. |
 | `write-prd` / `write-trd` / `write-ard` | Produce or update each document. `setup` uses them; `document-task` reuses them at the module level. |
+| `add-check` | Adds one review check to `docs/checks/{{name}}.md`: frontmatter `model`, `paths`, `reference`, body of verifiable statements. Writes the reference document in `docs/conventions/` first when the rule is not documented anywhere; dry-runs the check on current code so Sebastian can calibrate it; commits `docs(checks): add {{name}}` on the base branch. The om-reviewer picks it up on the next round of every task. |
 | `plan-task` | Planning conversation with Sebastian following the `docs/` reading path. Ends by offering `create-task`. |
 | `create-task` | Creates the `docs/tasks/{{id}}_{{title}}/` folder in the root checkout with `task.md` (`type`, `Goal`, `Scope`, `Acceptance`), `replication.md` if it's a bug, and, in the rare case of phases, one `phase_N.md` per phase. Doesn't commit. Ends by offering `consolidate-task`. |
 | `consolidate-task` | Syncs the base branch, creates a worktree and branch according to `type` from `origin/{{base}}`, opens the tmux window and launches only the om-reviewer inside the worktree. Mediates the om-reviewer's questions with Sebastian until `Context & decisions` is written in the root checkout copy. With Sebastian's approval it commits and pushes `docs(tasks): {{id}}_{{title}} planned` (plan plus decisions; the task's only docs commit). Asks whether to delegate now; if not, it stops the om-reviewer session (keeping the conversation) and closes the tmux window; the worktree and branch stay. |
@@ -47,7 +48,7 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 |---|---|---|
 | `analyze-task` | The session starts | Reads the task folder and the modules' `docs/`. If `Context & decisions` is empty, it does the back-and-forth with om-manager and Sebastian once and writes it in the root checkout copy (the only one written before delegation); it can adjust `Scope`, `Acceptance` and the phases. If it's already written (only happens when the original session was lost), it reads it and doesn't ask again. If there's a new `retakes.md`, it incorporates it. Notifies the om-manager "consolidated" and waits for "delegated, start". |
 | `start-task` | Message from the om-manager "delegated, start" | Opens the right pane of the tmux window, launches `om-{{id}}-developer` (or `-developer-phase-1`) with cwd in the worktree and sends it "context ready, start". |
-| `review-task` | Message "round N" from the om-developer | Runs the Pipeline over the worktree: intent, rebase, verification (audits `verify.log`; never runs `verify-task` itself), review. If there are issues, it sends them to the om-developer with file:line, error and what was expected. If there are no issues, it sends "round N clean, document" and, on "docs ready", runs `publish-task`. |
+| `review-task` | Message "round N" from the om-developer | Launches the project checks (`docs/checks/*.md` matching the diff) as background `claude -p` processes, then runs the Pipeline over the worktree: intent, rebase, verification (audits `verify.log`; never runs `verify-task` itself), review, and the triage of the checks' output. If there are issues, it sends them to the om-developer with file:line, error and what was expected. If there are no issues, it sends "round N clean, document" and, on "docs ready", runs `publish-task`. |
 | `publish-task` | `review-task` with no issues | Pushes each branch in the workspace, one PR per touched repo (plus the root one in multirepo), and the summary as the root PR's description with Intent, What changed (with links to each PR), Decisions (including merge order), Risk assessment and Pipeline per target. Writes no state; notifies the om-manager "PRs ready". |
 | `next-phase` | Message from the om-manager "phase N merged, continue" | Kills the phase N om-developer session, creates the phase N+1 branch from `origin/{{base}}` in the worktree, writes phase N's `Result` in `phase_N.md` (it travels in the phase N+1 PR) and runs `start-task`. |
 
@@ -133,7 +134,7 @@ All written as drafts in `skills/`, pending pilot (see [06-pilot.md](06-pilot.md
 
 | Role | Skills |
 |---|---|
-| om-manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work` |
+| om-manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `add-check`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work` |
 | om-reviewer | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
 | om-developer | `execute-task`, `document-task`, `verify-task` |
 | overmind | `add-project` (with `pause` and `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |

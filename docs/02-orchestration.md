@@ -304,7 +304,8 @@ If not: a new pair is launched with the same pointer and it picks up from the fi
 
 ## review-task: the Pipeline
 
-Order: intent → rebase → verification audit → review → documentation → push.
+Order: intent → rebase → verification audit → review → project checks → documentation → push.
+The project checks are launched before intent as background processes and collected after the review, so they cost no waiting time.
 
 The verification audit comes before the deep review because a failing test changes what gets reviewed.
 
@@ -314,6 +315,7 @@ The verification audit comes before the deep review because a failing test chang
 | rebase | That the om-developer rebased from `origin/{{base}}`. It requests it if not done. |
 | verification audit | `verify.log`: the om-developer's last block is at the round's commit, green on every step, and covers every touched target. The om-reviewer never runs lint, typecheck or tests itself. |
 | review | Finds issues in the code created for the task. Documents the error and how it was fixed, not how the task was solved. |
+| project checks | `docs/checks/*.md` whose `paths` match the diff, each run as a `claude -p` process on the model it declares, with the diff on stdin and its reference document in the prompt. The om-reviewer triages every line against the code it read: confirmed lines join the findings as `[{{check}}]`, the rest go to `Decisions` as let-pass. |
 | documentation | On the clean round the om-developer runs `document-task` once; `publish-task` checks the module's docs (`updated`, `source`, ARD entries) before pushing. |
 | push | Done by the om-reviewer itself in `publish-task` once everything above has passed. |
 
@@ -344,6 +346,7 @@ Level (Low / Medium / High) and one sentence of justification.
 - ✅ lint
 - ✅ test
 - ✅ review: N issues auto-fixed (detail per issue collapsed: file:line, error, fix, re-check)
+- ✅ checks: i18n, style: N findings auto-fixed (or n/a)
 - ✅ documentation
 - ✅ push
 ```

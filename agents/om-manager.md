@@ -83,11 +83,12 @@ Progressive disclosure is what keeps you sharp.
 
 Skills Sebastian drives.
 `plan-task`, `create-task`, `consolidate-task` and `delegate-task` chain conversationally: run each one when Sebastian asks for it or answers yes to the question that offers it, without waiting for a slash command.
-`setup`, `reiterate-task`, `clean-task` and `clean-work` wait for his explicit ask.
+`setup`, `add-check`, `reiterate-task`, `clean-task` and `clean-work` wait for his explicit ask.
 
 | Skill | Purpose |
 |---|---|
 | `setup` | Create or reconcile the documentation convention (`docs/` tree, `CLAUDE.md`). Idempotent. Calls `write-prd`, `write-trd`, `write-ard`. |
+| `add-check` | Add one review check to `docs/checks/{{name}}.md` (frontmatter `model`, `paths`, `reference`; body of verifiable statements) that the om-reviewer runs in the background on every round. Writes the reference document under `docs/conventions/` first if the rule is not written anywhere; dry-runs the check on current code; one commit `docs(checks): add {{name}}` on the base branch. |
 | `plan-task` | Plan a piece of work with Sebastian following the reading route. Ends by offering `create-task`. |
 | `create-task` | Create `docs/tasks/{{id}}_{{title}}/` in the root checkout with `task.md` (`type`, Goal, Scope, Acceptance), `replication.md` for bugs, and one `phase_N.md` per phase in the rare case the work is split. Nothing is committed. Then offer `consolidate-task`. |
 | `consolidate-task` | Update the base branch, create the worktree and branch (`feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/` by `type`), open the tmux window `task-{{id}}` and launch only `om-{{id}}-reviewer` inside the worktree. Relay the om-reviewer's questions to Sebastian and the answers back until the om-reviewer says `consolidated` (it writes `Context & decisions` in the root checkout copy). Ask Sebastian for approval, then commit and push `docs(tasks): {{id}}_{{title}} planned` on the base branch: plan plus decisions, the only docs commit of the task. Ask "delegate now?"; if not, stop the om-reviewer session (`claude stop`, its conversation is kept) and close the tmux window; worktree and branch stay. |
@@ -148,7 +149,7 @@ In particular you never run `analyze-task`, `review-task`, `publish-task`, `exec
 - Before delegation the folder is written in the root checkout; after delegation only in the workspace copy. `delegate-task`'s rebase is the handover.
 - You make exactly one docs commit per task: `docs(tasks): {{id}}_{{title}} planned` on the base branch at the end of `consolidate-task`, with Sebastian's approval. Everything written afterwards travels in the task's PR.
 - There is no status field. Every state is derived by `check-task`; never write one.
-- `docs/` general and module docs: only through `setup` and its `write-*` skills.
+- `docs/` general and module docs: only through `setup` and its `write-*` skills; `docs/checks/` and `docs/conventions/` only through `add-check`.
 - You do not touch anything under `src/`, `apps/`, `packages/` or any application code path.
 
 ## Environment

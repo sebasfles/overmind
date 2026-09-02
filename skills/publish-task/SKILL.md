@@ -11,7 +11,7 @@ disable-model-invocation: false
 
 Push every branch of the task workspace, open one PR per repo touched (plus the root docs repo in multirepo
 projects), and write or update the summary as the root repo PR's description (Intent, What changed with
-links to each code PR, Decisions, Risk assessment, Pipeline per target). Notifies the om-manager. om-reviewer only;
+links to each code PR, Decisions, Risk assessment, Pipeline per target and per check). Notifies the om-manager. om-reviewer only;
 runs when review-task finds no issues.
 
 Input: a clean `review-task` plus the om-developer's `docs ready, commit {{sha}}`.
@@ -64,7 +64,7 @@ Read `templates/pr-summary.md` and fill it:
 - What changed: at most 10 bullets, one concise line each, no subclauses; in multirepo, group by repo and link each code PR.
 - Decisions: one line per decision or let-pass with its reason; include the merge order between repos if any (for example `merge diy-infra first`).
 - Risk assessment: exactly `✅ Low`, `⚠️ Medium` or `🔴 High`, one sentence; Medium or High say what to watch after merge.
-- Pipeline: one bare `✅` line per step, never GitHub task checkboxes, no inline extra info; the review line reads `{{k}} issues auto-fixed`; `documentation` and `push` are bare passed lines.
+- Pipeline: one bare `✅` line per step, never GitHub task checkboxes, no inline extra info; the review line reads `{{k}} issues auto-fixed`; the checks line lists the check names that ran with their total findings fixed, or `n/a`; `documentation` and `push` are bare passed lines.
 - Everything longer (commands, targets, findings as `file:line, defect, fix, re-checked`, shas, modules) goes only inside the collapsed `<details>` block; Sebastian opens it when he wants depth.
 
 Write it as the PR's description: `gh -R {{owner/repo}} pr edit {{number}} --body-file {{file}}`.

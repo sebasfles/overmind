@@ -100,6 +100,8 @@ docs/
   PRD.md                   # general product
   TRD.md                   # general technical, declares stack and mechanics
   ARD.md                   # global decisions + debt index
+  conventions/             # optional: one rule per file, when TRD Conventions is not enough (i18n, style)
+  checks/                  # optional: review checks the om-reviewer runs per round (see below)
   modules/
     {{module}}/
       README.md            # 20-40 lines: what it does, boundaries, links to the rest
@@ -109,6 +111,14 @@ docs/
       database.md
       flows.md             # mermaid: states and sequences (only if applicable)
 ```
+
+### Review checks (`docs/checks/{{name}}.md`, optional)
+
+A check is a small, single-rule review the om-reviewer delegates to a cheap model in the background on every round: i18n coverage, a style the linter cannot express, a module's patterns.
+Frontmatter: `name`, `model` (bare alias, usually `sonnet`), `paths` (globs relative to the project root, repo folder first in multirepo; the check runs only when the diff touches a matching file), `reference` (the document that defines the rule).
+Body: verifiable statements in the present tense, one per line, and a closing line saying what to report as clean.
+No reference document, no check: the rule must be written in `TRD.md` Conventions, a module's `trd.md` or `docs/conventions/{{topic}}.md` before the check exists.
+Checks are added with `add-check` by the om-manager on Sebastian's ask; the om-reviewer triages their output and only verified lines reach the om-developer.
 
 ## Versioning
 
