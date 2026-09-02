@@ -338,3 +338,21 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: the harness resolves the memory directory itself regardless of cwd.
 - Files: agents/om-manager.md.
+
+## 2026-09-02: verify.log records the exit code of every step, captured without a pipeline
+
+- Decision: `verify-task` step 2 prescribes the exact form for each step, `cd {{path}} && {{command}} > {{WORKSPACE}}/.verify/{{target}}-{{step}}.out 2>&1 ; echo "EXIT=$?"`, with no pipeline anywhere, and bans capturing status through `tee` or `${PIPESTATUS[0]}`. The log format carries `exit {{code}}` on every step line, `pass` means exit 0 and nothing else, and a step whose code could not be captured is `fail`. `review-task` step 3 and the om-reviewer's Pipeline treat a `pass` with an empty or missing code as the finding `verify.log: step {{name}} has no exit code`.
+- Alternatives rejected: keeping "capture the exit code" as an instruction without a form (that gap is what let each om-developer improvise a `tee` pipeline), `set -o pipefail` (fixes the status but still hides which stage failed, and the om-developers were reading command output to judge steps anyway), running verification through a script in `scripts/` (the commands come from each project's TRD, not from this repo).
+- Reason: the om-0005-reviewer on diy found that the improvised pattern logged `${PIPESTATUS[0]}`, which is empty in zsh (zsh spells it `$pipestatus` and indexes from 1) and where `$?` after a pipeline is the last stage's status. Every `EXIT=` line written so far proves nothing, and the om-reviewer audits that log as the only evidence that lint and tests ran, so the whole verification gate was resting on a value the shell never set. Verified in this repo's shell: after `false | cat`, zsh gives `${PIPESTATUS[0]}` empty and `$?` 0.
+- Debt created: `verify.log` blocks written before this entry carry no usable exit codes; tasks in flight will show the finding on their next round, which is the intended outcome. Sebastian's shell is the assumption: the form uses only `$?`, which is portable, so a different shell does not reopen this.
+- Revisit when: `verify-task` ever needs a pipeline (streaming output to the conversation), which it must not; or a project's runner exits 0 on failure, which is a finding about that project, not about the log.
+- Files: skills/verify-task/SKILL.md, skills/review-task/SKILL.md, agents/om-reviewer.md, docs/02-orchestration.md, docs/03-skills.md.
+
+## 2026-09-02: clean-task removes the method's scratch folders before rmdir
+
+- Decision: `clean-task` step 4 removes `{{WORKSPACE}}/.checks`, `{{WORKSPACE}}/.verify` and `{{WORKSPACE}}/.claude` before `rmdir {{WORKSPACE}}`; anything else left is listed and stops the cleanup.
+- Alternatives rejected: `rm -rf {{WORKSPACE}}` (removes whatever a session left there, including work nobody looked at), writing the scratch folders under `/tmp` (they belong to the task and are useful while it is open).
+- Reason: `review-task` creates `.checks/` and `verify-task` now creates `.verify/`, so the plain `rmdir` would always find the workspace non-empty and stop; the skill would report a leftover it created itself.
+- Debt created: none.
+- Revisit when: another skill starts writing in the workspace root; it must be added to this list.
+- Files: skills/clean-task/SKILL.md.

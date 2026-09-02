@@ -71,6 +71,7 @@ If false, finding: `rebase on origin/{{base}} required`.
 
 Audit `verify.log`; never run lint, typecheck or tests yourself.
 The om-developer's last block must be at `{{sha}}`, green on every step, and cover every target the diff touches; anything missing, stale or red is a finding on its own.
+Every step line must carry its `exit {{code}}` (only `n/a` may lack one), and `pass` must agree with `exit 0`: a block that claims `pass` with an empty or missing code proves nothing and is the finding `verify.log: step {{name}} has no exit code`.
 
 ## 4. Review the code
 

@@ -36,7 +36,17 @@ Per target, in this order, each command alone, absolute path with `cd {{WORKSPAC
 
 Never run two targets or two suites in parallel; several tasks share the machine and memory is the constraint.
 Never pass `--watch`.
-Capture the exit code and the last relevant lines per step.
+
+Run each step exactly like this, with no pipeline, so `$?` is the command's own status:
+
+```
+mkdir -p {{WORKSPACE}}/.verify
+cd {{WORKSPACE}}/{{target path}} && {{command}} > {{WORKSPACE}}/.verify/{{target}}-{{step}}.out 2>&1 ; echo "EXIT=$?"
+```
+
+Then read the tail of that file for the error lines.
+Never pipe the command into `tee` or anything else to capture its status: the shell is zsh, where `${PIPESTATUS[0]}` is empty (zsh spells it `$pipestatus` and indexes from 1) and `$?` after a pipeline is the last stage's status, not the command's.
+`.verify/` sits in the workspace, outside every worktree, so it never reaches a commit.
 
 ## 3. Log
 
@@ -44,13 +54,14 @@ Append per target:
 
 ```
 ## {{ISO timestamp}} by om-developer target {{name}} on {{sha of that repo}}
-- lint: {{pass | fail}} ({{command}})
-- typecheck: {{pass | fail | n/a}} ({{command}})
-- unit: {{pass | fail}} ({{n}} tests, {{command}})
-- e2e: {{pass | fail | n/a}} ({{command}})
+- lint: {{pass | fail}} exit {{code}} ({{command}})
+- typecheck: {{pass | fail | n/a}} exit {{code}} ({{command}})
+- unit: {{pass | fail}} exit {{code}} ({{n}} tests, {{command}})
+- e2e: {{pass | fail | n/a}} exit {{code}} ({{command}})
 {{first relevant error lines of the first failing step, if any}}
 ```
 
+`pass` means exit 0 and nothing else; `n/a` is the only step line without a code.
 Never rewrite earlier blocks.
 
 ## 4. Report
@@ -63,5 +74,6 @@ Red: stop at the first failing step of that target, report it, continue with the
 
 - Never modify code, tests or configuration.
 - Never skip a declared step.
+- `pass` comes from the exit code, never from reading the output. A step whose code you could not capture is `fail`, not `pass`.
 - Never parallelize.
 - The log is the archive: never paste full command output into the conversation or a message.

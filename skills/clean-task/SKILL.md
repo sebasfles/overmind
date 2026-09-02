@@ -52,7 +52,8 @@ git -C {{ROOT}}/{{repo}} branch -D {{branch}}                  # and phase branc
 git -C {{ROOT}}/{{repo}} push origin --delete {{branch}}       # if the merge did not delete it
 ```
 
-Then `rmdir {{WORKSPACE}}` (it must be empty; if not, list what is left and stop).
+Then remove the method's own scratch folders in the workspace (`{{WORKSPACE}}/.checks`, `{{WORKSPACE}}/.verify`, `{{WORKSPACE}}/.claude`) and `rmdir {{WORKSPACE}}`.
+If anything else is left, list it and stop; it was not created by the method.
 
 ## 5. tmux
 

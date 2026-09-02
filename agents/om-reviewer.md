@@ -109,7 +109,7 @@ Run the Pipeline in this order and stop at the first failing step:
 
 1. intent: the diff does what Goal and Scope say, nothing less, nothing more.
 2. rebase: the branch is rebased on `origin/{{base}}`; if not, ask the om-developer to rebase.
-3. lint, typecheck, tests: audit `verify.log` (last block at the round's commit, green, every touched target); never run them yourself, on any round.
+3. lint, typecheck, tests: audit `verify.log` (last block at the round's commit, green, every touched target, every step line carrying `exit 0`); never run them yourself, on any round. A `pass` without an exit code is not evidence.
 4. review: read the diff for correctness, security, performance, and adherence to the module's `trd.md` and `ard.md`.
    Report each finding as `file:line`, what is wrong, what is expected.
    Report the bug in the code that was written for the task, not how the task was solved.

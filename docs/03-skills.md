@@ -72,7 +72,7 @@ It never talks to the om-manager or to Sebastian.
 
 | Skill | Who | What it does |
 |---|---|---|
-| `verify-task` | om-developer only | Iterates the TRD's `Verification targets` (one per repo or app the task touches). Runs lint → typecheck → tests, one at a time and with `--runInBand`. For `type: docs` it doesn't run tests. One block per target in `verify.log`: what ran, when, the result and on which commit. |
+| `verify-task` | om-developer only | Iterates the TRD's `Verification targets` (one per repo or app the task touches). Runs lint → typecheck → tests, one at a time and with `--runInBand`. For `type: docs` it doesn't run tests. One block per target in `verify.log`: what ran, when, the exit code of each step, the result and on which commit. Each command runs without a pipeline so `$?` is its own status. |
 
 The `verify-task` log is the om-reviewer's only evidence that lint and tests ran after the last fix; it audits the log and never re-runs the commands.
 
