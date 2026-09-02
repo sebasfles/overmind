@@ -12,3 +12,4 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-02 add check for i18n @auvral (done 2026-09-01)
 - [x] 2026-09-02 loaders en signup estan en español @auvral (done 2026-09-01)
 - [x] 2026-09-02 add i18n to docs and backoffice @auvral (done 2026-09-02)
+- [x] 2026-09-02 show errors if login fails @auvral (done 2026-09-02)
