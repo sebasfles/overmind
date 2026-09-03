@@ -90,3 +90,5 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-03T15:47:49Z diy 0011 PR ready (https://github.com/designli/diy-infra/pull/1); tfvars edit plus plan/apply for dev and stg still Sebastian's (action)
 - [x] 2026-09-03T15:51:16Z drive-now 0002 applied in core (3 users destroyed), PR #1 ready to merge (https://github.com/designli/drive-now-infra/pull/1) (action)
 - [x] 2026-09-03T16:13:18Z diy 0012 PR ready (https://github.com/designli/diy-platform/pull/502) (action)
+- [x] 2026-09-03T20:32:43Z diy 0013 PR ready (https://github.com/designli/diy-platform/pull/504) (action)
+- [x] 2026-09-03T20:43:04Z diy 0014 PR ready (https://github.com/designli/diy-platform/pull/505) (action)
