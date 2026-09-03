@@ -66,3 +66,8 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-02T23:44:18Z drive-now 0001 merged (infra main 534ff5b applied dev/stg/prd, platform PR #374 merged); root docs commit and clean-task pending Sebastian (action)
 - [x] 2026-09-03T00:31:51Z diy 0007 phase 1 PR ready (https://github.com/designli/diy-platform/pull/488); intended to merge after 0008 (action)
 - [x] 2026-09-03T02:46:37Z diy 0007 phase 2 PR ready, last phase (https://github.com/designli/diy-platform/pull/490) (action)
+- [x] 2026-09-03T05:27:34Z auvral 0007 PRs ready (https://github.com/auvral-development/auvral-platform/pull/48, auvral-backend #13) (action)
+- [x] 2026-09-03T05:20:37Z diy 0010 consolidated (info)
+- [x] 2026-09-03T05:20:37Z diy 0010 delegated (info)
+- [x] 2026-09-03T05:25:32Z diy 0009 consolidated (info)
+- [x] 2026-09-03T05:25:32Z diy 0009 delegated (info)
