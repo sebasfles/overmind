@@ -19,3 +19,6 @@ Completed todos, moved here from todos.md.
 - [x] 2026-08-31 update ui on listing page @diy (done 2026-09-03)
 - [x] 2026-09-02 fix timezone errors on the showings on visits and on the showings tab and on the listing detail @diy (done 2026-09-03)
 - [x] 2026-09-02 add more information to the showings detail page @diy (done 2026-09-03)
+- [x] 2026-08-31 send emails/sms of merging accounts @drive-now (done 2026-09-03)
+- [x] 2026-08-31 send sms of missing email @drive-now (done 2026-09-03)
+- [x] 2026-09-02 configuration set for email open rate @drive-now (done 2026-09-03)
