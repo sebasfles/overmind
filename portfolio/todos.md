@@ -14,7 +14,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 - [ ] 2026-09-02 jorge fix PTO request @bseen
 - [ ] 2026-09-02 forgot password issue @bseen
-- [ ] 2026-09-02 review portia user in stg @bseen
 - [ ] 2026-09-02 change attom key on dev and stg @diy
 - [ ] 2026-09-03 test cubicasa @diy
 - [ ] 2026-09-03 test showings @diy
