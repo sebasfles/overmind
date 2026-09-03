@@ -92,3 +92,7 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-03T16:13:18Z diy 0012 PR ready (https://github.com/designli/diy-platform/pull/502) (action)
 - [x] 2026-09-03T20:32:43Z diy 0013 PR ready (https://github.com/designli/diy-platform/pull/504) (action)
 - [x] 2026-09-03T20:43:04Z diy 0014 PR ready (https://github.com/designli/diy-platform/pull/505) (action)
+- [x] 2026-09-03T18:00:42Z diy 0011 cleaned (info)
+- [x] 2026-09-03T18:00:42Z diy 0012 cleaned (info)
+- [x] 2026-09-03T19:42:01Z diy 0013 consolidated and delegated (branch task-0013-listing-detail-ui-polish) (info)
+- [x] 2026-09-03T19:55:18Z diy 0014 consolidated and delegated (branch task-0014-yard-sign-kit), in parallel with 0013 (info)
