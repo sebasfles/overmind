@@ -14,5 +14,8 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 - [ ] 2026-09-02 jorge fix PTO request @bseen
 - [ ] 2026-09-04 respond message portia about landing @bseen
+- [ ] 2026-09-04 give god access to dev @bseen
+- [ ] 2026-09-04 give god access to dev @drive-now
+- [ ] 2026-09-04 give god access to dev @diy
 
 ## Done
