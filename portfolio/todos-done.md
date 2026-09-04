@@ -24,3 +24,6 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-02 configuration set for email open rate @drive-now (done 2026-09-03)
 - [x] 2026-09-02 review portia user in stg @bseen (done 2026-09-03)
 - [x] 2026-09-02 change attom key on dev and stg @diy (done 2026-09-03)
+- [x] 2026-09-03 test cubicasa @diy (done 2026-09-03)
+- [x] 2026-09-03 test showings @diy (done 2026-09-03)
+- [x] 2026-09-03 test ui @diy (done 2026-09-03)
