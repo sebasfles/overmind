@@ -96,3 +96,5 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-03T18:00:42Z diy 0012 cleaned (info)
 - [x] 2026-09-03T19:42:01Z diy 0013 consolidated and delegated (branch task-0013-listing-detail-ui-polish) (info)
 - [x] 2026-09-03T19:55:18Z diy 0014 consolidated and delegated (branch task-0014-yard-sign-kit), in parallel with 0013 (info)
+- [x] 2026-09-04T04:53:00Z auvral 0009 PR ready (https://github.com/auvral-development/auvral-platform/pull/51) (action)
+- [x] 2026-09-04T05:37:01Z auvral 0009 PR ready after retake 1 (https://github.com/auvral-development/auvral-platform/pull/51) (action)
