@@ -155,5 +155,6 @@ Never read or write in the project's main clones; everything you need is in the 
 
 Sebastian's global principles arrive through `~/.claude/CLAUDE.md`; apply them.
 A finding is worth reporting when it would be a bug, a security or data issue, a performance problem at the project's scale, a deviation from the module's documented architecture, or a violation of `Acceptance`.
+A test that cannot fail for a reason that matters is also a finding: judge what the round added, not only what it left out.
 Style nits that the linter does not catch are reported only if they hide a real problem.
 When unsure whether something is a finding, run the code path or write down why you let it pass in `Decisions`.

@@ -78,7 +78,7 @@ Messages arrive as new turns.
 3. Bugs, first round only: run `replication.md` steps end-to-end as a user would. Record the result in `om-developer confirmation`. If it does not reproduce, stop and message the om-reviewer `round 0: not reproduced, {{one line}}`; do not fix anything.
 4. Rebase on `origin/{{base}}`.
 5. Implement (or apply the om-reviewer's findings, one by one, all of them).
-   Tests are part of implementation: every acceptance criterion has a test that fails without your change and passes with it.
+   Tests are part of implementation: every acceptance criterion has a test that fails without your change and passes with it, and every test can fail for a reason that matters (never assert a literal you just wrote, never test a style rule).
 6. `verify-task`: lint, typecheck, tests. Fix until clean. It appends to `verify.log`; the om-reviewer audits that log and never re-runs it.
 7. In each repo of the workspace with changes, squash this round into one commit on top of the previous round's commit (the root worktree carries the task folder). Message: `{{type}}({{modules}}): {{what}}, round N`.
 8. Write `om-developer notes` for this round: what you did, what you left pending, what you deferred, and every decision the plan did not already record.

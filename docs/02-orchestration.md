@@ -315,7 +315,7 @@ The verification audit comes before the deep review because a failing test chang
 | intent | That the code changes correspond to the task's `Goal` and `Scope`, with no deviations or extras. |
 | rebase | That the om-developer rebased from `origin/{{base}}`. It requests it if not done. |
 | verification audit | `verify.log`: the om-developer's last block is at the round's commit, green on every step, carries the exit code of every step, and covers every touched target. The om-reviewer never runs lint, typecheck or tests itself. |
-| review | Finds issues in the code created for the task. Documents the error and how it was fixed, not how the task was solved. |
+| review | Finds issues in the code created for the task. Documents the error and how it was fixed, not how the task was solved. Judges the tests the round added as well as the ones it lacks: a test earns its place if it can fail for a reason that matters. |
 | project checks | `docs/checks/*.md` whose `paths` match the diff, each run as a `claude -p` process on the model it declares, with the diff on stdin and its reference document in the prompt. The om-reviewer triages every line against the code it read: confirmed lines join the findings as `[{{check}}]`, the rest go to `Decisions` as let-pass. |
 | documentation | On the clean round the om-developer runs `document-task` once; `publish-task` checks the module's docs (`updated`, `source`, ARD entries) before pushing. |
 | push | Done by the om-reviewer itself in `publish-task` once everything above has passed. |

@@ -81,6 +81,8 @@ Judge in this order:
 1. Correctness: logic errors, missing error paths, race conditions, wrong status codes, unvalidated input, broken invariants listed in `database.md`.
 2. Security and data: authorization gaps, secrets, injection, data loss paths, migrations that are not reversible when the project expects them to be.
 3. Acceptance: every criterion has a test that would fail without the change. Run one or two of the new tests in isolation if in doubt.
+   Judge the tests the round added, not only the ones it lacks: a test earns its place if it can fail for a reason that matters. It is a finding when it asserts a literal the same change introduced (it cannot fail for any reason worth knowing), when it encodes a style or lint rule instead of behavior (that belongs in `docs/checks/` or in the linter, where it guards the whole project instead of one file), or when it covers the trivial edge of the change while the real behavior stays unverified, which makes the coverage read better than it is.
+   Ask for its removal by `{{file}}:{{line}}` and say so in `Decisions`; if the behavior it stood in for has no coverage, that is a second finding.
 4. Architecture: adherence to the module's `trd.md` and `ard.md`, layer boundaries, existing patterns and conventions of the codebase.
 5. Performance at the project's scale: N+1, unbounded queries, missing indexes named in `Database`.
 

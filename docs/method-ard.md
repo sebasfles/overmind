@@ -356,3 +356,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: another skill starts writing in the workspace root; it must be added to this list.
 - Files: skills/clean-task/SKILL.md.
+
+## 2026-09-02: A test earns its place if it can fail for a reason that matters
+
+- Decision: `execute-task` and `review-task` gain a criterion for the tests a round adds, not only for the ones it lacks. A test is a finding when it asserts a literal the same change introduced, when it encodes a style or lint rule instead of behavior (that belongs in `docs/checks/` or the linter), or when it covers the trivial edge of a change while the real behavior stays unverified. The om-reviewer asks for its removal by `file:line`, records it in `Decisions`, and raises a second finding when the behavior it stood in for has no coverage.
+- Alternatives rejected: a project check in `docs/checks/` for test quality (a checker sees the diff, not whether the behavior is covered elsewhere; this needs the judgment of the om-reviewer that read every file), a coverage threshold (it rewards exactly the padding this entry rejects), leaving it to the om-developer alone (it wrote the test, so it is the worst placed to judge whether it can fail).
+- Reason: Sebastian's ask, from PR #506 on diy-platform (task 0015). A fix that removed two em dashes from copy shipped two `it.each` cases asserting that the two strings the same commit had just written contain no em dash. It pinned a house style rule from his global `CLAUDE.md` inside a unit test of one file, where it guards that file while suggesting the rule is enforced project-wide; it could not fail for any reason worth knowing; and it inflated the test count of a task whose real behavior change, the wizard's save slot, had no automated coverage at all.
+- Debt created: the criterion is judgment, not a check, so it depends on the om-reviewer applying it; a test that merely duplicates an existing one is not covered by this wording.
+- Revisit when: the om-reviewer starts asking to remove tests Sebastian wanted kept (the wording is too broad), or a second PR ships style-rule tests after this entry (the criterion is not reaching the om-developer and belongs earlier, in `analyze-task`).
+- Files: skills/execute-task/SKILL.md, skills/review-task/SKILL.md, agents/om-developer.md, agents/om-reviewer.md, docs/02-orchestration.md.

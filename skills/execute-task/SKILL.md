@@ -74,6 +74,7 @@ Tests are part of implementation:
 - Every acceptance criterion has at least one test that fails without your change and passes with it.
 - Bugs: a regression test that encodes `replication.md`.
 - Use the project's existing test layout and helpers; do not introduce a new test framework or pattern.
+- A test earns its place if it can fail for a reason that matters. Do not write one that asserts a literal your own change just introduced, that encodes a style or lint rule instead of behavior (that belongs in `docs/checks/` or in the linter), or that covers the trivial edge of the change while its real behavior stays unverified. Fewer tests on the behavior beat many on the wording.
 
 Write code comments only when absolutely necessary, which is almost never: a non-obvious invariant or an external workaround the code cannot express.
 Never comment what the code already says; explanation belongs in the module docs and the ARD, not in comments.
