@@ -27,3 +27,4 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-03 test cubicasa @diy (done 2026-09-03)
 - [x] 2026-09-03 test showings @diy (done 2026-09-03)
 - [x] 2026-09-03 test ui @diy (done 2026-09-03)
+- [x] 2026-09-02 forgot password issue @bseen (done 2026-09-04)
