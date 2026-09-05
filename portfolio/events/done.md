@@ -98,3 +98,8 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-03T19:55:18Z diy 0014 consolidated and delegated (branch task-0014-yard-sign-kit), in parallel with 0013 (info)
 - [x] 2026-09-04T04:53:00Z auvral 0009 PR ready (https://github.com/auvral-development/auvral-platform/pull/51) (action)
 - [x] 2026-09-04T05:37:01Z auvral 0009 PR ready after retake 1 (https://github.com/auvral-development/auvral-platform/pull/51) (action)
+- [x] 2026-09-04T17:00:13Z diy 0017 PRs ready (https://github.com/designli/diy-platform/pull/508) (action)
+- [x] 2026-09-04T04:16:39Z auvral 0009 consolidated and delegated (info)
+- [x] 2026-09-04T05:27:58Z auvral 0009 retake sent (info)
+- [x] 2026-09-04T15:56:07Z diy 0017 consolidated and delegated (info)
+- [x] 2026-09-05T02:09:08Z auvral 0010 consolidated and delegated (info)
