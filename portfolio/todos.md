@@ -17,5 +17,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-04 give god access to dev @bseen
 - [ ] 2026-09-04 give god access to dev @drive-now
 - [ ] 2026-09-04 give god access to dev @diy
+- [ ] 2026-09-06 use database steps for migration execution @auvral
 
 ## Done
