@@ -8,7 +8,7 @@ set -euo pipefail
 name="${1:-}"
 [[ -n "$name" ]] || { echo "usage: resume-project <name>" >&2; exit 2; }
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
 registry="$repo_root/portfolio/projects.yaml"
 [[ -f "$registry" ]] || { echo "registry not found: $registry" >&2; exit 1; }
 

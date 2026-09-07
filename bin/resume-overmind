@@ -1,34 +1,55 @@
 #!/usr/bin/env bash
 # resume-overmind
 # Ensures the overmind tmux session has its three Claude sessions
-# (window "overmind": overmind | om-events; window "config": om-config), creating only what is missing,
+# (window 1 "overmind": overmind | om-events; window 2 "config": om-config), creating only what is missing,
 # then brings you there in place: switches if you are already in tmux, replaces the current terminal otherwise.
+# Invoked through the ~/bin symlink, so the repo root is resolved from the real path of this file.
 set -euo pipefail
-root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+root="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
 S=overmind
-# A claude that exits non-zero (no network yet after boot, auth refresh, a bad flag) must not close its
+
+# A claude that exits non-zero (a bad flag, no network yet after boot, auth refresh) must not close its
 # window: with the window gone the session dies and every tmux command below fails with a cryptic error.
 # The guard keeps the pane alive with the real error on screen; prefix + R relaunches the same command.
 guard='|| { rc=$?; echo; echo "[resume-overmind] claude exited with status $rc; fix the cause, then prefix + R relaunches it"; read -r line; }'
 
+overmind_cmd="claude --agent overmind -n overmind $guard"
+events_cmd="claude --agent om-events -n om-events $guard"
+config_cmd="claude --agent om-config -n om-config $guard"
+
 if ! tmux has-session -t "$S" 2>/dev/null; then
-  tmux new-session -d -s "$S" -c "$root" -n overmind "claude --agent overmind -n overmind $guard"
+  tmux new-session -d -s "$S" -c "$root" -n overmind "$overmind_cmd"
 fi
 
-next_index() { echo $(( $(tmux list-windows -t "$S" -F '#I' | sort -n | tail -1) + 1 )); }
+index_taken() { tmux list-windows -t "$S" -F '#I' | grep -qx "$1"; }
 
-if ! tmux list-windows -t "$S" -F '#W' | grep -qx overmind; then
-  tmux new-window -t "$S:$(next_index)" -n overmind -c "$root" "claude --agent overmind -n overmind $guard"
-fi
+# Windows live at fixed indices; an existing one elsewhere is moved, a missing one is inserted there.
+ensure_window() {
+  local name="$1" idx="$2" cmd="$3" cur
+  cur="$(tmux list-windows -t "$S" -F '#I #W' | awk -v n="$name" '$2 == n { print $1; exit }')"
+  if [[ -z "$cur" ]]; then
+    if index_taken "$idx"; then
+      tmux new-window -d -b -t "$S:$idx" -n "$name" -c "$root" "$cmd"
+    else
+      tmux new-window -d -t "$S:$idx" -n "$name" -c "$root" "$cmd"
+    fi
+  elif [[ "$cur" != "$idx" ]]; then
+    if index_taken "$idx"; then
+      tmux move-window -b -s "$S:$cur" -t "$S:$idx"
+    else
+      tmux move-window -s "$S:$cur" -t "$S:$idx"
+    fi
+  fi
+}
+
+ensure_window overmind 1 "$overmind_cmd"
 
 if [[ "$(tmux list-panes -t "$S:overmind" -F x | wc -l)" -lt 2 ]]; then
-  tmux split-window -h -t "$S:overmind" -c "$root" "claude --agent om-events -n om-events $guard"
+  tmux split-window -h -t "$S:overmind" -c "$root" "$events_cmd"
   tmux select-pane -t "$S:overmind.0"
 fi
 
-if ! tmux list-windows -t "$S" -F '#W' | grep -qx config; then
-  tmux new-window -t "$S:$(next_index)" -n config -c "$root" "claude --agent om-config -n om-config $guard"
-fi
+ensure_window config 2 "$config_cmd"
 
 tmux select-window -t "$S:overmind"
 
