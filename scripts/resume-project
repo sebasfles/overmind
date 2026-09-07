@@ -27,7 +27,11 @@ tmux_name="${tmux_name:-$name}"
 
 distro="${WSL_DISTRO_NAME:-Ubuntu}"
 
-manager_cmd="claude --agent om-manager -n om-${name}-manager"
+# A claude that exits non-zero (no network yet after boot, auth refresh, a bad flag) must not close its
+# window: with the window gone the session dies and every tmux command below fails with a cryptic error.
+# The guard keeps the pane alive with the real error on screen; prefix + R relaunches the same command.
+guard='|| { rc=$?; echo; echo "[resume-project] claude exited with status $rc; fix the cause, then prefix + R relaunches it"; read -r line; }'
+manager_cmd="claude --agent om-manager -n om-${name}-manager $guard"
 
 if ! tmux has-session -t "$tmux_name" 2>/dev/null; then
   tmux new-session -d -s "$tmux_name" -c "$root" -n om-manager "$manager_cmd"

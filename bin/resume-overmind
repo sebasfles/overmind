@@ -6,24 +6,28 @@
 set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 S=overmind
+# A claude that exits non-zero (no network yet after boot, auth refresh, a bad flag) must not close its
+# window: with the window gone the session dies and every tmux command below fails with a cryptic error.
+# The guard keeps the pane alive with the real error on screen; prefix + R relaunches the same command.
+guard='|| { rc=$?; echo; echo "[resume-overmind] claude exited with status $rc; fix the cause, then prefix + R relaunches it"; read -r line; }'
 
 if ! tmux has-session -t "$S" 2>/dev/null; then
-  tmux new-session -d -s "$S" -c "$root" -n overmind "claude --agent overmind -n overmind"
+  tmux new-session -d -s "$S" -c "$root" -n overmind "claude --agent overmind -n overmind $guard"
 fi
 
 next_index() { echo $(( $(tmux list-windows -t "$S" -F '#I' | sort -n | tail -1) + 1 )); }
 
 if ! tmux list-windows -t "$S" -F '#W' | grep -qx overmind; then
-  tmux new-window -t "$S:$(next_index)" -n overmind -c "$root" "claude --agent overmind -n overmind"
+  tmux new-window -t "$S:$(next_index)" -n overmind -c "$root" "claude --agent overmind -n overmind $guard"
 fi
 
 if [[ "$(tmux list-panes -t "$S:overmind" -F x | wc -l)" -lt 2 ]]; then
-  tmux split-window -h -t "$S:overmind" -c "$root" "claude --agent om-events -n om-events"
+  tmux split-window -h -t "$S:overmind" -c "$root" "claude --agent om-events -n om-events $guard"
   tmux select-pane -t "$S:overmind.0"
 fi
 
 if ! tmux list-windows -t "$S" -F '#W' | grep -qx config; then
-  tmux new-window -t "$S:$(next_index)" -n config -c "$root" "claude --agent om-config -n om-config"
+  tmux new-window -t "$S:$(next_index)" -n config -c "$root" "claude --agent om-config -n om-config $guard"
 fi
 
 tmux select-window -t "$S:overmind"
