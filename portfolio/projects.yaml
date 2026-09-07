@@ -55,6 +55,11 @@ projects:
         base_branch: main
       - name: bseen-landing-page
         base_branch: main
+  - name: local-auctions
+    root: /home/fless/dev/designli/projects/local-auctions
+    tmux: local-auctions
+    status: active
+    repos: []
 #  - name: diy
 #    root: /home/fless/dev/designli/projects/diy
 #    tmux: diy
