@@ -18,5 +18,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-04 give god access to dev @drive-now
 - [ ] 2026-09-04 give god access to dev @diy
 - [ ] 2026-09-06 use database steps for migration execution @auvral
+- [ ] 2026-09-07 when pushing to develop in dashboard-backend, and a migration was run, pull in auvral-backend @auvral
 
 ## Done
