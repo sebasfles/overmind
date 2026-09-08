@@ -32,3 +32,4 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-04 give god access to dev @drive-now (done 2026-09-07)
 - [x] 2026-09-04 give god access to dev @diy (done 2026-09-07)
 - [x] 2026-08-31 use terraform as single source of truth for infra @auvral (done 2026-09-07)
+- [x] 2026-09-01 send HR email about Walter's compensation @bseen (done 2026-09-07)
