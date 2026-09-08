@@ -34,3 +34,5 @@ Completed todos, moved here from todos.md.
 - [x] 2026-08-31 use terraform as single source of truth for infra @auvral (done 2026-09-07)
 - [x] 2026-09-01 send HR email about Walter's compensation @bseen (done 2026-09-07)
 - [x] 2026-09-04 respond message portia about landing @bseen (done 2026-09-07)
+- [x] 2026-08-31 draft, active and archived state on flow @auvral (done 2026-09-07)
+- [x] 2026-09-06 use database steps for migration execution @auvral (done 2026-09-07)
