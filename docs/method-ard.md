@@ -384,3 +384,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: `scripts/install` is not covered by `readlink -f`; it is run from the repo, never through a link. The move-to-taken-index branch of `ensure_window` is untested here (the sandbox kills seeded sessions); it is the same command `resume-project` runs.
 - Revisit when: a launcher gains a fourth window (add it to the pinned list), or `install` starts being invoked through a link.
 - Files: bin/resume-overmind, scripts/resume-project, docs/method-ard.md.
+
+## 2026-09-08: om-reviewer returns to fable
+
+- Decision: `agents/om-reviewer.md` moves back from `model: opus` to `model: fable`; `om-manager` stays on fable, `om-developer` stays on opus.
+- Supersedes: 2026-09-01 "om-reviewer runs on opus; om-manager stays on fable".
+- Alternatives rejected: keeping opus (the 2026-09-01 cost data still stands, but Sebastian chose the stronger gate), moving the om-developer to fable instead (the om-reviewer is the only independent gate before a PR, so the stronger model belongs there).
+- Reason: Sebastian asked for the return on 2026-09-08 after a week with the om-reviewer on opus; the 2026-09-01 entry named its own return conditions (a finding the om-reviewer missed reaching a PR, or the fable quota no longer being the constraint) and this closes its debt of having the final gate on the same tier as the code it reviews.
+- Debt created: the om-reviewer's cost per task goes back toward the 2026-09-01 measurements ($22 to $29 per task, 78 to 80 percent in cache writes) unless the later cuts (`verify-task` only by the om-developer, `document-task` once) changed that profile; nobody has re-measured.
+- Revisit when: the fable weekly quota is hit again with the om-reviewer as the main consumer; re-measure a task before deciding.
+- Files: agents/om-reviewer.md.
