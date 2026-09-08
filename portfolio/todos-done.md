@@ -39,3 +39,4 @@ Completed todos, moved here from todos.md.
 - [x] 2026-08-31 script js versioning and use s3 for it @auvral (done 2026-09-07)
 - [x] 2026-09-02 organization shows the plan @auvral (done 2026-09-07)
 - [x] 2026-09-07 when pushing to develop in dashboard-backend, and a migration was run, pull in auvral-backend @auvral (done 2026-09-07)
+- [x] 2026-09-08 change preview images on steps config @auvral (done 2026-09-08)
