@@ -28,3 +28,6 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-03 test showings @diy (done 2026-09-03)
 - [x] 2026-09-03 test ui @diy (done 2026-09-03)
 - [x] 2026-09-02 forgot password issue @bseen (done 2026-09-04)
+- [x] 2026-09-04 give god access to dev @bseen (done 2026-09-07)
+- [x] 2026-09-04 give god access to dev @drive-now (done 2026-09-07)
+- [x] 2026-09-04 give god access to dev @diy (done 2026-09-07)
