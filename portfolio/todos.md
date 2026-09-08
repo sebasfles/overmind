@@ -11,7 +11,6 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 delete comments @auvral
 - [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 - [ ] 2026-09-02 jorge fix PTO request @bseen
-- [ ] 2026-09-04 respond message portia about landing @bseen
 - [ ] 2026-09-06 use database steps for migration execution @auvral
 - [ ] 2026-09-07 when pushing to develop in dashboard-backend, and a migration was run, pull in auvral-backend @auvral
 
