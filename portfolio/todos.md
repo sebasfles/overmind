@@ -8,7 +8,7 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 - [ ] 2026-09-02 delete comments @auvral
 - [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 - [ ] 2026-09-02 jorge fix PTO request @bseen
-- [ ] 2026-09-07 review docs @diy
-- [ ] 2026-09-08 change preview images on steps config @diy
+- [ ] 2026-09-07 review docs @auvral
+- [ ] 2026-09-08 change preview images on steps config @auvral
 
 ## Done
