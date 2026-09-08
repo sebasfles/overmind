@@ -36,3 +36,6 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-04 respond message portia about landing @bseen (done 2026-09-07)
 - [x] 2026-08-31 draft, active and archived state on flow @auvral (done 2026-09-07)
 - [x] 2026-09-06 use database steps for migration execution @auvral (done 2026-09-07)
+- [x] 2026-08-31 script js versioning and use s3 for it @auvral (done 2026-09-07)
+- [x] 2026-09-02 organization shows the plan @auvral (done 2026-09-07)
+- [x] 2026-09-07 when pushing to develop in dashboard-backend, and a migration was run, pull in auvral-backend @auvral (done 2026-09-07)

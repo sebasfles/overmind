@@ -5,11 +5,8 @@ Quick capture. `add-todo` appends, `complete-todo` strikes through.
 ## Open
 
 - [ ] 2026-08-31 define when there is a review-needed @auvral
-- [ ] 2026-08-31 script js versioning and use s3 for it @auvral
-- [ ] 2026-09-02 organization shows the plan @auvral
 - [ ] 2026-09-02 delete comments @auvral
 - [ ] 2026-09-02 suggest Jose for the english bootcamp @drive-now
 - [ ] 2026-09-02 jorge fix PTO request @bseen
-- [ ] 2026-09-07 when pushing to develop in dashboard-backend, and a migration was run, pull in auvral-backend @auvral
 
 ## Done
