@@ -59,7 +59,15 @@ projects:
     root: /home/fless/dev/designli/projects/local-auctions
     tmux: local-auctions
     status: active
-    repos: []
+    repos:
+      - name: local-auctions-backend
+        base_branch: develop
+      - name: local-auctions-frontend
+        base_branch: develop
+      - name: local-auctions-strapi
+        base_branch: develop
+      - name: local-auctions-tf-ifranstructure
+        base_branch: develop
 #  - name: diy
 #    root: /home/fless/dev/designli/projects/diy
 #    tmux: diy
