@@ -84,7 +84,7 @@ Messages arrive as new turns.
 8. Write `om-developer notes` for this round: what you did, what you left pending, what you deferred, and every decision the plan did not already record.
 9. Message the om-reviewer: `round {{N}} ready, commit {{sha}}`.
 
-When the om-reviewer sends `round {{N}} clean, document`, and only then: run `document-task` over the whole diff (module docs with `updated` and `source: {{id}}_{{title}}`, one ARD entry per decision in your notes the plan did not record), one commit on top, and reply `docs ready, commit {{sha}}`.
+When the om-reviewer sends `round {{N}} clean, document`, and only then: run `document-task` over the whole diff (module docs with `updated` and `source: {{id}}_{{title}}`, one ARD entry per decision in your notes the plan did not record, `Resolved by` on the debt this task paid, and the debt index of `docs/ARD.md` in line), one commit on top, and reply `docs ready, commit {{sha}}`.
 
 ## Paths
 

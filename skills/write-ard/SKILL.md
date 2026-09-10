@@ -40,13 +40,22 @@ Every entry follows `templates/ard-entry.md`:
 Later entries may supersede earlier ones; then the new entry says `Supersedes: {{date}}: {{title}}` and the old one gets a one-line `Superseded by ...` note at its top.
 Nothing is deleted.
 
+A paid debt is not a superseded decision: the decision still stands, what is gone is its cost.
+When a task removes the debt, add one line to the existing entry, under its `Debt created`:
+
+```
+- Resolved by: {{id}}_{{title}}, {{YYYY-MM-DD}}
+```
+
+The rest of the entry keeps its wording, so the trail still says the debt existed and for how long.
+
 ## General `docs/ARD.md`
 
 Read `templates/ARD.md`.
 Two parts:
 
 1. Decisions: architecture-level choices visible in the code: framework, layering, persistence, auth, messaging, multi-tenancy, deployment model. One entry each.
-2. Debt index: a table linking every `Debt created` across all module ARDs, with module, date, trigger. Rebuild the table on every run; it is the one derived part of the file.
+2. Debt index: a table linking every `Debt created` across all module ARDs that carries no `Resolved by`, with module, date, trigger. Rebuild the table on every run; it is the one derived part of the file, and `document-task` keeps it current between runs.
 
 ## Module `docs/modules/{{module}}/ard.md`
 
@@ -66,7 +75,8 @@ Rules:
 
 ## Rules
 
-- Append only; never rewrite or reorder entries.
+- Append only; never rewrite or reorder entries. `Superseded by` and `Resolved by` are the only lines ever added to one already written.
+- Never remove a resolved entry, only its row in the debt index; the index bills open cost, the log keeps history.
 - One decision per entry, dated.
 - Frontmatter `updated` and `source` on the file.
 - English.

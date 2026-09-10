@@ -62,7 +62,7 @@ It's the only publication point.
 | Skill | Event that triggers it | What it does |
 |---|---|---|
 | `execute-task` | "context ready, start" from the om-reviewer, a message with findings, or "round N clean, document" | Implement mode if there's no task code yet; fix mode if there are findings or retakes; documentation mode on the clean signal. Rebase from `origin/{{base}}`, implements, `verify-task`, squashes into one commit, writes its closing note (what it did, what it left pending, decisions taken) in `task.md` or `phase_N.md`, notifies the om-reviewer "round N". |
-| `document-task` | "round N clean, document" from the om-reviewer, once per task or phase | Updates `prd.md`, `trd.md`, `ard.md`, `database.md` and `flows.md` of the touched module with `updated` and `source` (Part 1), over the whole task's diff, when the code is final. |
+| `document-task` | "round N clean, document" from the om-reviewer, once per task or phase | Updates `prd.md`, `trd.md`, `ard.md`, `database.md` and `flows.md` of the touched module with `updated` and `source` (Part 1), over the whole task's diff, when the code is final. Also the debt index of `docs/ARD.md`: rows for the debt it created, none for the debt it resolved. |
 
 The om-developer never touches the remote.
 Its work ends in a local commit and a message to the om-reviewer.

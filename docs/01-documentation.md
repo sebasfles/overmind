@@ -52,7 +52,7 @@ It exists at a general level (global decisions and a debt index) and at a module
 
 Unlike the PRD and the TRD, the ARD is a log.
 Each decision is a new, dated entry.
-Old entries are not deleted; at most they are marked as superseded by a later entry.
+Old entries are not deleted; at most they are marked as superseded by a later entry, or as having had their debt resolved by a task.
 The value of the ARD lies in the trail, not just in the final state.
 
 Each ARD entry contains:
@@ -61,7 +61,7 @@ Each ARD entry contains:
 - Decision made.
 - Alternatives discarded.
 - Reason for the choice.
-- Technical debt it generates (if applicable).
+- Technical debt it generates (if applicable), and the task that later paid it.
 - Trigger to revisit it (for example, "when there are more than N tenants" or "when we migrate to X").
 
 ### database.md (per module)
@@ -99,7 +99,7 @@ CLAUDE.md                  # short: stack, commands, and "the docs live in docs/
 docs/
   PRD.md                   # general product
   TRD.md                   # general technical, declares stack and mechanics
-  ARD.md                   # global decisions + debt index
+  ARD.md                   # global decisions + index of open debt
   conventions/             # optional: one rule per file, when TRD Conventions is not enough (i18n, style)
   checks/                  # optional: review checks the om-reviewer runs per round (see below)
   modules/
@@ -187,7 +187,8 @@ If it is not explicit, the agent skips it when the context gets long.
 Updates:
 
 - `prd.md` and `trd.md` of the module: edited in place.
-- `ard.md` of the module: new entry with decisions made and debt generated.
+- `ard.md` of the module: new entry with decisions made and debt generated, and `Resolved by` on the entries whose debt this task paid.
+- `ARD.md`: its debt index, and only that, so it bills open debt and not work already done.
 - `database.md` and `flows.md` if the change affects them.
 - `updated` and `source` frontmatter on each touched file.
 

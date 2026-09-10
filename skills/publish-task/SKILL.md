@@ -26,6 +26,7 @@ The om-developer's last commit is the documentation commit; check it before push
 For each module in `modules`, plus any module the diff touched:
 
 - `docs/modules/{{module}}/*.md` affected have `updated` today and `source: {{id}}_{{title}}`, or `om-developer notes` justifies in one line why nothing changed.
+- The debt index of `docs/ARD.md` matches the module ARDs: a row for every new `Debt created`, none for an entry carrying `Resolved by`.
 - `trd.md` reflects new or changed endpoints; `database.md` reflects new tables, columns or invariants; `flows.md` if a complex flow changed.
 - `ard.md` has an entry for every decision `om-developer notes` records that `Approach` and `Context & decisions` did not.
 

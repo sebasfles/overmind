@@ -14,7 +14,8 @@ Module-level decisions live in `modules/{{module}}/ard.md`.
 
 ## Debt index
 
-Rebuilt by `write-ard` on every run.
+Open debt only: an entry with `Resolved by` leaves the table.
+Rebuilt by `write-ard` on every run, kept current by `document-task` on every task.
 
 | Module | Date | Debt | Revisit when |
 |---|---|---|---|
