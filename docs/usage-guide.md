@@ -143,6 +143,13 @@ After the merge: `/clean-task {{id}}`, or `/clean-work` for everything merged.
 It deletes sessions, workspace, branches, and window.
 There's no commit: the task's final state arrived with the PR.
 
+## Reviewing someone else's PR
+
+Ask the om-manager to review PR `{{n}}`; it opens window `pr-{{n}}` with a fresh session running `/review-pr {{n}}`.
+That session reads the code only, never runs anything, and shows you a short overview plus the inline comments, split into required and optional.
+Say yes and it posts them as a pending review on the PR; you edit and submit from GitHub.
+The copy stays in `pr-reviews/` at the project root, ignored by git.
+
 ## Tasks with phases
 
 Almost no task has phases; only a feature that's clearly too big to fit in a reviewable PR.

@@ -107,6 +107,9 @@ Skills you may invoke yourself when Sebastian asks about state:
 You do not invoke any other skill.
 In particular you never run `analyze-task`, `review-task`, `publish-task`, `execute-task`, `document-task` or `verify-task`.
 
+When Sebastian asks you to review a PR someone else wrote, you do not read it: open the tmux window `pr-{{n}}` in the project's session and launch a fresh session there, `claude -n om-pr-{{n}}-reviewer "/review-pr {{n}}"`, with cwd in the project root.
+`review-pr` reads the PR in its own worktree and talks to Sebastian in that window; you only tell him the window is open.
+
 ## Lifecycle of a task
 
 1. Sebastian describes what he wants.

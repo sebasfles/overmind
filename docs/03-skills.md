@@ -76,6 +76,12 @@ It never talks to the om-manager or to Sebastian.
 
 The `verify-task` log is the om-reviewer's only evidence that lint and tests ran after the last fix; it audits the log and never re-runs the commands.
 
+## Sebastian
+
+| Skill | Where | What it does |
+|---|---|---|
+| `review-pr` | A fresh session in the project root, opened by the om-manager in window `pr-{{n}}` on Sebastian's ask | Read-only review of a PR someone else wrote. Reads the description, the linked issue and the open threads, checks the PR branch out in a worktree under `.workspaces/pr-{{n}}/` and reads every changed file in full; runs nothing, since CI, lint and checks already show on the PR. Findings are typed comments (`issue`, `security`, `test`, `scope` block; `refactor`, `docs`, `question` do not by default; `suggestion` and `nit` never), few and well placed, at most three optional ones. Output in two layers: a short overview (verdict derived from the blocking comments, risk with the production-first rubric, one line per comment split into required and optional) and one inline comment per finding with the explanation. Saved in the worktree and in the ignored `pr-reviews/`; on Sebastian's yes, posted as a pending review on the PR of the repo the diff belongs to, which he edits and submits. |
+
 ## State machines
 
 ### om-reviewer
@@ -118,7 +124,7 @@ Final names, which replace the ones used provisionally in earlier conversations:
 |---|---|
 | `refine-us`, `us-to-tus`, `us-to-specs` | Absorbed into `plan-task` and `create-task`. |
 | `implement-specs-{nestjs,nextjs,rails,react-native}` | Absorbed into `execute-task` with `references/{{stack}}.md`. |
-| `pr-reviews` | Absorbed into `review-task`. |
+| `pr-reviews` | Absorbed into `review-task` for the method's own tasks; `review-pr` covers PRs written by someone else (2026-09-14). |
 | `address-pr-comments-nestjs` | Absorbed into `reiterate-task` + `execute-task` (fix mode). |
 | `ds-write-prd`, `ds-write-trd` | Replaced by `write-prd`, `write-trd`, written from scratch. |
 
@@ -138,6 +144,7 @@ All written as drafts in `skills/`, pending pilot (see [06-pilot.md](06-pilot.md
 | om-reviewer | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
 | om-developer | `execute-task`, `document-task`, `verify-task` |
 | overmind | `add-project` (with `pause` and `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
+| Sebastian (fresh session, launched by the om-manager) | `review-pr` |
 | om-config (project skill in `.claude/skills/`) | `update-method` |
 
 Global agents in `agents/`: `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker` (subagent of `setup` with `discover` and `document` modes).
