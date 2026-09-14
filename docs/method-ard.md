@@ -421,3 +421,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: projects whose TRD lacks a `Delivery` line will get asked once; the answer must reach the TRD or the question repeats. The rubric lives in `review-pr`, a skill the om-reviewer does not own, so the om-reviewer reads across skills to apply it.
 - Revisit when: a Low-rated PR breaks production users (tighten the Medium criteria), or the rubric needs a home both skills own (move it to a shared reference).
 - Files: skills/review-pr/SKILL.md, skills/publish-task/SKILL.md, docs/method-ard.md.
+
+## 2026-09-14: A new skill is linked by `scripts/install`, and `update-method` says so
+
+- Decision: `update-method` step 3, new skill, ends by running `scripts/install`; the symlinks under `~/.claude/skills/` are one per skill folder, so a new folder is invisible to every Claude session until it is linked and the session relaunched.
+- Alternatives rejected: linking the whole `skills/` directory once (Sebastian keeps skills from other repos in `~/.claude/skills/`, see `jira-to-github-projects`); `update-method` writing the link itself (`install` already owns the linking and is idempotent).
+- Reason: `review-pr` was committed on 2026-09-14 and announced as available; Sebastian's session did not find it because the link never existed.
+- Debt created: none.
+- Revisit when: `install` gains a way to link a single skill, or the skills move to a plugin.
+- Files: .claude/skills/update-method/SKILL.md, docs/method-ard.md.
