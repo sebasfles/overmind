@@ -144,3 +144,5 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-09T07:05:00Z auvral 0018 consolidated (info)
 - [x] 2026-09-16T00:05:00Z auvral 0040 sessions resumed, round 2 in progress (info)
 - [x] 2026-09-16T00:15:00Z auvral 0040 retake sent (PR #93, Playwright smoke test) (info)
+- [x] 2026-09-09T07:25:00Z auvral 0020 phase 1 merged (info)
+- [x] 2026-09-16T00:20:00Z auvral 0020 phase 2 merged (dashboard-backend #35, auvral-platform #72) and cleaned; done, event reported late (info)
