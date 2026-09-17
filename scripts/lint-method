@@ -6,7 +6,7 @@ Exit 0 when clean, 1 when any finding. Prints one finding per line: path:line: m
 import re, sys, pathlib, yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ROLE_OK = {"overmind", "om-events", "om-config", "om-manager", "om-reviewer", "om-developer", "om-setup-worker"}
+ROLE_OK = {"overmind", "om-events", "om-config", "om-manager", "om-reviewer", "om-pr-reviewer", "om-developer", "om-setup-worker"}
 findings = []
 
 def add(path, line, msg):

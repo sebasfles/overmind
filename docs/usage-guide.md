@@ -145,9 +145,12 @@ There's no commit: the task's final state arrived with the PR.
 
 ## Reviewing someone else's PR
 
-Ask the om-manager to review PR `{{n}}`; it opens window `pr-{{n}}` with a fresh session running `/review-pr {{n}}`.
-That session reads the code only, never runs anything, and shows you a short overview plus the inline comments, split into required and optional.
-Say yes and it posts them as a pending review on the PR; you edit and submit from GitHub.
+Ask the om-manager to review PR `{{n}}` (and name a related PR if one exists; it is read as context, not reviewed); `delegate-pr` opens window `pr-{{n}}` with an om-pr-reviewer running `/review-pr {{n}}`.
+That session reads the code only, never runs anything, and shows you a short overview (verdict, risk, size, intent) plus the inline comments, split into required and optional, with the counts at the end.
+It posts nothing and offers nothing; `om-events` gets one action line.
+Say `approve` and it approves the PR with no comments (`approve-pr`); say which comments to send and it submits them as a request-changes review (`request-pr-changes`).
+When the author pushes again, ask the om-manager for the same PR: the same session re-reviews and reports what was addressed, what is still open and what is new.
+Ask the om-manager for `check-prs` to see every open PR grouped by what it waits for, and `clean-pr` (or `clean-work`) once the PR is merged.
 The copy stays in `pr-reviews/` at the project root, ignored by git.
 
 ## Tasks with phases

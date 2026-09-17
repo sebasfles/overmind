@@ -64,6 +64,7 @@ The role lives version-controlled; the om-manager does not draft long prompts ev
 Each role has its own `--permission-mode`: the om-developer autonomous, the om-reviewer without code-writing tools.
 
 These agents can live in `~/.claude/agents/` (global, applying to every project) because the flow is Sebastian's convention, not the project's.
+A fourth global role sits outside the task machinery: `om-pr-reviewer`, a per-PR session the om-manager opens with `delegate-pr` to review a PR someone else wrote (`03-skills.md`).
 
 ## Session and tmux mechanics
 

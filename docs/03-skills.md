@@ -15,8 +15,8 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 3. Sebastian drives the om-manager's skills.
    `plan-task`, `create-task`, `consolidate-task` and `delegate-task` are invocable by the om-manager so the task flow chains as one conversation: each runs on Sebastian's explicit yes to the question that offers it, never on the om-manager's initiative.
    `reiterate-task` and `clean-work` stay invocable only by the user.
-   `clean-task` and `add-check` are invocable by the om-manager, but only on Sebastian's explicit ask, phrased however he likes; never on its own initiative.
-   `check-task` and `check-work` can be invoked by the om-manager when Sebastian asks about status.
+   `clean-task`, `add-check`, `delegate-pr` and `clean-pr` are invocable by the om-manager, but only on Sebastian's explicit ask, phrased however he likes; never on its own initiative.
+   `check-task`, `check-work` and `check-prs` can be invoked by the om-manager when Sebastian asks about status.
 4. The om-reviewer's and om-developer's skills run automatically.
    om-reviewer and om-developer are event-driven state machines.
    The machine lives in the agent's system prompt; nobody invokes the skills, the agent reacts.
@@ -40,7 +40,10 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
 | `check-task` | Derives a task's status: `planned` (no worktree), `consolidating` (worktree without `Context & decisions`), `consolidated` (worktree with `Context & decisions`, no commits or om-developer), `in_progress` (commits ahead of base or an om-developer session), `in_review` (PR open according to `gh`), `merged` (PR merged, worktree still exists), `done` (PR merged, no worktree). It doesn't query the sessions to ask them anything; it only checks whether they exist. A `gh` failure is reported as unknown, never as "no PRs". |
 | `check-work` | `check-task` over all the project's tasks. It's Sebastian's dashboard. |
 | `clean-task` | If the task's PR is merged into the base branch: `git pull` in the root checkout, stops and deletes every Claude session whose cwd is the workspace (derived from `claude agents --all --json`), then worktree, local and remote branch, tmux window. Doesn't commit anything; without a worktree the task is derived as `done`. |
-| `clean-work` | Goes through all the worktrees, detects the merged ones and runs `clean-task` on each one. |
+| `clean-work` | Goes through all the worktrees, detects the merged ones and runs `clean-task` on each one, and `clean-pr` on each local PR review whose PR is merged or closed. |
+| `delegate-pr` | Opens window `pr-{{n}}` in the project's tmux session and launches `om-pr-{{n}}-reviewer` (agent `om-pr-reviewer`) with `/review-pr {{n}} [{{m}}]`, `{{m}}` being a related PR passed as context only. If the session already exists, reopens it and sends `re-review, head {{sha}}`. The om-manager reads nothing of the PR and is never reported to. |
+| `check-prs` | The PR board: every open PR of the project's repos grouped by what it waits for (`reviewed locally, not posted`, `waiting on author`, `back for re-review`, `approved, not merged`, `not reviewed`, `dependabot`), the local reviews whose PR is merged or closed (`cleanable`), and the PRs sharing a ticket key in title, body or branch. Derived from `gh` and the `.workspaces/pr-*` folders; never lists sessions. |
+| `clean-pr` | If the PR is merged or closed: stops and removes the om-pr-reviewer session, removes the worktree, the workspace folder and the local branch `pr-{{n}}`, closes the window. `pr-reviews/` stays. |
 
 ## om-reviewer
 
@@ -76,11 +79,16 @@ It never talks to the om-manager or to Sebastian.
 
 The `verify-task` log is the om-reviewer's only evidence that lint and tests ran after the last fix; it audits the log and never re-runs the commands.
 
-## Sebastian
+## om-pr-reviewer
 
-| Skill | Where | What it does |
+A per-PR session (`om-pr-{{n}}-reviewer`, window `pr-{{n}}`) the om-manager opens with `delegate-pr`; Sebastian talks to it in its window.
+It never writes code, never runs anything, never talks to the om-manager; its only messages are events to `om-events`.
+
+| Skill | Event that triggers it | What it does |
 |---|---|---|
-| `review-pr` | A fresh session in the project root, opened by the om-manager in window `pr-{{n}}` on Sebastian's ask | Read-only review of a PR someone else wrote. Reads the description, the linked issue and the open threads, checks the PR branch out in a worktree under `.workspaces/pr-{{n}}/` and reads every changed file in full; runs nothing, since CI, lint and checks already show on the PR. Findings are typed comments (`issue`, `security`, `test`, `scope` block; `refactor`, `docs`, `question` do not by default; `suggestion` and `nit` never), few and well placed, at most three optional ones. Output in two layers: a short overview (verdict derived from the blocking comments, risk with the production-first rubric, one line per comment split into required and optional) and one inline comment per finding with the explanation. Saved in the worktree and in the ignored `pr-reviews/`; on Sebastian's yes, posted as a pending review on the PR of the repo the diff belongs to, which he edits and submits. |
+| `review-pr` | The launch prompt `/review-pr {{n}} [{{m}}]`, or `re-review, head {{sha}}` from the om-manager | Read-only review of a PR someone else wrote. Reads the description, the linked issue and the open threads, and the related PR `{{m}}` as context only; checks the PR branch out in a worktree under `.workspaces/pr-{{n}}/` and reads every changed file in full; runs nothing, since CI, lint and checks already show on the PR. Findings are typed comments (`issue`, `security`, `test`, `scope` block; `refactor`, `docs`, `question` do not by default; `suggestion` and `nit` never), few and well placed, at most three optional ones. Output in two layers: a short overview (verdict derived from the blocking comments, risk with the production-first rubric, size as counts, one line per comment split into required and optional, a closing summary with the counts) and one inline comment per finding with the explanation. Saved in the worktree and in the ignored `pr-reviews/`; posts nothing, offers nothing; sends `om-events` one `action` line. The worktree stays until `clean-pr`. When its previous report exists, it re-reviews: updates the worktree, marks each previous comment `addressed`, `still open` or `withdrawn`, and reviews the new code. |
+| `approve-pr` | Sebastian says approve | `gh pr review --approve` with no body and no comments, on the same head the report reviewed. Sends `om-events` one `info` line. |
+| `request-pr-changes` | Sebastian says which comments to send | Filters the saved overview and inline comments to his selection (every required one by default, plus the optional ones he names, minus the required ones he drops) and submits them as a `REQUEST_CHANGES` review on the same head. Sends `om-events` one `info` line. |
 
 ## State machines
 
@@ -140,14 +148,14 @@ All written as drafts in `skills/`, pending pilot (see [06-pilot.md](06-pilot.md
 
 | Role | Skills |
 |---|---|
-| om-manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `add-check`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work` |
+| om-manager | `setup`, `write-prd`, `write-trd`, `write-ard`, `add-check`, `plan-task`, `create-task`, `consolidate-task`, `delegate-task`, `reiterate-task`, `check-task`, `check-work`, `clean-task`, `clean-work`, `delegate-pr`, `check-prs`, `clean-pr` |
 | om-reviewer | `analyze-task`, `start-task`, `review-task`, `publish-task`, `next-phase` |
 | om-developer | `execute-task`, `document-task`, `verify-task` |
 | overmind | `add-project` (with `pause` and `remove`), `resume-project`, `check-portfolio`, `clean-portfolio`, `add-todo`, `complete-todo` |
-| Sebastian (fresh session, launched by the om-manager) | `review-pr` |
+| om-pr-reviewer | `review-pr`, `approve-pr`, `request-pr-changes` |
 | om-config (project skill in `.claude/skills/`) | `update-method` |
 
-Global agents in `agents/`: `om-manager`, `om-reviewer`, `om-developer`, `om-setup-worker` (subagent of `setup` with `discover` and `document` modes).
+Global agents in `agents/`: `om-manager`, `om-reviewer`, `om-developer`, `om-pr-reviewer`, `om-setup-worker` (subagent of `setup` with `discover` and `document` modes).
 Agents of this repo in `.claude/agents/`: `overmind`, `om-events`, `om-config`.
 
 Content pending: `references/{{stack}}.md` for `execute-task` and `verify-task` (nestjs, nextjs, rails, react-native).

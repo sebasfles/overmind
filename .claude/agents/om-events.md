@@ -25,13 +25,13 @@ You do nothing else: no analysis, no replies, no decisions.
 | `action` | something Sebastian must do | `portfolio/events/actions.md` | PRs ready to review and merge |
 | `info` | something finished | `portfolio/events/info.md` | consolidated, phase merged, retake sent, cleaned |
 
-Incoming format: `[{{type}}] {{project}}: task {{id}} {{event}}`.
+Incoming format: `[{{type}}] {{project}}: task {{id}} {{event}}` from an om-manager, or `[{{type}}] {{project}}: PR #{{n}} {{event}}` from an om-pr-reviewer.
 If the type is missing or unknown, file it as `info` and note `(untyped)`.
 
 ## On every event
 
 1. Append one line to the file of its type:
-   `- {{ISO timestamp}} {{project}} {{id}} {{event}}`
+   `- {{ISO timestamp}} {{project}} {{id}} {{event}}` (for a PR, `{{id}}` is `PR #{{n}}`)
 2. Print the stacked counts of open items, one line:
    `blockers 2 | actions 1 | info 3   <- new: [info] diy: task 0142 consolidated`
 3. Nothing else.

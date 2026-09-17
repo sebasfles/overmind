@@ -1,6 +1,6 @@
 ---
 name: clean-work
-description: Run clean-task for every merged task and report leftovers. om-manager; Sebastian invokes it.
+description: Run clean-task for every merged task and clean-pr for every merged PR review, then report leftovers. om-manager; Sebastian invokes it.
 effort: low
 disable-model-invocation: true
 ---
@@ -9,27 +9,29 @@ disable-model-invocation: true
 
 ## Purpose
 
-Run clean-task for every task in state merged, and report orphan worktrees and stale branches that clean-task
-cannot claim. om-manager only; Sebastian invokes it.
+Run clean-task for every task in state merged, clean-pr for every local PR review whose PR is merged or closed,
+and report orphan worktrees and stale branches that neither can claim. om-manager only; Sebastian invokes it.
 
 Input: none.
-Output: one line per task cleaned, then leftovers.
+Output: one line per task or PR cleaned, then leftovers.
 
 ## 1. Find
 
 Run `check-work`.
 Take every task in `merged`.
+Run `check-prs`.
+Take every PR in `cleanable`.
 
 ## 2. Clean
 
-For each, run `clean-task`.
+For each task, run `clean-task`; for each PR, run `clean-pr`.
 Continue on failure; collect the error.
 
 ## 3. Leftovers
 
 Report, without deleting:
 
-- Orphan workspaces under `.workspaces/` with no task folder.
+- Orphan workspaces under `.workspaces/` with no task folder and no `pr-{{n}}` name.
 - Local branches with the task prefixes whose remote is gone (`git branch -vv | grep ': gone]'`).
 - Stopped Claude sessions (`claude agents --all --json`) for tasks already `done`.
 
@@ -37,5 +39,5 @@ Ask Sebastian before removing any of them; they were not created by a task you c
 
 ## Rules
 
-- Only `merged` tasks are cleaned automatically.
-- Never remove anything `clean-task` did not create.
+- Only `merged` tasks and `cleanable` PR reviews are cleaned automatically.
+- Never remove anything `clean-task` or `clean-pr` did not create.

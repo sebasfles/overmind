@@ -152,7 +152,7 @@ Being in a hot file means open; counting is counting lines; git and the done fil
 
 ### Agent content
 
-`agents/om-manager.md`, `om-reviewer.md`, `om-developer.md`, `overmind.md` and `om-setup-worker.md`, in the `overmind` repo, with symlinks from `~/.claude/agents/`.
+`agents/om-manager.md`, `om-reviewer.md`, `om-developer.md`, `om-pr-reviewer.md`, `overmind.md` and `om-setup-worker.md`, in the `overmind` repo, with symlinks from `~/.claude/agents/`.
 Written as a draft on 2026-08-29; see `03-skills.md`.
 Each with: role description, allowed skills, allowed tools, permission mode, state machine (for om-reviewer and om-developer), and rules for what it never does.
 

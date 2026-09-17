@@ -1,8 +1,17 @@
 ## Review: #{{n}} {{title}}
 
-Verdict: {{✅ approve | ⚠️ approve with comments | 🔴 request changes}}
+Head: {{headRefOid}}
+Verdict: {{✅ approve | 🔴 request changes}}
 Risk: {{✅ Low | ⚠️ Medium | 🔴 High}}: {{one sentence}}. {{Medium or High only: what to watch after merge.}}
-Intent: {{one or two sentences: what the PR says it does, and whether the diff does that and only that}}
+Size: +{{additions}} -{{deletions}}, {{files}} files, {{commits}} commits
+Intent: {{one or two sentences: what the PR says it does, and whether the diff does that and only that; `depends on #{{m}}` when a related PR was given}}
+
+### Since last review ({{re-review only}})
+
+addressed {{a}}, still open {{s}}, withdrawn {{w}}, new {{x}}
+
+- addressed: `{{file}}:{{line}}`: {{what the comment asked, one line}}
+- withdrawn: `{{file}}:{{line}}`: {{why you were wrong, one line}}
 
 ### Required before merge ({{b}})
 
@@ -19,3 +28,7 @@ Intent: {{one or two sentences: what the PR says it does, and whether the diff d
 ### Let pass
 
 - {{questionable thing}}: {{why acceptable, one line}}
+
+### Summary
+
+{{b}} required, {{o}} optional; +{{additions}} -{{deletions}}, {{files}} files, {{commits}} commits
