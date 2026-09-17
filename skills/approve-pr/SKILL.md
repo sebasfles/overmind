@@ -3,7 +3,7 @@ name: approve-pr
 description: "Approve the reviewed PR on GitHub with no comments at all. om-pr-reviewer; only when Sebastian says approve."
 effort: low
 argument-hint: "[PR_NUMBER]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # approve-pr

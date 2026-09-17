@@ -3,7 +3,7 @@ name: review-pr
 description: "Read-only code review of a PR someone else wrote: intent and code, nothing run. Reports to Sebastian and om-events; posts nothing. om-pr-reviewer; first action."
 effort: xhigh
 argument-hint: "[PR_NUMBER_OR_URL] [RELATED_PR]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # review-pr

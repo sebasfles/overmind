@@ -3,7 +3,7 @@ name: request-pr-changes
 description: "Submit the comments Sebastian selected from the review as a request-changes review on GitHub. om-pr-reviewer; only on his selection."
 effort: low
 argument-hint: "[PR_NUMBER] [SELECTION]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # request-pr-changes
