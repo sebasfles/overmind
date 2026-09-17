@@ -14,7 +14,7 @@ Derived from `gh` and from disk; no session is asked anything.
 om-manager only; runs when Sebastian asks how the PRs are.
 
 Input: none.
-Output: the grouped board, one line per PR, no explanations.
+Output: the grouped board, one table per group, one row per PR, no explanations.
 
 `ROOT` is the project root; `REPOS` the project's code repos (the repo itself in single and mono; the list in `docs/TRD.md` in multirepo).
 
@@ -25,7 +25,7 @@ Once: `ME = gh api user -q .login`.
 Per repo:
 
 ```
-gh -R {{owner/repo}} pr list --state open --limit 100 --json number,title,body,url,author,isDraft,headRefName,headRefOid,reviews,reviewRequests
+gh -R {{owner/repo}} pr list --state open --limit 100 --json number,title,body,url,author,isDraft,headRefName,headRefOid,reviews,reviewRequests,createdAt,updatedAt
 ```
 
 A `gh` failure is reported as is for that repo (`{{repo}}: gh failed: {{first line}}`, plus the active account from `gh auth status`) and the rest continues; never treat it as "no PRs".
@@ -56,14 +56,18 @@ Two PRs sharing a key are related, across repos too.
 
 ## 3. Report
 
-One header per non-empty group in the order of the table, then one line per PR:
+One header per non-empty group in the order of the table, then a Markdown table, one row per PR, oldest `updatedAt` first:
 
 ```
-#{{n}} {{repo}}: {{title}} ({{author}}){{ (draft)}}
+| PR | Repo | Title | Author | Created | Updated |
+|---|---|---|---|---|---|
+| #{{n}} | {{repo}} | {{title}}{{ (draft)}} | {{author}} | {{YYYY-MM-DD}} | {{YYYY-MM-DD}} |
 ```
 
-Then `Related`, one line per key: `{{key}}: #{{a}} #{{b}}`.
+Dates are `createdAt` and `updatedAt` as day only; the `Repo` column is dropped in single and mono.
+Then `Related`, one table: `| Key | PRs |` with one row per key (`#{{a}} #{{b}}`).
 Nothing else: no sizes, no explanations, no advice.
+Bullet lists are not used anywhere in the board; a table is what Sebastian scans.
 If `cleanable` is not empty, end with one question: `clean them?` (`clean-pr` each).
 
 ## Rules
@@ -71,4 +75,4 @@ If `cleanable` is not empty, end with one question: `clean them?` (`clean-pr` ea
 - Never ask a session anything; `gh` and disk only.
 - Never list Claude sessions; workspaces are the local signal.
 - A `gh` failure is reported, never silently read as "no PRs".
-- One line per PR, no explanations.
+- One table per group, one row per PR, no explanations.

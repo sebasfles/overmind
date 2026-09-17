@@ -449,3 +449,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: `om-events` prints counts keyed on `task {{id}}` lines and `PR #{{n}}` lines alike, fine for counting, unparsed otherwise. `check-prs` reads `reviews[].commit.oid` from `gh`; if a repo's PR list is above 100 the `--limit` truncates silently. The interactive launch in `delegate-pr` dies with the window (`claude -r` brings it back; `check-prs` does not miss it because the workspace is the signal). No `references/` per stack yet.
 - Revisit when: `check-prs` needs the review states of more than one person (a team board), or the om-pr-reviewer session crosses ~150k on a re-review (recycle per re-review with the report as the only context).
 - Files: agents/om-pr-reviewer.md, agents/om-manager.md, .claude/agents/om-events.md, skills/review-pr/SKILL.md, skills/review-pr/templates/pr-review.md, skills/approve-pr/SKILL.md, skills/request-pr-changes/SKILL.md, skills/delegate-pr/SKILL.md, skills/check-prs/SKILL.md, skills/clean-pr/SKILL.md, skills/clean-work/SKILL.md, skills/publish-task/SKILL.md, scripts/lint-method, docs/02-orchestration.md, docs/03-skills.md, docs/04-operation.md, docs/usage-guide.md, docs/method-ard.md.
+
+## 2026-09-17: `check-prs` prints tables with created and updated dates
+
+- Decision: each group of the `check-prs` board is a Markdown table (`PR`, `Repo`, `Title`, `Author`, `Created`, `Updated`), rows sorted oldest `updatedAt` first, dates as day only; `Related` is a table too. No bullet lists in the board.
+- Alternatives rejected: one line per PR with bullets (Sebastian: it does not read well); relative ages (`3d`) instead of dates (a date is stable in a transcript read hours later).
+- Reason: the board is scanned, not read; a table aligns what has to be compared across PRs, and the two dates say which PRs are going stale.
+- Debt created: none.
+- Revisit when: the board needs more columns than fit a pane; then move detail behind the PR link.
+- Files: skills/check-prs/SKILL.md, agents/om-manager.md, docs/03-skills.md, docs/method-ard.md.
