@@ -17,6 +17,8 @@ Two rounds of cuts landed that day: the "token economy" ARD entry (d3e9bbc) and 
   - Restoring any independent verification gate: only if a merged PR turns red on CI or a lying `verify.log` is caught after publish.
 - Sebastian recycles the om-manager manually with his own recycle-session routine, every task or two; no method change needed there, and `clean-task`'s suggestion coexists with it.
 - 2026-09-01 later: om-reviewer moved to opus (05257e3) on two tasks of data ($22 and $29 reviewer sessions, 80% cache writes). om-manager stays fable on purpose: cheap session, highest leverage per token.
-- 2026-09-08: Sebastian put the om-reviewer back on fable (ARD entry of that date). Reason not stated by him; the entry records it as his call. Next trigger to revisit: fable quota hit again with the om-reviewer as main consumer, re-measure first.
+- 2026-09-08: Sebastian put the om-reviewer back on fable (ARD entry of that date). Reason not stated by him; the entry records it as his call.
+- 2026-09-17: om-reviewer back on opus again (5d1721f), also his call without stated reason; the new om-pr-reviewer is opus too. Next trigger to revisit: a quota hit with a reviewer session as main consumer, re-measure first.
+- 2026-09-17: per-skill `model:` rejected for good: a skill's model switches the session for one turn and prompt cache is per model, so every switch rewrites the context twice. Model is per session; `effort` is the per-skill dial. Do not re-propose.
 - Rejected the same day: om-developer reading `ard.md` as an index (saves ~8k tokens/module but blinds the implementer; the developer is the cheap session anyway). Do not re-propose.
 - Sebastian's working style here: cut based on usage data, then wait 2-3 days and re-measure before cutting more.

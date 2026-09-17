@@ -9,3 +9,4 @@
 - [commit scope](feedback_commit-scope.md) — stage the files of the change explicitly, never git add -A; the tree carries other sessions edits
 - [tmux over herdr](project_tmux-over-herdr.md) — 2026-09-09: keep tmux as substrate, agents operate it; herdr rejected, revisit at 1.0 + WSL
 - [review calibration](feedback_review-calibration.md) — strict on defects, max three optional comments, risk Low unless production users are hit
+- [check skills disk only](feedback_check-skills-disk-only.md) — check-* derive from disk and gh, never list sessions; board lines minimal
