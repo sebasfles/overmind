@@ -146,3 +146,7 @@ Resolved events, moved here from the hot files.
 - [x] 2026-09-16T00:15:00Z auvral 0040 retake sent (PR #93, Playwright smoke test) (info)
 - [x] 2026-09-09T07:25:00Z auvral 0020 phase 1 merged (info)
 - [x] 2026-09-16T00:20:00Z auvral 0020 phase 2 merged (dashboard-backend #35, auvral-platform #72) and cleaned; done, event reported late (info)
+- [x] 2026-09-17T16:32:29Z auvral 0040 PRs ready (https://github.com/auvral-development/auvral-platform/pull/94); root docs branch chore/0040_next_16_upgrade pending local merge into main (action, done 2026-09-17)
+- [x] 2026-09-17T18:00:23Z local-auctions 934 PR #934 review ready, 0 required, 2 optional, window pr-934 (action, done 2026-09-17)
+- [x] 2026-09-17T18:00:43Z local-auctions 925 PR #925 review ready, 0 required, 2 optional, window pr-925 (action, done 2026-09-17)
+- [x] 2026-09-17T18:00:55Z local-auctions 935 PR #935 review ready, 0 required, 3 optional, window pr-935 (action, done 2026-09-17)
