@@ -68,6 +68,11 @@ projects:
         base_branch: develop
       - name: local-auctions-tf-ifranstructure
         base_branch: develop
+  - name: my-napkin
+    root: /home/fless/dev/personal/projects/my-napkin
+    tmux: my-napkin
+    status: active
+    repos: []
 #  - name: diy
 #    root: /home/fless/dev/designli/projects/diy
 #    tmux: diy
