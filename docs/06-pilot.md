@@ -13,6 +13,7 @@ Each failure gets fixed in the skill or agent with `update-method` before moving
 | `claude --bg` + `claude attach` in a tmux pane gives the same experience as a direct session | consolidate, start-task, resume-overmind | alternative form documented in `02` |
 | `SendMessage` between local sessions launched with `--bg` gets delivered and processed as a turn | all communication | direct sessions; if that fails too, an on-disk mailbox file |
 | `--allow-dangerously-skip-permissions` with `--bg` leaves om-reviewer and om-developer without the classifier's blocks | consolidate, start-task | `permissionMode: auto` with an allowlist in settings |
+| The launcher's allow rules cover the launch line as the skill writes it (bare `cd && claude`, bare `tmux`) | consolidate, start-task, delegate-pr | failed 2026-09-20 in auvral: a `export PATH=...; VAR=...` prefix sent the line to the classifier ("Create Unsafe Agents"); fixed by forbidding prefixes in the skills, not by adding rules |
 | The Workflow tool is available inside an om-manager session and accepts `model` per step | setup (discovery and modules) | fallback `Agent(om-setup-worker)` already written |
 | An `initialPrompt` that invokes a skill (`/check-work`, `/analyze-task`, `/check-portfolio`) runs on startup | om-manager, om-reviewer, overmind | send the first message by hand from whoever launches it |
 | `wt.exe -w 0 new-tab ... wsl.exe --cd ... tmux attach` opens the tab in the current window | resume-project, resume-overmind | adjust Windows Terminal flags |

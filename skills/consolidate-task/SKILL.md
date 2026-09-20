@@ -80,6 +80,9 @@ tmux send-keys -t {{PROJECT}}:{{WINDOW}} "claude attach {{bg-id}}" Enter
 
 Fallback form: same `tmux new-window`, then `claude --agent om-reviewer -n {{SESSION}} '...'` in the pane.
 
+Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`.
+Nothing before `cd` or `tmux`: an `export`, a `VAR=` assignment or a shell function in the same command matches no allow rule, the whole command goes to the classifier and it blocks the launch as "Create Unsafe Agents".
+
 Only the om-reviewer is launched here.
 Do not keep the bg id anywhere: `claude agents --all --json` lists it by `name` (`{{SESSION}}`) and `cwd` (`{{WORKSPACE}}`) whenever a skill needs it.
 

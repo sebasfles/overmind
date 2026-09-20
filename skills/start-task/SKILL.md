@@ -56,6 +56,7 @@ tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude --agent om-developer -n {{DEV}} 'task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md'" Enter
 ```
 
+Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`; nothing before `cd` or `tmux` (no `export`, `VAR=` or shell function), or the command matches no allow rule and goes to the classifier.
 Omit the `phase:` part when the task has no phases.
 Left pane stays yours; right pane is the om-developer's.
 

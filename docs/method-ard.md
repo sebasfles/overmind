@@ -458,3 +458,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: the board needs more columns than fit a pane; then move detail behind the PR link.
 - Files: skills/check-prs/SKILL.md, agents/om-manager.md, docs/03-skills.md, docs/method-ard.md.
+
+## 2026-09-20: Launch lines run bare; a prefix sends them to the classifier
+
+- Decision: `consolidate-task`, `start-task` and `delegate-pr` state that each launch line runs exactly as written, one Bash call, `cd {{abs}} && claude ...` or `tmux ...` with nothing before it; `om-manager` carries the same rule in Environment. No new allow rules, per project or global.
+- Alternatives rejected: adding allow rules for `export *` or `Bash(* claude --bg *)` (a wildcard prefix rule is a blanket grant that defeats the classifier; an `export` rule still leaves `VAR=` and functions), copying the global rules into each project's `settings.local.json` (auvral had them since 2026-09-16 and they did nothing: rules match the command text, not the project), letting the om-manager retry until the classifier yields (deterministic block, and the classifier tags the following commands too).
+- Reason: 2026-09-20 in auvral, `consolidate-task` for 0042 to 0044 was blocked four times as "Create Unsafe Agents"; every denied command carried `export PATH=$HOME/.nvm/...; R=...; WS=...` or a `launch(){}` wrapper, while my-napkin's om-manager launched the same command bare and never met the classifier. Allow rules skip the classifier only when every segment of the compound command matches a rule.
+- Debt created: the environment the launched session needs (node version, PATH) is left to that session's shell profile; if a workspace needs an environment its profile does not provide, the method has no place to declare it yet.
+- Revisit when: a launched om-reviewer or om-developer reports a missing tool that the om-manager's prefix was providing.
+- Files: skills/consolidate-task/SKILL.md, skills/start-task/SKILL.md, skills/delegate-pr/SKILL.md, agents/om-manager.md, docs/02-orchestration.md, docs/06-pilot.md, docs/method-ard.md.
