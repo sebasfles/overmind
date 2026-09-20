@@ -33,3 +33,11 @@ Appended by the om-events session. Unchecked lines are open.
 - [ ] 2026-09-20T00:00:05Z my-napkin 0011 phase 3 merged (PR #14), phase 4 (review polish) started with the same om-reviewer
 - [ ] 2026-09-20T00:00:06Z my-napkin 0011 cleaned
 - [ ] 2026-09-20T00:00:07Z my-napkin 0012 libraries created (planned, 2 phases)
+- [ ] 2026-09-20T00:00:08Z my-napkin 0012 consolidated and delegated (phase 1 of 3)
+- [ ] 2026-09-20T00:00:09Z my-napkin 0014 consolidated and delegated
+- [ ] 2026-09-20T00:00:10Z my-napkin 0013 consolidating
+- [ ] 2026-09-20T00:00:11Z my-napkin 0013 consolidated and delegated
+- [ ] 2026-09-20T00:00:13Z my-napkin 0013 merged (PR #16), run clean-task
+- [ ] 2026-09-20T00:00:14Z my-napkin 0013 cleaned
+- [ ] 2026-09-20T00:00:16Z my-napkin 0014 merged (PR #17) and cleaned
+- [ ] 2026-09-20T00:00:17Z my-napkin 0016 consolidated, delegation waits on 0012 phase 1 merge
