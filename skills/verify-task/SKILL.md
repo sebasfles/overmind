@@ -37,14 +37,16 @@ Per target, in this order, each command alone, absolute path with `cd {{WORKSPAC
 Never run two targets or two suites in parallel; several tasks share the machine and memory is the constraint.
 Never pass `--watch`.
 
-Run each step exactly like this, with no pipeline, so `$?` is the command's own status:
+Run each step exactly like this, with no pipeline, so `$?` is the command's own status, and write that status into the artefact itself:
 
 ```
 mkdir -p {{WORKSPACE}}/.verify
-cd {{WORKSPACE}}/{{target path}} && {{command}} > {{WORKSPACE}}/.verify/{{target}}-{{step}}.out 2>&1 ; echo "EXIT=$?"
+cd {{WORKSPACE}}/{{target path}} && {{command}} > {{WORKSPACE}}/.verify/{{target}}-{{step}}.out 2>&1 ; echo "EXIT=$?" >> {{WORKSPACE}}/.verify/{{target}}-{{step}}.out
 ```
 
-Then read the tail of that file for the error lines.
+Nothing between the command and the `echo "EXIT=$?"`: a `tail`, an `ls` or a trailing `echo done` in between replaces `$?` with its own green status.
+Then read the tail of that file for the error lines; its last line is the step's `EXIT={{code}}`.
+Each run overwrites the step's artefact, so `.verify/` always holds the latest run of every step and the om-reviewer audits the log against it.
 Never pipe the command into `tee` or anything else to capture its status: the shell is zsh, where `${PIPESTATUS[0]}` is empty (zsh spells it `$pipestatus` and indexes from 1) and `$?` after a pipeline is the last stage's status, not the command's.
 `.verify/` sits in the workspace, outside every worktree, so it never reaches a commit.
 
@@ -61,7 +63,8 @@ Append per target:
 {{first relevant error lines of the first failing step, if any}}
 ```
 
-`pass` means exit 0 and nothing else; `n/a` is the only step line without a code.
+Every step line is derived from its artefact: `exit {{code}}` is the last `EXIT=` line of `{{WORKSPACE}}/.verify/{{target}}-{{step}}.out`, read after the run, never recalled from a previous run or from memory.
+`pass` means that line reads `EXIT=0` and nothing else; a step with no artefact or no `EXIT=` line is `fail`; `n/a` is the only step line without a code.
 Never rewrite earlier blocks.
 
 ## 4. Report
@@ -74,6 +77,6 @@ Red: stop at the first failing step of that target, report it, continue with the
 
 - Never modify code, tests or configuration.
 - Never skip a declared step.
-- `pass` comes from the exit code, never from reading the output. A step whose code you could not capture is `fail`, not `pass`.
+- `pass` comes from the `EXIT=` line of the step's artefact, never from reading the output or from an earlier run. A step whose code you could not capture is `fail`, not `pass`.
 - Never parallelize.
 - The log is the archive: never paste full command output into the conversation or a message.

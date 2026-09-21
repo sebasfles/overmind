@@ -72,6 +72,8 @@ If false, finding: `rebase on origin/{{base}} required`.
 Audit `verify.log`; never run lint, typecheck or tests yourself.
 The om-developer's last block must be at `{{sha}}`, green on every step, and cover every target the diff touches; anything missing, stale or red is a finding on its own.
 Every step line must carry its `exit {{code}}` (only `n/a` may lack one), and `pass` must agree with `exit 0`: a block that claims `pass` with an empty or missing code proves nothing and is the finding `verify.log: step {{name}} has no exit code`.
+Then check the block against the artefacts: for every step line, the last line of `{{WORKSPACE}}/.verify/{{target}}-{{step}}.out` must read `EXIT={{code}}` with the same code, and the artefact must be newer than the round's commit; a missing artefact, a different code or an older artefact is the finding `verify.log: step {{name}} does not match .verify`.
+The log is the om-developer's claim; the artefacts are the evidence.
 
 ## 4. Review the code
 
@@ -130,7 +132,7 @@ No findings: `SendMessage` the om-developer `round {{N}} clean, document`, wait 
 
 - Never fix anything yourself.
 - Never soften a finding because the round count is high.
-- Never run `verify-task` or any lint, typecheck or test command; audit `verify.log` every round, and treat a missing, stale or red block as a finding. The om-developer's log is the only evidence.
+- Never run `verify-task` or any lint, typecheck or test command; audit `verify.log` against `{{WORKSPACE}}/.verify/` every round, and treat a missing, stale, red or unmatched block as a finding. The om-developer's log plus its artefacts are the only evidence.
 - Never publish before the om-developer's `docs ready` commit; documentation is checked by `publish-task`, not here.
 - Never review before `round {{N}} ready, commit {{sha}}` arrives; never review a commit other than the one named.
 - Never forward a check finding unverified, and never skip a check whose `paths` match the diff; checks run on every round, not only the first.
