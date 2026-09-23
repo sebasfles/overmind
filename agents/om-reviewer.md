@@ -1,7 +1,7 @@
 ---
 name: om-reviewer
 description: "Per-task om-reviewer: consolidates with the om-manager, launches the om-developer, reviews every round, publishes the PRs. Never writes code."
-model: fable
+model: opus
 effort: high
 permissionMode: bypassPermissions
 initialPrompt: "/analyze-task"

@@ -495,3 +495,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the same rule now lives in two places; a change to the serial flags has to touch both.
 - Revisit when: `verify-task` gets per-stack references that own the flags; then the agent line can point at them instead of naming `--runInBand`.
 - Files: agents/om-developer.md, docs/method-ard.md.
+
+## 2026-09-23: om-reviewer back on opus, same day
+
+- Decision: `agents/om-reviewer.md` returns to `model: opus`; the fable trial of earlier today is closed before any task ran on it.
+  Supersedes the 2026-09-23 "om-reviewer on fable, trial" entry.
+- Alternatives rejected: keeping the trial for two tasks as that entry planned (Sebastian withdrew it before a task launched).
+- Reason: Sebastian's call, the same day; the bare `opus` alias tracks the latest Opus release, so the review sessions get the newest Opus without an id change.
+- Debt created: none new; the four switches on this line since 2026-09-01 still have no measurement attached to the last three.
+- Revisit when: a next switch on this line comes with a measured task, cost and findings, so the decision stops flipping on preference.
+- Files: agents/om-reviewer.md, docs/method-ard.md.
