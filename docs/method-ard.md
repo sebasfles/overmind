@@ -486,3 +486,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the om-reviewer is the volume role, so the fable weekly quota is exposed again; without a measurement this trial will end the way the previous ones did.
 - Revisit when: after the first two tasks reviewed on fable, compare cost per task and findings against the 2026-09-01 numbers ($22 and $29 on fable, $12 and $19 for the om-developer) and decide with data.
 - Files: agents/om-reviewer.md, docs/method-ard.md.
+
+## 2026-09-23: om-developer carries the serial test rule itself
+
+- Decision: `agents/om-developer.md` gains a `What you never do` line: never two suites, targets or verification commands in parallel, and never tests without `--runInBand` or the stack's serial flag, even while iterating on one failing test outside `verify-task`.
+- Alternatives rejected: leaving the rule only in `verify-task` (the skill is loaded when invoked; the om-developer runs tests by hand between rounds, and those runs never see the skill).
+- Reason: the rule lived in `verify-task` and `docs/03-skills.md`, both scoped to the formal verification run; the ad hoc test runs during implementation are the ones that pile up across workspaces, and the agent file is the only text present in every turn.
+- Debt created: the same rule now lives in two places; a change to the serial flags has to touch both.
+- Revisit when: `verify-task` gets per-stack references that own the flags; then the agent line can point at them instead of naming `--runInBand`.
+- Files: agents/om-developer.md, docs/method-ard.md.
