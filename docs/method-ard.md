@@ -476,3 +476,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the audit compares the artefact's mtime with the round's commit, a heuristic that a re-run after the commit satisfies without proving the code at the commit was the one verified; `.verify/` is per workspace, so a task with several phases keeps only the latest run per step.
 - Revisit when: the method gets a per-stack `references/{{stack}}.md` for `verify-task` that can write the block itself, or an om-reviewer finds an artefact matching a log line that was still wrong.
 - Files: skills/verify-task/SKILL.md, skills/review-task/SKILL.md, agents/om-reviewer.md, docs/02-orchestration.md, docs/03-skills.md, docs/method-ard.md.
+
+## 2026-09-23: om-reviewer on fable, trial
+
+- Decision: `agents/om-reviewer.md` runs on `fable`; the return to `opus` of 2026-09-17 is reversed.
+  Supersedes the 2026-09-17 entry.
+- Alternatives rejected: none weighed; Sebastian asked for a trial.
+- Reason: Sebastian wants to try the review sessions on fable again; this is the third switch on this line (2026-09-01 opus, 2026-09-08 fable, 2026-09-17 opus), with no measurement attached to the last two.
+- Debt created: the om-reviewer is the volume role, so the fable weekly quota is exposed again; without a measurement this trial will end the way the previous ones did.
+- Revisit when: after the first two tasks reviewed on fable, compare cost per task and findings against the 2026-09-01 numbers ($22 and $29 on fable, $12 and $19 for the om-developer) and decide with data.
+- Files: agents/om-reviewer.md, docs/method-ard.md.
