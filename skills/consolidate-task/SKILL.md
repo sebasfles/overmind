@@ -82,6 +82,7 @@ Fallback form: same `tmux new-window`, then `claude --agent om-reviewer -n {{SES
 
 Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`.
 Nothing before `cd` or `tmux`: an `export`, a `VAR=` assignment or a shell function in the same command matches no allow rule, the whole command goes to the classifier and it blocks the launch as "Create Unsafe Agents".
+If the bare line is denied with that same reason, stop and tell Sebastian: the `autoMode.allow` entry from `usage-guide.md` is missing, or this session started before it was added and needs `prefix + R`; a retry or the fallback form gets the same verdict.
 
 Only the om-reviewer is launched here.
 Do not keep the bg id anywhere: `claude agents --all --json` lists it by `name` (`{{SESSION}}`) and `cwd` (`{{WORKSPACE}}`) whenever a skill needs it.

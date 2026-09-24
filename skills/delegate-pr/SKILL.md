@@ -39,6 +39,7 @@ tmux send-keys -t {{PROJECT}}:{{WINDOW}} "claude --agent om-pr-reviewer -n {{SES
 
 `{{m}}` only when Sebastian gave a related PR.
 Run both lines exactly as written, one Bash call each, nothing before `tmux` (no `export`, `VAR=` or shell function), or the command matches no allow rule and goes to the classifier.
+A bare line denied as "Create Unsafe Agents" means the `autoMode.allow` entry from `usage-guide.md` is missing or predates this session: report it, do not retry.
 Interactive form on purpose: Sebastian talks to this session in its window, and the om-manager never messages it after this.
 
 ## 3. Report

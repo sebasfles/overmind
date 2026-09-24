@@ -57,6 +57,7 @@ tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude --agent om-developer -n {{DEV
 ```
 
 Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`; nothing before `cd` or `tmux` (no `export`, `VAR=` or shell function), or the command matches no allow rule and goes to the classifier.
+A bare line denied as "Create Unsafe Agents" means the `autoMode.allow` entry from `usage-guide.md` is missing or predates this session: report it, do not retry.
 Omit the `phase:` part when the task has no phases.
 Left pane stays yours; right pane is the om-developer's.
 

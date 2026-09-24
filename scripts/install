@@ -54,6 +54,20 @@ if missing:
     print(json.dumps(missing, indent=2))
 else:
     print("ok      permission allow rules present in ~/.claude/settings.json")
+try:
+    auto_allow = json.load(open(path)).get("autoMode", {}).get("allow", [])
+except (FileNotFoundError, json.JSONDecodeError):
+    auto_allow = []
+entry = ("Overmind sessions: launching `claude --bg --allow-dangerously-skip-permissions --agent om-reviewer`, "
+         "`om-developer` or `om-pr-reviewer` inside a project's `.workspaces/` directory is allowed. "
+         "These are Sebastian's own per-task review and developer sessions of the overmind method, "
+         "isolated in git worktrees; the flag is how the method runs them.")
+if not any(a.startswith("Overmind sessions:") for a in auto_allow):
+    print("MISSING autoMode.allow entry in ~/.claude/settings.json (since Claude Code 2.1.281 the classifier's Create Unsafe Agents rule blocks the launch even with the allow rules).")
+    print('Paste into "autoMode": { "allow": [ ... ] }, keeping "$defaults" first; sessions started before the edit do not see it:')
+    print(json.dumps(["$defaults", entry], indent=2))
+else:
+    print("ok      autoMode.allow entry for overmind sessions present in ~/.claude/settings.json")
 PY
 
 # Tools the skills call from Bash: jq (clean-task, delegate-task and next-phase parse

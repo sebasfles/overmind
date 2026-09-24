@@ -99,7 +99,8 @@ The `task-{{id}}-{{role}}` convention makes addressing deterministic: the om-rev
    They alternate; they never write at the same time because the om-reviewer does not write code.
 
 The om-reviewer and om-developer agents run with `permissionMode: bypassPermissions`: they work isolated in their workspace and must not be held back by the classifier; with `--bg` they must be launched with `--allow-dangerously-skip-permissions`.
-The launcher's own classifier lets that flag through only because the allow rules in `~/.claude/settings.json` match the bare command (`cd {{abs}} && claude --bg ...`); a launch line with any prefix (`export`, `VAR=`, a shell function) matches no rule and is blocked.
+The launcher's own classifier lets that flag through only with two things in `~/.claude/settings.json`: the allow rules matching the bare command (`cd {{abs}} && claude --bg ...`; a launch line with any prefix such as `export`, `VAR=` or a shell function matches no rule) and, since Claude Code 2.1.281, an `autoMode.allow` entry naming the overmind launches, because the classifier's built-in `Create Unsafe Agents` rule judges the line even when a rule matches.
+Both are listed in `usage-guide.md`; `scripts/install` reports the missing one.
 Advantages: `claude agents --json` lists the live sessions, `claude stop {{id}}` pauses, `claude rm {{id}}` deletes the session and its worktree, `claude attach {{id}}` reopens it.
 The process survives if the pane is closed, and killing the pane or the window does not stop it.
 The bare `claude agents` needs a TTY; from Bash the skills use `--json`, whose entries carry `id`, `name` and `cwd`, so every session of a task is derivable by `cwd` under its workspace and no skill stores an id.
