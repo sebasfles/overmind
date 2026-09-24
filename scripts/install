@@ -54,20 +54,6 @@ if missing:
     print(json.dumps(missing, indent=2))
 else:
     print("ok      permission allow rules present in ~/.claude/settings.json")
-try:
-    auto_allow = json.load(open(path)).get("autoMode", {}).get("allow", [])
-except (FileNotFoundError, json.JSONDecodeError):
-    auto_allow = []
-entry = ("Overmind sessions: launching `claude --bg --allow-dangerously-skip-permissions --agent om-reviewer`, "
-         "`om-developer` or `om-pr-reviewer` inside a project's `.workspaces/` directory is allowed. "
-         "These are Sebastian's own per-task review and developer sessions of the overmind method, "
-         "isolated in git worktrees; the flag is how the method runs them.")
-if not any(a.startswith("Overmind sessions:") for a in auto_allow):
-    print("MISSING autoMode.allow entry in ~/.claude/settings.json (since Claude Code 2.1.281 the classifier's Create Unsafe Agents rule blocks the launch even with the allow rules).")
-    print('Paste into "autoMode": { "allow": [ ... ] }, keeping "$defaults" first; sessions started before the edit do not see it:')
-    print(json.dumps(["$defaults", entry], indent=2))
-else:
-    print("ok      autoMode.allow entry for overmind sessions present in ~/.claude/settings.json")
 PY
 
 # Tools the skills call from Bash: jq (clean-task, delegate-task and next-phase parse
@@ -79,24 +65,6 @@ for tool in jq gh; do
     echo "MISSING $tool: install it; the skills that list sessions or PRs from Bash need it."
   fi
 done
-
-# om-reviewer and om-developer run with permissionMode bypassPermissions, which needs the
-# disclaimer accepted once per machine; without it, --bg launches fail non-interactively.
-# Functional check (the persisted key is not greppable in current versions): try one throwaway
-# --bg bypass launch and clean it up. Accepting the disclaimer stays Sebastian's interactive act.
-if command -v claude >/dev/null 2>&1; then
-  bg_out="$(claude --bg --dangerously-skip-permissions --model haiku "say ok and nothing else" 2>&1 || true)"
-  bg_id="$(printf '%s' "$bg_out" | grep -oE 'backgrounded · [a-z0-9]+' | awk '{print $3}')"
-  if [[ -n "$bg_id" ]]; then
-    claude stop "$bg_id" >/dev/null 2>&1 || true
-    claude rm "$bg_id" >/dev/null 2>&1 || true
-    echo "ok      bypass-permissions launches work"
-  else
-    echo "MISSING bypass-permissions acceptance."
-    echo "        Run 'claude --dangerously-skip-permissions' once in a terminal, accept the bypass warning (not just the folder trust dialog), exit."
-    echo "        Without it, om-reviewer and om-developer cannot start bypassed and --bg launches fail."
-  fi
-fi
 
 case ":$PATH:" in *":$HOME/bin:"*) ;; *) echo "note: add ~/bin to PATH" ;; esac
 echo "done. Cockpit agents (overmind, om-events, om-config) stay project-scoped in $root/.claude/agents."

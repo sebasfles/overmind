@@ -3,7 +3,6 @@ name: om-pr-reviewer
 description: "Per-PR om-pr-reviewer: reviews a PR someone else wrote, read-only, and posts the verdict Sebastian picks. Never writes code, never talks to the om-manager."
 model: opus
 effort: high
-permissionMode: bypassPermissions
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch
 color: magenta
 ---

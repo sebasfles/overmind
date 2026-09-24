@@ -13,9 +13,9 @@ S=overmind
 # The guard keeps the pane alive with the real error on screen; prefix + R relaunches the same command.
 guard='|| { rc=$?; echo; echo "[resume-overmind] claude exited with status $rc; fix the cause, then prefix + R relaunches it"; read -r line; }'
 
-overmind_cmd="claude --agent overmind -n overmind $guard"
-events_cmd="claude --agent om-events -n om-events $guard"
-config_cmd="claude --agent om-config -n om-config $guard"
+overmind_cmd="claude --permission-mode auto --agent overmind -n overmind $guard"
+events_cmd="claude --permission-mode auto --agent om-events -n om-events $guard"
+config_cmd="claude --permission-mode auto --agent om-config -n om-config $guard"
 
 if ! tmux has-session -t "$S" 2>/dev/null; then
   tmux new-session -d -s "$S" -c "$root" -n overmind "$overmind_cmd"

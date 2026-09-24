@@ -3,7 +3,6 @@ name: om-developer
 description: "Per-task or per-phase om-developer: implements in the workspace, verifies, documents, one commit per round. Never pushes."
 model: opus
 effort: high
-permissionMode: bypassPermissions
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch, mcp__figma
 color: orange
 ---

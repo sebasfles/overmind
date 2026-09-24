@@ -44,7 +44,7 @@ Primary form (`--bg` + `attach`):
 
 ```
 cd {{WORKSPACE}}
-claude --bg --allow-dangerously-skip-permissions --agent om-developer -n {{DEV}} "task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md workspace: {{WORKSPACE}}"
+claude --bg --permission-mode auto --agent om-developer -n {{DEV}} "task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md workspace: {{WORKSPACE}}"
 tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude attach {{bg-id}}" Enter
 ```
@@ -53,11 +53,12 @@ Fallback form (direct session):
 
 ```
 tmux split-window -h -t {{PROJECT}}:{{WINDOW}} -c {{WORKSPACE}}
-tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude --agent om-developer -n {{DEV}} 'task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md'" Enter
+tmux send-keys -t {{PROJECT}}:{{WINDOW}}.1 "claude --permission-mode auto --agent om-developer -n {{DEV}} 'task: {{TASK_DIR}}/task.md phase: {{TASK_DIR}}/phase_{{n}}.md'" Enter
 ```
 
 Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`; nothing before `cd` or `tmux` (no `export`, `VAR=` or shell function), or the command matches no allow rule and goes to the classifier.
-A bare line denied as "Create Unsafe Agents" means the `autoMode.allow` entry from `usage-guide.md` is missing or predates this session: report it, do not retry.
+`--permission-mode auto` stays in the line: it pins the om-developer's mode (the startup default can land in manual) and keeps it in the same permission class as you, so your messages are delivered instead of held.
+Never add a bypass flag.
 Omit the `phase:` part when the task has no phases.
 Left pane stays yours; right pane is the om-developer's.
 

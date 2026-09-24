@@ -73,16 +73,17 @@ Primary form (`--bg` + `attach`, to be validated in the pilot):
 
 ```
 cd {{WORKSPACE}}
-claude --bg --allow-dangerously-skip-permissions --agent om-reviewer -n {{SESSION}} "task: {{TASK_FOLDER}} root: {{ROOT}} workspace: {{WORKSPACE}}"
+claude --bg --permission-mode auto --agent om-reviewer -n {{SESSION}} "task: {{TASK_FOLDER}} root: {{ROOT}} workspace: {{WORKSPACE}}"
 tmux new-window -t {{PROJECT}} -n {{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}} "claude attach {{bg-id}}" Enter
 ```
 
-Fallback form: same `tmux new-window`, then `claude --agent om-reviewer -n {{SESSION}} '...'` in the pane.
+Fallback form: same `tmux new-window`, then `claude --permission-mode auto --agent om-reviewer -n {{SESSION}} '...'` in the pane.
 
 Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`.
-Nothing before `cd` or `tmux`: an `export`, a `VAR=` assignment or a shell function in the same command matches no allow rule, the whole command goes to the classifier and it blocks the launch as "Create Unsafe Agents".
-If the bare line is denied with that same reason, stop and tell Sebastian: the `autoMode.allow` entry from `usage-guide.md` is missing, or this session started before it was added and needs `prefix + R`; a retry or the fallback form gets the same verdict.
+Nothing before `cd` or `tmux`: an `export`, a `VAR=` assignment or a shell function in the same command matches no allow rule, the whole command goes to the classifier.
+`--permission-mode auto` is part of the line: it pins the om-reviewer's mode, which otherwise depends on a feature-flag fetch at startup and can land in manual.
+Never add `--dangerously-skip-permissions` or `--allow-dangerously-skip-permissions`: the classifier blocks them as "Create Unsafe Agents", and a session in bypass cannot exchange messages with the sessions in auto.
 
 Only the om-reviewer is launched here.
 Do not keep the bg id anywhere: `claude agents --all --json` lists it by `name` (`{{SESSION}}`) and `cwd` (`{{WORKSPACE}}`) whenever a skill needs it.

@@ -10,13 +10,8 @@ Everything not covered here is in `01` through `06`.
 - tmux, `gh` authenticated with the account that can open PRs in each project, and Windows Terminal if you work in WSL.
 - This repo cloned, and `~/bin` in the `PATH`.
 - Permission allow rules in `~/.claude/settings.json` (`permissions.allow`) for `claude --agent`, `claude --bg`, `claude attach`, `claude -r`, `claude --resume`, `claude stop`, `claude agents`, the tmux window and pane commands, and the `SendMessage` tool: without them, auto mode's classifier blocks the om-manager from launching om-reviewers mid `consolidate-task` or from sending the protocol's messages.
-- An `autoMode.allow` entry in `~/.claude/settings.json` (after `"$defaults"`) naming the overmind launches: `scripts/install` prints the exact text when it is missing.
-  Since Claude Code 2.1.281 the allow rules no longer short-circuit the launch; the classifier judges it and its built-in `Create Unsafe Agents` rule denies `--allow-dangerously-skip-permissions` unless an `autoMode.allow` entry clears it.
-  A session started before the edit keeps the old rules: recycle the om-manager (`prefix + R`) after adding it.
   You add them yourself; `scripts/install` checks and prints the missing ones with the exact JSON to paste.
-- The bypass-permissions disclaimer accepted once per machine: run `claude --dangerously-skip-permissions` in a terminal, accept the bypass warning (it is a different dialog from the folder trust one), exit.
-  om-reviewer and om-developer run with `permissionMode: bypassPermissions`, and without the acceptance their `--bg` launches fail and their classifiers block `SendMessage` between them.
-  You accept it yourself; `scripts/install` checks and reminds you if it is missing.
+- Auto mode available to the account (Pro, Max or Team): every session of the method runs in it, pinned with `--permission-mode auto`.
 
 ## Install
 
