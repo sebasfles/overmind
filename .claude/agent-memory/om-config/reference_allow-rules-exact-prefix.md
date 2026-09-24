@@ -1,12 +1,15 @@
 ---
 name: allow-rules-exact-prefix
-description: Auto mode allow rules only skip the classifier when every segment of a compound Bash command matches a rule; prefixes like export PATH=, VAR= or shell functions send the whole launch to the classifier, which blocks --allow-dangerously-skip-permissions as "Create Unsafe Agents"
+description: The om-reviewer/om-developer launch (`claude --bg --allow-dangerously-skip-permissions`) is a built-in auto mode soft_deny "Create Unsafe Agents"; the bare `cd ws && claude --bg ...` form is necessary (a prefix sends it to the classifier) but not sufficient, only an `autoMode.allow` prose entry in ~/.claude/settings.json clears it durably
 metadata:
   type: reference
 ---
 
-A `claude --bg --allow-dangerously-skip-permissions --agent om-reviewer ...` launch passes only when the Bash command is the bare skill form: `cd /abs/ws && claude --bg ...`, nothing else in the command.
+Two layers gate a `claude --bg --allow-dangerously-skip-permissions --agent om-reviewer ...` launch from an om-manager in auto mode.
 
-**Why:** 2026-09-20, auvral's om-manager prefixed the launch with `export PATH=$HOME/.nvm/...; R=...; WS=...` and once wrapped it in a `launch(){}` function; no allow rule matches those segments, so the classifier evaluated the full command and denied it as "Create Unsafe Agents". my-napkin's manager used the literal form and never hit the classifier. Follow-up commands (even a `grep` on settings) get the same tag because the classifier judges in context.
+1. `permissions.allow` rules (`Bash(claude --bg *)` and friends) resolve before the classifier only when every segment of the compound command matches; a `export PATH=...;`, `VAR=` or shell function prefix sends the whole line to the classifier. `Bash(*)` is suspended in auto mode and helps nothing.
+2. The classifier's default `soft_deny` "Create Unsafe Agents" blocks any agent loop started with `--dangerously-skip-permissions` / `--allow-dangerously-skip-permissions`. `permissions.allow` does not clear it; an `autoMode.allow` prose entry (with `"$defaults"`) in `~/.claude/settings.json` does, and so does Sebastian naming the exact launch in the conversation. Project `.claude/settings*.json` are not read for `autoMode`.
 
-**How to apply:** when a manager reports the classifier blocking a launch, read the exact command text in its transcript before suspecting settings; the fix is the command form, not more rules. Per-project `settings.local.json` copies of the global rules do not help.
+**Why:** 2026-09-20 auvral: prefixed launches denied, bare ones passed (layer 1). 2026-09-24 bseen: the bare form, identical to five launches that passed in my-napkin on 09-21 (2.1.278), was denied on 2.1.281 after settings.json changed the same morning; `claude auto-mode defaults --label 'Create Unsafe'` names the rule. Which of the two changes flipped it is not proven.
+
+**How to apply:** when a manager reports "Create Unsafe Agents", first read the exact command in its transcript (`~/.claude/projects/<proj>/*.jsonl`, tool_use Bash with `claude --bg`); if it is bare, the fix is the `autoMode.allow` entry, which is Sebastian's act (ARD 2026-08-31: install prints, never writes). Check with `claude auto-mode config`. Denials can be retried from `/permissions` > Recently denied with `r`.
