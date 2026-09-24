@@ -41,18 +41,6 @@ projects:
     tmux: bseen
     status: active
     repos:
-      - name: bseen-app
-        base_branch: main
-      - name: bseen-backend
-        base_branch: main
-      - name: bseen-company-portal-backend
-        base_branch: main
-      - name: bseen-company-portal-frontend
-        base_branch: main
-      - name: bseen-frontend
-        base_branch: main
-      - name: bseen-infra
-        base_branch: main
       - name: bseen-landing-page
         base_branch: main
   - name: local-auctions
