@@ -515,3 +515,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: one more manual requirement per machine and a wide exception in prose: any command matching that description skips the "Create Unsafe Agents" judgment in every auto mode session of the machine, not only om-managers. Whether 2.1.281 stopped honoring the `Bash(claude --bg *)` rule for this line or the classifier now runs on it regardless is not proven; the entry covers both.
 - Revisit when: a Claude Code release states allow rules short-circuit the launch again, or offers a per-agent way to declare the exception; or when a launch is denied with the entry present in a fresh session, which means the server-side classifier stopped reading `autoMode.allow`.
 - Files: scripts/install, docs/usage-guide.md, docs/02-orchestration.md, docs/06-pilot.md, agents/om-manager.md, skills/consolidate-task/SKILL.md, skills/start-task/SKILL.md, skills/delegate-pr/SKILL.md, docs/method-ard.md.
+
+## 2026-09-24: om-manager gets the Artifact tool
+
+- Decision: `Artifact` joins the `tools:` allowlist of `agents/om-manager.md`. `overmind` and `om-config` stay without it.
+- Alternatives rejected: dropping the `tools:` list so the om-manager gets every tool (the allowlist is what keeps MCP servers and other tools out of a session that plans and delegates); adding it to every cockpit agent (only the om-manager produces documents Sebastian shares).
+- Reason: on 2026-09-24 the diy om-manager could not publish the plan comparison Sebastian asked for: the tool errored as disabled, and a plain session started minutes later on the same version had it. The `tools:` list dates from 2026-08-29 and predates the tool; `plan-task` already says artifacts are published only on Sebastian's ask, so the behavior rule existed without the tool.
+- Debt created: each new built-in tool has to be added to the allowlist by hand; there is no lint for a tool the skills mention and the agent lacks.
+- Revisit when: a second tool goes missing the same way; then `scripts/lint-method` checks that every tool a skill names appears in its agent's `tools:`.
+- Files: agents/om-manager.md, docs/method-ard.md.

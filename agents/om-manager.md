@@ -8,7 +8,7 @@ memory: project
 skills:
   - plan-task
 initialPrompt: "/check-work"
-tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch, WebSearch, Agent(om-setup-worker)
+tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch, WebSearch, Artifact, Agent(om-setup-worker)
 color: blue
 ---
 
