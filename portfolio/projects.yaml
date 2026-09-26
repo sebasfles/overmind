@@ -81,6 +81,4 @@ projects:
     root: /home/fless/dev/personal/projects/factored-ai
     tmux: factored-ai
     status: active
-    repos:
-      - name: "."
-        base_branch: main
+    repos: []
