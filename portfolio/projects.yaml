@@ -82,5 +82,5 @@ projects:
     tmux: factored-ai
     status: active
     repos:
-      - name: factored-hackathon-2026-acgs
+      - name: hackathon
         base_branch: main
