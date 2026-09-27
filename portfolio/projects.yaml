@@ -81,4 +81,6 @@ projects:
     root: /home/fless/dev/personal/projects/factored-ai
     tmux: factored-ai
     status: active
-    repos: []
+    repos:
+      - name: factored-hackathon-2026-acgs
+        base_branch: main
