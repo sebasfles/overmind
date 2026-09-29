@@ -3,7 +3,7 @@ name: add-project
 description: Register a project (root, repos) in the portfolio; also pause or remove. overmind; Sebastian invokes it.
 effort: low
 argument-hint: "[PATH_OR_NAME] [pause | remove]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # add-project

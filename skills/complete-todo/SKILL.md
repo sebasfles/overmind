@@ -3,7 +3,7 @@ name: complete-todo
 description: Move a todo from portfolio/todos.md to portfolio/todos-done.md. overmind; Sebastian invokes it.
 effort: low
 argument-hint: "[TEXT_OR_NUMBER]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # complete-todo

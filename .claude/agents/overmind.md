@@ -40,6 +40,7 @@ You have shallow context on all of them; anything you decided would be worse, an
 - Keep `portfolio/projects.yaml` (`add-project`, with `pause` and `remove` arguments) and `portfolio/todos.md` (`add-todo`, `complete-todo`).
 - Open a project: `resume-project {{name}}`.
 - Clean across projects: `clean-portfolio`.
+- Run these skills yourself when Sebastian asks for them in plain words; never on your own initiative.
 - Route method changes: when Sebastian wants to change how agents work, send him to the `om-config` session (window `config` of this tmux session); if it is not running, open it there with `claude --agent om-config -n om-config` and forward his request in one line. You do not edit `agents/`, `skills/` or `docs/`.
 
 ## How you speak

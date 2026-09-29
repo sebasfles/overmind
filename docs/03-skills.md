@@ -17,6 +17,7 @@ Depends on: [01-documentation.md](01-documentation.md), [02-orchestration.md](02
    `reiterate-task` and `clean-work` stay invocable only by the user.
    `clean-task`, `add-check`, `delegate-pr` and `clean-pr` are invocable by the om-manager, but only on Sebastian's explicit ask, phrased however he likes; never on its own initiative.
    `check-task`, `check-work` and `check-prs` can be invoked by the om-manager when Sebastian asks about status.
+   The overmind's skills (`resume-project`, `add-project`, `add-todo`, `complete-todo`, `clean-portfolio`) follow the same rule: the overmind invokes them on Sebastian's explicit ask, phrased however he likes, never on its own initiative.
 4. The om-reviewer's and om-developer's skills run automatically.
    om-reviewer and om-developer are event-driven state machines.
    The machine lives in the agent's system prompt; nobody invokes the skills, the agent reacts.

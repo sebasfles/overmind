@@ -3,7 +3,7 @@ name: resume-project
 description: Open a registered project in a new terminal tab with its om-manager. overmind; Sebastian invokes it.
 effort: low
 argument-hint: "[NAME]"
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # resume-project
