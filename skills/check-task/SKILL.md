@@ -17,7 +17,7 @@ task has phases. om-manager only; may run on its own when Sebastian asks about a
 Input: a task id (`0142`) or a task folder path.
 Output: one line per task (or per phase), nothing else.
 
-Read `task.md` frontmatter: `id`, `title`, `type`, `branch`, `phases`, `modules`, `repos`, `depends_on`.
+Read `task.md` frontmatter: `id`, `title`, `type`, `crew`, `branch`, `phases`, `modules`, `repos`, `depends_on`.
 `WORKSPACE = {{ROOT}}/.workspaces/{{id}}_{{title}}`.
 Repos to inspect: `repos` plus the root in multirepo.
 
@@ -30,6 +30,7 @@ Repos to inspect: `repos` plus the root in multirepo.
 | context | `Context & decisions` non-empty (root workspace copy if the workspace exists, else root checkout copy) |
 | ahead | any repo: `git -C {{WORKSPACE}}/{{name}} rev-list --count origin/{{base}}..HEAD` > 0 |
 | om-developer | `claude agents --json` lists `om-{{id}}-developer*` with cwd under `WORKSPACE`, or panes of `task-{{id}}` show it |
+| om-devops working | `crew: devops`, the task folder exists in the root worktree of `WORKSPACE` (delegation's rebase brought it), and `claude agents --json` lists `om-{{id}}-devops` |
 | prs | per repo: `gh -R {{owner/repo}} pr list --head {{branch}} --state all --json number,state,mergedAt,url` |
 
 If `gh` fails (not logged in, the active account has no access to the repo, network), `prs` is unknown, not empty: never derive `in_review`, `merged` or `done` from it.
@@ -46,7 +47,7 @@ First match wins:
 | every expected PR merged (code repos touched, plus root in multirepo) and no workspace | `done` |
 | every expected PR merged and workspace exists | `merged` (pending `clean-task`) |
 | any PR open | `in_review` |
-| ahead or om-developer | `in_progress` |
+| ahead, om-developer or om-devops working | `in_progress` |
 | workspace and context | `consolidated` |
 | workspace and no context | `consolidating` |
 | folder only | `planned` |

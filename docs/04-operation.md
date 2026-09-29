@@ -16,7 +16,7 @@ It's a tmux session `overmind` in the root of the `~/dev/personal/projects/overm
 | `om-config` | `om-config` | `config` window | maintain the method with `update-method` |
 
 `bin/resume-overmind` opens the complete session; if `overmind` starts and `om-events` is not running, it opens or resumes it in the right pane.
-The three agents live in the repo's `.claude/agents/` (project scope), because they only run here; the four roles that run inside projects live in `agents/` with a global symlink.
+The three agents live in the repo's `.claude/agents/` (project scope), because they only run here; the roles that run inside projects live in `agents/` with a global symlink.
 
 Routing rule: questions about projects, status or notifications go to `overmind`; changes to the method go to `om-config`.
 If one is requested in the other's session, that session opens or resumes the correct one and forwards the request in one line.
@@ -91,13 +91,13 @@ Sebastian already works with one tmux session per project (`diy`, `auvral`, `dri
 Behavior:
 
 1. Reads `projects.yaml` to get `root` and `tmux`.
-2. If the tmux session doesn't exist, creates it with cwd at `root` and the window `om-manager` running `claude --agent om-manager -n om-{{name}}-manager`.
+2. If the tmux session doesn't exist, creates it with cwd at `root` and the window `om-manager` running `claude --dangerously-skip-permissions --agent om-manager -n om-{{name}}-manager`.
 3. Guarantees the `om-manager` window at index 1: if the session already exists without it, or with it at another index, the script inserts or moves it to 1 with `-b`, shifting other windows up.
 4. Selects window 1, opens the tab in the current Windows Terminal window and attaches to the session.
 
 ```bash
 tmux has-session -t "$name" 2>/dev/null || \
-  tmux new-session -d -s "$name" -c "$path" -n om-manager "claude --agent om-manager -n om-${name}-manager"
+  tmux new-session -d -s "$name" -c "$path" -n om-manager "claude --dangerously-skip-permissions --agent om-manager -n om-${name}-manager"
 
 # repair an existing session: om-manager always at index 1
 tmux move-window -b -s "$name:om-manager" -t "$name:1"
@@ -152,9 +152,9 @@ Being in a hot file means open; counting is counting lines; git and the done fil
 
 ### Agent content
 
-`agents/om-manager.md`, `om-reviewer.md`, `om-developer.md`, `om-pr-reviewer.md`, `overmind.md` and `om-setup-worker.md`, in the `overmind` repo, with symlinks from `~/.claude/agents/`.
+`agents/om-manager.md`, `om-reviewer.md`, `om-developer.md`, `om-devops.md`, `om-architect.md`, `om-pr-reviewer.md` and `om-setup-worker.md`, in the `overmind` repo, with symlinks from `~/.claude/agents/`; `overmind.md`, `om-events.md` and `om-config.md` in `.claude/agents/`.
 Written as a draft on 2026-08-29; see `03-skills.md`.
-Each with: role description, allowed skills, allowed tools, permission mode, state machine (for om-reviewer and om-developer), and rules for what it never does.
+Each with: role description, allowed skills, allowed tools, state machine (for om-reviewer, om-developer and om-devops), and rules for what it never does; none declares a permission mode, every session runs bypassed from its launch line (`02-orchestration.md`).
 
 ### `~/OPINIONS.md`: dropped
 

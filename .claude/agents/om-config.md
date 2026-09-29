@@ -3,7 +3,6 @@ name: om-config
 description: "Maintainer of the method: changes agents, skills and docs through update-method. Long-lived session om-config."
 model: fable
 effort: high
-permissionMode: auto
 memory: project
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch, WebSearch
 color: purple

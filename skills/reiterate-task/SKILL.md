@@ -11,11 +11,14 @@ disable-model-invocation: true
 ## Purpose
 
 Send a published task back for another round with Sebastian's PR comments: record them dated in retakes.md of
-the workspace copy, make sure om-reviewer and om-developer are running, and tell the om-reviewer "retakes updated".
+the workspace copy, make sure the crew is running (om-reviewer, or om-devops when `crew: devops`), and tell its
+first session "retakes updated".
 om-manager only; Sebastian invokes it.
 
 Input: a task id or folder, and Sebastian's comments (inline, or "read the PR" to pull review comments with `gh`).
-Output: `retakes.md` updated in the workspace copy, om-reviewer notified.
+Output: `retakes.md` updated in the workspace copy, `{{SESSION}}` notified.
+
+`SESSION` is `om-{{id}}-reviewer`, or `om-{{id}}-devops` when `task.md` says `crew: devops`.
 
 ## 1. Preconditions
 
@@ -44,21 +47,21 @@ Workspace copy only; the task is delegated.
 
 ## 4. Sessions
 
-om-reviewer running: continue.
-om-reviewer stopped: reopen its window and session (`claude attach` / `claude -r`) as `delegate-task` does.
+`{{SESSION}}` running: continue.
+`{{SESSION}}` stopped or lost: reopen or relaunch it as `delegate-task` step 2 does.
 om-developer missing: nothing to do; the om-reviewer relaunches it with `start-task` if needed.
 
 ## 5. Notify
 
-`SendMessage` to `om-{{id}}-reviewer`: `retakes updated: retake {{n}}, PR #{{number}}`.
-The om-reviewer runs `analyze-task` in reiteration mode, turns the retakes into findings, and the round loop continues.
+`SendMessage` to `{{SESSION}}`: `retakes updated: retake {{n}}, PR #{{number}}`.
+It runs `analyze-task` in reiteration mode: the om-reviewer turns the retakes into findings and the round loop continues; an om-devops applies them itself and publishes again.
 
 ## 6. Report
 
-One line to Sebastian: `{{id}}_{{title}}: retake {{n}} sent to om-reviewer`.
+One line to Sebastian: `{{id}}_{{title}}: retake {{n}} sent to {{SESSION}}`.
 
 ## Rules
 
 - Never rewrite or delete earlier retakes.
 - Never talk to the om-developer.
-- Never decide on Sebastian's comments; the om-reviewer does and documents it in the PR comment.
+- Never decide on Sebastian's comments; `{{SESSION}}` does and documents it in the PR description.

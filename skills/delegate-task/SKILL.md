@@ -1,6 +1,6 @@
 ---
 name: delegate-task
-description: "Hand a consolidated task to its om-reviewer with \"delegated, start\". om-manager; runs on Sebastian's yes to consolidate-task's offer, or when he asks."
+description: "Hand a consolidated task to its om-reviewer or om-devops with \"delegated, start\". om-manager; runs on Sebastian's yes to consolidate-task's offer, or when he asks."
 effort: medium
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
@@ -10,18 +10,18 @@ disable-model-invocation: false
 
 ## Purpose
 
-Hand a consolidated task to its om-reviewer. Checks depends_on, makes sure the om-reviewer session is running
-(reopening the stopped one with its context intact), rebases the root worktree so the workspace receives the
-task folder with its decisions, and sends "delegated, start". The om-reviewer launches the om-developer. om-manager
-only; it runs on Sebastian's yes to consolidate-task's offer, or when he asks.
+Hand a consolidated task to its crew session (the om-reviewer, or the om-devops when `crew: devops`). Checks
+depends_on, makes sure that session is running (reopening the stopped one with its context intact), rebases the
+root worktree so the workspace receives the task folder with its decisions, and sends "delegated, start". The
+om-reviewer launches the om-developer; an om-devops works alone. om-manager only; it runs on Sebastian's yes to consolidate-task's offer, or when he asks.
 
 Input: `$ARGUMENTS[0]`, a consolidated task folder in the root checkout: committed as `planned`, workspace present, `Context & decisions` written.
 If any is missing, stop: the task needs `consolidate-task` first.
 
-Output: the om-reviewer running in its tmux window with `delegated, start` delivered.
-From here the om-manager does not intervene until the om-reviewer reports `PRs ready`.
+Output: `{{SESSION}}` running in its tmux window with `delegated, start` delivered.
+From here the om-manager does not intervene until `{{SESSION}}` reports `PRs ready`.
 
-Set `TASK`, `WORKSPACE`, `WINDOW`, `SESSION`, `PROJECT`, `REPOS` as in `consolidate-task`.
+Set `TASK`, `WORKSPACE`, `WINDOW`, `AGENT`, `SESSION`, `PROJECT`, `REPOS` as in `consolidate-task`; `SESSION` is `om-{{id}}-reviewer`, or `om-{{id}}-devops` when `crew: devops`.
 `ROOT_WT` = the root's worktree inside the workspace: `{{WORKSPACE}}/{{root name}}` in multirepo; `{{WORKSPACE}}/{{repo name}}` in single and mono (the code worktree is the root's).
 
 ## 1. Dependencies
@@ -29,13 +29,13 @@ Set `TASK`, `WORKSPACE`, `WINDOW`, `SESSION`, `PROJECT`, `REPOS` as in `consolid
 Derive the state of every id in `depends_on` as `check-task` does.
 If any is not `done`, stop and say which task blocks this one.
 
-## 2. om-reviewer session
+## 2. Crew session
 
 | State | How you know | Action |
 |---|---|---|
 | Running | `claude agents --json` lists `{{SESSION}}`, or a live pane in `{{WINDOW}}` | nothing |
 | Stopped | `claude agents --all --json` lists `{{SESSION}}` (take its `id`), or its transcript exists under `~/.claude/projects/{{slug of WORKSPACE}}/` | `tmux new-window -t {{PROJECT}} -n {{WINDOW}} -c {{WORKSPACE}}`, then `claude attach {{id}}` (or `claude -r {{session-id}}`) in the pane; context intact |
-| Lost | none of the above | launch a new om-reviewer as `consolidate-task` step 4 does; its `analyze-task` finds `Context & decisions` written and does not ask; wait for `consolidated` |
+| Lost | none of the above | launch a new `{{AGENT}}` as `consolidate-task` step 4 does; its `analyze-task` finds `Context & decisions` written and does not ask; wait for `consolidated` |
 
 The bare `claude agents` needs a TTY and fails from Bash; always pass `--json`.
 
@@ -58,11 +58,11 @@ If the rebase fails, stop and show the error.
 delegated, start. task: {{ROOT_WT}}/docs/tasks/{{TASK}}/
 ```
 
-The om-reviewer runs `start-task`.
+The om-reviewer runs `start-task`; an om-devops starts implementing.
 
 ## 5. Report
 
-One line to Sebastian: `{{TASK}} delegated; om-reviewer {{SESSION}} in window {{WINDOW}}`.
+One line to Sebastian: `{{TASK}} delegated; {{SESSION}} in window {{WINDOW}}`.
 Then wait; do not poll.
 
 ## Rules

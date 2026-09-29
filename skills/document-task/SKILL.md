@@ -1,6 +1,6 @@
 ---
 name: document-task
-description: Update the module docs affected by the task, with updated and source. om-developer; once per task or phase, on the om-reviewer's clean signal.
+description: Update the module docs affected by the task, with updated and source. om-developer on the clean signal, or om-devops before publishing; once per task.
 effort: medium
 disable-model-invocation: false
 ---
@@ -11,7 +11,8 @@ disable-model-invocation: false
 
 Update the module documentation affected by the task (or phase): prd.md, trd.md, ard.md, database.md, flows.md
 of each module touched, with updated and source frontmatter, and one ARD entry per decision not already
-recorded. om-developer only; runs once, on `round {{N}} clean, document`, when the code is final and before publish.
+recorded. om-developer, once, on `round {{N}} clean, document`; or om-devops, once, before its own `publish-task`.
+Always when the code is final and before publish.
 
 Input: the diff of the task (or phase) against `origin/{{base}}`, the task folder and `om-developer notes`.
 Output: `docs/modules/{{module}}/*.md` updated for every module the task touched, and the `Debt index` of `docs/ARD.md` current, both in the root worktree.
@@ -64,7 +65,7 @@ Read `templates/ard-entry.md` and fill it:
 - Source: {{id}}_{{title}}
 ```
 
-If a decision changes a global one in `docs/ARD.md`, do not edit its `Decisions`; add the module entry and flag it in `om-developer notes` for the om-reviewer.
+If a decision changes a global one in `docs/ARD.md`, do not edit its `Decisions`; add the module entry and flag it in `om-developer notes` (for the om-reviewer, or for the PR's `Decisions` in a `crew: devops` task).
 
 If the task paid a debt an earlier entry recorded, that entry is not superseded and not rewritten: add one line under its `Debt created`.
 

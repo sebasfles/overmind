@@ -2,6 +2,8 @@
 id: "{{id}}"
 title: {{title}}
 type: {{feature | bug | docs | chore | refactor}}
+crew: {{pair | devops}}
+clearance: {{repo | full}}
 branch: {{prefix}}/{{id}}_{{title}}
 modules: [{{primary}}, {{other}}]
 repos: [{{repo}}]

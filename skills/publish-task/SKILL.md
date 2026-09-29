@@ -1,6 +1,6 @@
 ---
 name: publish-task
-description: Push, open one PR per repo and write the summary as the root PR's description. om-reviewer; when review-task finds no issues.
+description: Push, open one PR per repo, write the summary as the root PR's description. om-reviewer on a clean review-task, or om-devops when its work is done.
 effort: high
 disable-model-invocation: false
 ---
@@ -11,10 +11,11 @@ disable-model-invocation: false
 
 Push every branch of the task workspace, open one PR per repo touched (plus the root docs repo in multirepo
 projects), and write or update the summary as the root repo PR's description (Intent, What changed with
-links to each code PR, Decisions, Risk assessment, Pipeline per target and per check). Notifies the om-manager. om-reviewer only;
-runs when review-task finds no issues.
+links to each code PR, Decisions, Risk assessment, Pipeline per target and per check). Notifies the om-manager.
+om-reviewer when review-task finds no issues; om-devops in a `crew: devops` task, after its last green `verify-task` and
+`document-task`.
 
-Input: a clean `review-task` plus the om-developer's `docs ready, commit {{sha}}`.
+Input: a clean `review-task` plus the om-developer's `docs ready, commit {{sha}}`; for an om-devops, its own green `verify.log` block at the last commit and its docs commit.
 Output: all branches pushed, one PR per repo, the summary as the root PR's description, om-manager notified.
 
 `ROOT_WT` as in `delegate-task`.
@@ -30,7 +31,7 @@ For each module in `modules`, plus any module the diff touched:
 - `trd.md` reflects new or changed endpoints; `database.md` reflects new tables, columns or invariants; `flows.md` if a complex flow changed.
 - `ard.md` has an entry for every decision `om-developer notes` records that `Approach` and `Context & decisions` did not.
 
-Missing or stale docs: `SendMessage` the om-developer `docs findings: {{k}} ...`, stop, and rerun this step on the next `docs ready, commit {{sha}}`.
+Missing or stale docs: `SendMessage` the om-developer `docs findings: {{k}} ...`, stop, and rerun this step on the next `docs ready, commit {{sha}}`; an om-devops fixes them itself and reruns this step.
 
 ## 2. Push
 
@@ -63,9 +64,9 @@ Read `templates/pr-summary.md` and fill it:
 
 - Intent: two or three sentences at goal level, no implementation detail; name a consolidation agreement only if it changes how to read the PR.
 - What changed: at most 10 bullets, one concise line each, no subclauses; in multirepo, group by repo and link each code PR.
-- Decisions: one line per decision or let-pass with its reason; include the merge order between repos if any (for example `merge diy-infra first`).
+- Decisions: one line per decision or let-pass with its reason; include the merge order between repos if any (for example `merge diy-infra first`). In a `crew: devops` task, also one line per external action applied (`terraform apply` on dev, an `aws` change), from `om-developer notes`.
 - Risk assessment: exactly `✅ Low`, `⚠️ Medium` or `🔴 High`, judged with the rubric of `review-pr` step 5: `✅ Low` unless the base branch is in production and a defect would reach real users; Medium and High name the failure and what to watch after merge.
-- Pipeline: one bare `✅` line per step, never GitHub task checkboxes, no inline extra info; the review line reads `{{k}} issues auto-fixed`; the checks line lists the check names that ran with their total findings fixed, or `n/a`; `documentation` and `push` are bare passed lines.
+- Pipeline: one bare `✅` line per step, never GitHub task checkboxes, no inline extra info; in a `crew: devops` task the review and checks lines read `n/a (crew: devops)`; the review line reads `{{k}} issues auto-fixed`; the checks line lists the check names that ran with their total findings fixed, or `n/a`; `documentation` and `push` are bare passed lines.
 - Everything longer (commands, targets, findings as `file:line, defect, fix, re-checked`, shas, modules) goes only inside the collapsed `<details>` block; Sebastian opens it when he wants depth.
 
 Write it as the PR's description: `gh -R {{owner/repo}} pr edit {{number}} --body-file {{file}}`.

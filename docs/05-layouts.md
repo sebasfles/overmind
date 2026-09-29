@@ -17,7 +17,7 @@ All three are described with the same abstraction, and single and mono are cases
 ## Glossary
 
 - Root checkout: the clone of the root where om-manager runs, always on its base branch.
-- Workspace: `{{root}}/.workspaces/{{task}}/`, cwd of om-reviewer and om-developer, with one worktree per repo touched.
+- Workspace: `{{root}}/.workspaces/{{task}}/`, cwd of om-reviewer and om-developer (or the om-devops), with one worktree per repo touched. Two other kinds live beside it: `pr-{{n}}/` for an om-pr-reviewer and `plan-{{title}}/`, an om-architect's scratch.
 - Root worktree: the root's worktree inside the workspace; in single and mono it is the same worktree as the code.
 - Root checkout copy: the task folder in the root checkout; it is written only before `delegate-task`.
 - Workspace copy: the task folder in the workspace's root worktree; it is written only after `delegate-task`.

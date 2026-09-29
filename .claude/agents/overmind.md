@@ -3,7 +3,6 @@ name: overmind
 description: "Sebastian's cockpit across all projects: aggregated state, notifications, todos, opening projects. Never decides on a project."
 model: opus
 effort: medium
-permissionMode: auto
 memory: user
 initialPrompt: "/check-portfolio"
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch, WebSearch

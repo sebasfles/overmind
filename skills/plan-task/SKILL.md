@@ -1,6 +1,6 @@
 ---
 name: plan-task
-description: Plan a piece of work with Sebastian into an approved plan. om-manager; runs when Sebastian describes work he wants planned.
+description: Plan a piece of work with Sebastian into an approved plan. om-manager, or om-architect in window plan-{{title}}; when Sebastian describes work to plan.
 argument-hint: "[DESCRIPTION_OR_TICKET]"
 disable-model-invocation: false
 effort: high
@@ -12,12 +12,13 @@ effort: high
 
 Plan a piece of work with Sebastian for this project. Reads the project docs following the reading route, asks
 only what the docs cannot answer, and produces an approved plan (goal, scope, acceptance, approach, phases).
-Ends by offering create-task. om-manager only; it runs when Sebastian describes work he wants planned, slash command or not.
+Ends by offering create-task. om-manager, or om-architect in window plan-{{title}} (opened by delegate-plan); it runs
+when Sebastian describes work he wants planned, slash command or not.
 
 Input: `$ARGUMENTS`, a free-text description from Sebastian, a ticket reference, or nothing (then ask what he wants to build).
 
 Output: a plan approved by Sebastian, handed to `create-task` immediately after approval.
-The only thing this skill may write is a draft under `docs/tasks/_drafts/`.
+The only thing this skill may write is a draft under `docs/tasks/_drafts/`; an om-architect may also write scratch (prototypes, query results) under `{{ROOT}}/.workspaces/plan-{{title}}/`, never in the root checkout.
 
 ## 1. Read before asking
 
@@ -40,6 +41,10 @@ Decide and state:
 - `type`: `feature`, `bug`, `docs`, `chore` or `refactor`.
 - `modules`: every module touched, primary first. A task may span several modules; do not force it into one.
 - platform track(s): backend, frontend, mobile, infra. The TRD tells you. Infra is usually an extra track on top of a platform one.
+- `crew`: `crew: pair` (om-reviewer plus om-developer, review rounds) by default; `crew: devops` (one om-devops, end to end, no review rounds, no phases) when the work is operating infrastructure or environments rather than writing reviewable code, and Sebastian says so.
+- `clearance`: `repo` by default (the workspace and the repo's own commands); `full` when the work needs cloud accounts, remote services, deploys or MCP writes, named in the plan's Infra section. `crew: devops` is always `full`.
+
+Recommend `crew` and `clearance` with the reason; Sebastian decides both.
 
 For `type: bug`, the plan must include a replication section: exact steps to reproduce end-to-end as a user would, expected vs observed, environment, evidence (logs, screenshots, ids).
 `create-task` writes it to `replication.md`; the om-developer must reproduce it before touching code and the om-reviewer verifies the fix against it.
@@ -68,6 +73,7 @@ Present it in this shape, in English, short:
 ```
 Goal          one paragraph: what and why, from the user's perspective
 Type / Modules
+Crew / Clearance  crew: pair | devops, clearance: repo | full, with the reason
 Scope         what is in
 Out of scope  what is explicitly not in, and deferred ideas
 Acceptance    numbered, observable, testable criteria
@@ -110,12 +116,14 @@ Do not publish artifacts on your own; if Sebastian wants one, he will ask.
 ## 7. Approve and hand off
 
 Iterate until Sebastian approves the plan.
-Then ask: "Create the task?" and, if yes, invoke `create-task` with the approved plan in context.
-If Sebastian says not now, update the draft one last time and tell him it is retakable: `create-task` accepts `docs/tasks/_drafts/{{title}}.md` in any future session.
+
+- om-manager: ask "Create the task?" and, if yes, invoke `create-task` with the approved plan in context.
+  If Sebastian says not now, update the draft one last time and tell him it is retakable: `create-task` accepts `docs/tasks/_drafts/{{title}}.md` in any future session.
+- om-architect: update the draft one last time, `SendMessage` to `om-{{project}}-manager`: `draft ready: {{absolute path of the draft}}`, and tell Sebastian to continue with the om-manager (`create-task`). Then stop; the om-manager closes this window when it creates the task.
 
 ## Rules
 
 - Never write code, pseudo-code or file contents.
-- Never write to disk except `docs/tasks/_drafts/`; task folders are `create-task`'s job.
+- Never write to disk except `docs/tasks/_drafts/` (and, for an om-architect, `.workspaces/plan-{{title}}/`); task folders are `create-task`'s job.
 - Speak to Sebastian in his language; the plan itself is in English.
 - If Sebastian's answers reveal a general preference rather than a one-off, ask whether to record it in `~/.claude/CLAUDE.md`.

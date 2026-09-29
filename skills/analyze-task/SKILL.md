@@ -1,6 +1,6 @@
 ---
 name: analyze-task
-description: Read the task, ask the om-manager once, write Context & decisions. om-reviewer; runs automatically at session start and on retakes.
+description: "Read the task, ask the om-manager once, write Context & decisions. om-reviewer, or om-devops in a crew: devops task; at session start and on retakes."
 effort: xhigh
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
@@ -13,7 +13,7 @@ disable-model-invocation: false
 om-reviewer's first action. Reads the task folder, the module docs and the code the task will touch, batches its
 doubts to the om-manager once, writes Context & decisions in the root checkout copy, and reports "consolidated".
 Idempotent: if Context & decisions is already written it does not ask again. Also incorporates new retakes
-when reiterated. om-reviewer only; runs automatically.
+when reiterated. om-reviewer, or om-devops in a `crew: devops` task; runs automatically.
 
 Input: the task folder path from your first message (`task: {{path}}`), an absolute path in the root checkout.
 Output: `Context & decisions` written in that copy, and the message `consolidated` to the om-manager.
@@ -69,6 +69,7 @@ In the root checkout copy of `task.md` (the path you were given), fill the secti
 - Constraints from `ard.md` and `trd.md` the om-developer must respect, cited by path.
 - What you will check in `review-task` beyond the Pipeline, if anything specific.
 - For bugs: any correction to `replication.md` preconditions or steps.
+- The clearance, restated in one line: `clearance: repo` (workspace and repo commands only) or `clearance: full` with the access the task names (accounts, environments, services).
 
 Keep it under 40 lines.
 Then `SendMessage` to the om-manager: `consolidated`.
@@ -78,10 +79,10 @@ Do not commit; the om-manager does.
 ## 6. Reiteration
 
 Read the new entries in `retakes.md` (workspace copy) and the PR comments they refer to.
-Translate them into concrete findings for the om-developer: `file:line` or acceptance criterion, what Sebastian wants, what is expected now.
+Translate them into concrete findings: `file:line` or acceptance criterion, what Sebastian wants, what is expected now.
 Append a dated `Reiteration {{n}}` block to `Context & decisions` in the workspace copy with those findings.
-`SendMessage` to the om-developer: `retakes: {{k}} findings, see Context & decisions, round {{n}}`.
-Then wait for `round {{N}} ready, commit {{sha}}`.
+om-reviewer: `SendMessage` to the om-developer: `retakes: {{k}} findings, see Context & decisions, round {{n}}`, then wait for `round {{N}} ready, commit {{sha}}`.
+om-devops: apply them yourself as a new round of your own loop, then publish again.
 
 ## Rules
 

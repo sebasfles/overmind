@@ -9,9 +9,9 @@ Everything not covered here is in `01` through `06`.
 - Claude Code with background sessions (`claude --bg`, `claude attach`, `claude agents`).
 - tmux, `gh` authenticated with the account that can open PRs in each project, and Windows Terminal if you work in WSL.
 - This repo cloned, and `~/bin` in the `PATH`.
-- Permission allow rules in `~/.claude/settings.json` (`permissions.allow`) for `claude --agent`, `claude --bg`, `claude attach`, `claude -r`, `claude --resume`, `claude stop`, `claude agents`, the tmux window and pane commands, and the `SendMessage` tool: without them, auto mode's classifier blocks the om-manager from launching om-reviewers mid `consolidate-task` or from sending the protocol's messages.
-  You add them yourself; `scripts/install` checks and prints the missing ones with the exact JSON to paste.
-- Auto mode available to the account (Pro, Max or Team): every session of the method runs in it, pinned with `--permission-mode auto`.
+- `"skipDangerousModePermissionPrompt": true` in `~/.claude/settings.json`: every session of the method runs bypassed (`--dangerously-skip-permissions` on its launch line), and without it an unattended `--bg` session stops at the disclaimer.
+  You set it yourself; `scripts/install` checks it and says so.
+  The `permissions.allow` rules and the `autoMode.allow` entry for the overmind launches from the auto mode era are harmless and no longer needed; remove them when you like.
 
 ## Install
 
@@ -95,6 +95,9 @@ Everything from the project's `om-manager`.
 The om-manager reads `docs/` and asks you only what isn't there, in batches of up to five, always with a recommendation.
 At the end it shows you the plan (Goal, Scope, Acceptance, Approach, Database, Risks) and asks "Create the task?".
 It keeps a draft in `docs/tasks/_drafts/` updated every turn, so nothing is lost if the session dies or is recycled.
+It also agrees with you the crew (`crew: pair`, the default, or `crew: devops` for infrastructure work done end to end by one om-devops with no review rounds) and the clearance (`repo`, the default, or `full` when the om-developer needs cloud accounts, remote services or deploys).
+
+For a long or exploratory idea, ask the om-manager to plan it in its own window: `delegate-plan` opens `plan-{{title}}` with an om-architect that plans with you there, may prototype and query what it needs, and hands the draft back to the om-manager, which offers `create-task`.
 
 ### 2. Create
 
@@ -118,6 +121,8 @@ Then: "Delegate now?".
 The om-manager reopens the om-reviewer if it was paused, sends it `delegated, start`, and the om-reviewer opens the right pane with the `om-developer`.
 From here you don't intervene.
 You can look at the `task-{{id}}` window whenever you want: the om-reviewer on the left, the om-developer on the right.
+
+With `crew: devops` there is no right pane: the om-devops works alone in the window, applies what the task names, verifies, documents and publishes, with no review rounds.
 
 ### 5. Wait
 
@@ -174,12 +179,12 @@ Nobody stores state; it's inferred:
 
 ## When something gets stuck
 
-- A `[blocker]` in `om-events` means an om-developer or om-reviewer couldn't continue due to missing permissions, credentials, environment, or tools, and neither the om-reviewer nor the om-manager could resolve it.
+- A `[blocker]` in `om-events` means an om-developer, om-reviewer or om-devops couldn't continue due to missing permissions, credentials, environment, or tools, and neither the om-reviewer nor the om-manager could resolve it.
   It's the only thing that escalates the whole chain.
   Go into the project, look at the task's window, fix what's missing (an `.env`, a `gh` login), and tell the om-manager to continue.
 - A session's context is heavy or about to compact: `prefix + R` in its pane recycles it (`respawn-pane -k` relaunches the original command, so agent, name and cwd stay correct and the context starts empty).
   The old conversation stays archived on disk; nothing addresses it again.
-  Works on any agent pane: om-manager, om-reviewer, `overmind`, `om-events`, `om-config`.
+  Works on any agent pane: om-manager, om-reviewer, om-devops, om-architect, `overmind`, `om-events`, `om-config`.
   If the window or the whole tmux session is gone, `resume-overmind` and `resume-project` recreate the layout instead.
 - A session died: the state lives in the task's folder, in git, and in the PRs.
   `claude agents` lists live and stopped sessions; `claude attach {{id}}` reopens one with its context.
@@ -206,4 +211,4 @@ docs/tasks/{{id}}_{{title}}/     task.md, replication.md, phase_N.md, retakes.md
 ```
 
 Branches: `feat/0142_badge_wall`, `bugfix/0143_fix_login`, with `-phase-N` if there are phases.
-Sessions: `om-diy-manager`, `om-0142-reviewer`, `om-0142-developer`.
+Sessions: `om-diy-manager`, `om-0142-reviewer`, `om-0142-developer`, `om-0143-devops`, `om-badge_wall-architect`.

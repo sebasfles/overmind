@@ -1,6 +1,6 @@
 ---
 name: consolidate-task
-description: Create the task workspace, launch the om-reviewer and commit the task as planned. om-manager; runs on Sebastian's yes to create-task's offer, or when he asks.
+description: Create the task workspace, launch its om-reviewer or om-devops, commit the task as planned. om-manager; on Sebastian's yes to create-task's offer, or when he asks.
 effort: high
 argument-hint: "[TASK_FOLDER]"
 disable-model-invocation: false
@@ -12,16 +12,16 @@ disable-model-invocation: false
 
 Take a created task from disk to consolidated. Creates the task workspace (one worktree per repo the task
 touches, plus the root repo's worktree in multirepo projects), bootstraps each worktree, opens the tmux
-window, launches the om-reviewer alone inside the workspace, relays the om-reviewer's questions to Sebastian until
-Context & decisions is written, then commits and pushes the task folder as planned with Sebastian's approval.
+window, launches the crew's first session alone inside the workspace (the om-reviewer, or the om-devops when
+`crew: devops`), relays its questions to Sebastian until Context & decisions is written, then commits and pushes the task folder as planned with Sebastian's approval.
 Ends by asking whether to delegate now. om-manager only; it runs on Sebastian's yes to create-task's offer, or when he asks.
 
 Input: `$ARGUMENTS[0]`, the absolute path of a task folder under `{{ROOT}}/docs/tasks/`, uncommitted, with no workspace yet.
 If the folder is missing or a workspace already exists, stop and say so.
 
-Output: workspace with bootstrapped worktrees, tmux window, running om-reviewer; `Context & decisions` written in the root checkout copy; the task folder (plan plus decisions) committed and pushed as `planned`, the only docs commit of the task on the root's base branch; and the question "delegate now?".
+Output: workspace with bootstrapped worktrees, tmux window, running om-reviewer or om-devops; `Context & decisions` written in the root checkout copy; the task folder (plan plus decisions) committed and pushed as `planned`, the only docs commit of the task on the root's base branch; and the question "delegate now?".
 
-Read `task.md` frontmatter: `id`, `title`, `type`, `phases`, `depends_on`, `repos`.
+Read `task.md` frontmatter: `id`, `title`, `type`, `crew`, `phases`, `depends_on`, `repos`.
 Read `docs/TRD.md`, section Components, for the repos and each `base_branch`; the root is your cwd.
 If the TRD has no Components table yet, use `git -C {{repo}} symbolic-ref refs/remotes/origin/HEAD` per repo and tell Sebastian the TRD should declare it.
 Set:
@@ -34,7 +34,8 @@ BRANCH     = {{PREFIX}}/{{TASK}}                or {{PREFIX}}/{{TASK}}-phase-1 i
 WORKSPACE  = {{ROOT}}/.workspaces/{{TASK}}
 REPOS      = task.md repos (in single and mono: ["."])
 WINDOW     = task-{{id}}
-SESSION    = om-{{id}}-reviewer
+AGENT      = om-reviewer | om-devops                  (by crew: pair | devops; missing crew is pair)
+SESSION    = om-{{id}}-reviewer                    or om-{{id}}-devops when crew: devops
 PROJECT    = the tmux session you run in (same name as the project)
 ```
 
@@ -67,32 +68,31 @@ From the TRD section of that repo or app:
 
 If the TRD has no such section, copy `.env*` files that exist in the main clone and run the stack's default install; then tell Sebastian the TRD should declare them.
 
-## 4. tmux window with the om-reviewer
+## 4. tmux window with the crew
 
 Primary form (`--bg` + `attach`, to be validated in the pilot):
 
 ```
 cd {{WORKSPACE}}
-claude --bg --permission-mode auto --agent om-reviewer -n {{SESSION}} "task: {{TASK_FOLDER}} root: {{ROOT}} workspace: {{WORKSPACE}}"
+claude --bg --dangerously-skip-permissions --agent {{AGENT}} -n {{SESSION}} "task: {{TASK_FOLDER}} root: {{ROOT}} workspace: {{WORKSPACE}}"
 tmux new-window -t {{PROJECT}} -n {{WINDOW}} -c {{WORKSPACE}}
 tmux send-keys -t {{PROJECT}}:{{WINDOW}} "claude attach {{bg-id}}" Enter
 ```
 
-Fallback form: same `tmux new-window`, then `claude --permission-mode auto --agent om-reviewer -n {{SESSION}} '...'` in the pane.
+Fallback form: same `tmux new-window`, then `claude --dangerously-skip-permissions --agent {{AGENT}} -n {{SESSION}} '...'` in the pane.
 
 Run each launch line exactly as written, absolute paths filled in, one Bash call per line, `cd` and `claude` joined only by `&&`.
-Nothing before `cd` or `tmux`: an `export`, a `VAR=` assignment or a shell function in the same command matches no allow rule, the whole command goes to the classifier.
-`--permission-mode auto` is part of the line: it pins the om-reviewer's mode, which otherwise depends on a feature-flag fetch at startup and can land in manual.
-Never add `--dangerously-skip-permissions` or `--allow-dangerously-skip-permissions`: the classifier blocks them as "Create Unsafe Agents", and a session in bypass cannot exchange messages with the sessions in auto.
+Nothing before `cd` or `tmux`: no `export`, `VAR=` assignment or shell function in the same command.
+`--dangerously-skip-permissions` is part of the line: every session of the method runs bypassed, and a session in another permission class has its messages held for Sebastian.
 
-Only the om-reviewer is launched here.
+Only `{{SESSION}}` is launched here, alone in the window; an om-devops keeps the window to itself for the whole task.
 Do not keep the bg id anywhere: `claude agents --all --json` lists it by `name` (`{{SESSION}}`) and `cwd` (`{{WORKSPACE}}`) whenever a skill needs it.
 
 ## 5. Relay the consolidation
 
-The om-reviewer runs `analyze-task`, reads the task folder at `{{TASK_FOLDER}}` (root checkout) and writes `Context & decisions` there.
+The om-reviewer (or om-devops) runs `analyze-task`, reads the task folder at `{{TASK_FOLDER}}` (root checkout) and writes `Context & decisions` there.
 For each message from it: answer from `docs/` yourself if the answer is there; otherwise bring the questions to Sebastian with your recommendation; send the answers back as pointers.
-Continue until the om-reviewer sends `consolidated`.
+Continue until `{{SESSION}}` sends `consolidated`.
 Do not commit, do not delegate, do not answer anything about Goal or Scope on Sebastian's behalf.
 
 ## 6. Commit and push `planned`
@@ -121,7 +121,7 @@ Ask: "Delegate now?"
 ## Rules
 
 - Never launch an om-developer.
-- Never write inside the task folder; here only the om-reviewer writes, and only `Context & decisions`.
+- Never write inside the task folder; here only `{{SESSION}}` writes, and only `Context & decisions`.
 - Never commit before Sebastian approves.
 - Never remove worktrees or branches in this skill.
 - Absolute paths in every command.

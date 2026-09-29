@@ -43,6 +43,8 @@ Frontmatter:
 id: "0142"
 title: badge_wall
 type: feature            # feature | bug | docs | chore | refactor
+crew: pair               # pair (om-reviewer + om-developer) | devops (one om-devops, end to end)
+clearance: repo          # repo | full; crew: devops is always full
 branch: feat/0142_badge_wall     # empty when the task has phases
 modules: [billing, notifications]   # primary first
 repos: [diy-platform, diy-infra]     # repos the task touches; ["."] in single and mono
@@ -54,6 +56,8 @@ updated: 2026-08-28
 ```
 
 Branch prefix by type: `feat/`, `bugfix/`, `docs/`, `chore/`, `refactor/`.
+`crew` and `clearance` are the ones `plan-task` agreed with Sebastian; if the plan does not say, `crew: pair` and `clearance: repo`.
+`crew: devops` has no phases: if the plan has both, stop and ask Sebastian which one gives way.
 
 Body sections, in this order, from the plan: Goal, Scope, Out of scope, Acceptance, Approach, Database, Infra, Design, Risks, Depends on.
 Then two empty sections the om-reviewer and the om-developer will own: `Context & decisions` and `om-developer notes`.
@@ -83,9 +87,19 @@ When there are phases, `task.md` keeps `branch` empty and `phases` set to the co
 Read the frontmatter of every other task folder (ignore `_drafts/`) and derive its state as `check-task` does.
 If any task not `done` touches one of the same modules, mention it and ask Sebastian whether it belongs in `depends_on`.
 
-## 7. Delete the draft
+## 7. Delete the draft and close its planning window
 
 If the plan came from `docs/tasks/_drafts/{{title}}.md`, delete that file now; the task folder is the source from here on.
+If the plan was made by an om-architect (`delegate-plan`), close what it left, sessions first:
+
+```
+claude agents --all --json | jq -r '.[] | select(.name == "om-{{title}}-architect") | .id'
+```
+
+For each id: `claude stop {{id}}`, then `claude rm {{id}}`.
+Then `tmux kill-window -t {{PROJECT}}:plan-{{title}}` if the window exists, and `rm -rf {{ROOT}}/.workspaces/plan-{{title}}` if the folder exists; it holds only the om-architect's scratch.
+`{{title}}` is the draft's name, which can differ from the task's title; use the draft's.
+`PROJECT` is the tmux session you run in; `ROOT` is your cwd.
 
 ## 8. Confirm and offer consolidation
 
@@ -98,7 +112,7 @@ There is no status field; `check-task` derives every state.
 
 ## Rules
 
-- Never write anything outside `docs/tasks/{{id}}_{{title}}/`, `docs/tasks/_drafts/` and `.gitignore`.
+- Never write anything outside `docs/tasks/{{id}}_{{title}}/`, `docs/tasks/_drafts/` and `.gitignore`; the only other thing you remove is the om-architect's window, session and `.workspaces/plan-{{title}}/`.
 - Never commit; `consolidate-task` does.
 - Never change an existing task folder; that is `reiterate-task` or the om-reviewer's job.
 - Copy the plan faithfully; do not add, drop or reinterpret anything Sebastian approved.
