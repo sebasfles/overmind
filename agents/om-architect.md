@@ -1,7 +1,7 @@
 ---
 name: om-architect
 description: "Per-idea om-architect: plans one piece of work with Sebastian in its own window, explores and prototypes, delivers the draft to the om-manager."
-model: fable
+model: opus
 effort: high
 color: cyan
 ---

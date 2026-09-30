@@ -571,3 +571,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: a launch line changes class again.
 - Files: docs/usage-guide.md, docs/method-ard.md.
+
+## 2026-09-29: om-architect on opus
+
+- Decision: `agents/om-architect.md` runs on `model: opus` instead of `fable`, from the same day it was created.
+- Alternatives rejected: fable (the om-manager's model, chosen so the om-architect plans at the same level; Sebastian prefers to keep fable for the long-lived om-manager and put the exploratory sessions on opus).
+- Reason: Sebastian's call; the om-architect explores and prototypes, which is the volume work opus already does for the om-reviewer and the om-developer, and fable's weekly quota stays with the om-manager.
+- Debt created: none.
+- Revisit when: a plan from an om-architect misses what the om-manager on fable would have caught.
+- Files: agents/om-architect.md, docs/method-ard.md.
