@@ -190,6 +190,11 @@ Nobody stores state; it's inferred:
   `claude agents` lists live and stopped sessions; `claude attach {{id}}` reopens one with its context.
   If it's completely lost, `/delegate-task` launches a new om-reviewer that reads `Context & decisions` and continues.
 - Orphan workspaces or branches: `/clean-work` reports them and asks before deleting anything it doesn't recognize.
+- Sessions ask for permission to message each other: they are in different permission classes, usually one started before a launch line changed, while the skills it reads from disk already launch with the new line.
+  Relaunch the old ones with `--dangerously-skip-permissions`, all at once; `prefix + R` does not help, it repeats the pane's old command.
+  A pane session: `tmux respawn-pane -k -t {{session}}:{{window}}.{{pane}} "{{the line from resume-overmind or resume-project}}"`, which also fixes `prefix + R` for later.
+  A `--bg` session: `claude stop {{id}}`, then `claude --bg --dangerously-skip-permissions --agent {{role}} -n {{name}} --resume {{session-id}}` from its workspace; it keeps its conversation.
+  The transcript rows under `~/.claude/projects/` carry `permissionMode`; any row that is not `bypassPermissions` marks a session to relaunch.
 
 ## Changing how the agents work
 

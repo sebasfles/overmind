@@ -562,3 +562,12 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: an om-devops has no second pair of eyes before the PR; Sebastian's review of the PR and its `Decisions` is the only one, after the infrastructure change is already applied. Phases in `crew: devops` are not supported. `om-developer notes` keeps its name in a devops task.
 - Revisit when: an om-devops applies something Sebastian would have stopped in review; a `crew: devops` task needs phases; the om-architect is never used, or is used for every plan (then it becomes the default and `plan-task` leaves the om-manager).
 - Files: agents/om-devops.md, agents/om-architect.md, agents/om-developer.md, agents/om-manager.md, skills/delegate-plan/SKILL.md, skills/plan-task/SKILL.md, skills/create-task/SKILL.md, skills/create-task/templates/task.md, skills/consolidate-task/SKILL.md, skills/delegate-task/SKILL.md, skills/reiterate-task/SKILL.md, skills/check-task/SKILL.md, skills/clean-work/SKILL.md, skills/start-task/SKILL.md, skills/analyze-task/SKILL.md, skills/verify-task/SKILL.md, skills/document-task/SKILL.md, skills/publish-task/SKILL.md, scripts/lint-method, docs/02-orchestration.md, docs/03-skills.md, docs/04-operation.md, docs/05-layouts.md, docs/usage-guide.md, CLAUDE.md, docs/method-ard.md.
+
+## 2026-09-29: The usage guide says how to recover from mixed permission classes
+
+- Decision: `docs/usage-guide.md`, "When something gets stuck", gains the symptom (sessions asking permission to message each other), the cause (different permission classes) and the fix: relaunch the non-bypassed sessions together, panes with `tmux respawn-pane -k` and the new line, `--bg` sessions with `claude stop` and `--resume` under `--dangerously-skip-permissions`.
+- Alternatives rejected: relaunching the live sessions from om-config (Sebastian chose to let the running tasks finish as they are and apply it from the next sessions on); a script that migrates every session (a one-time transition does not earn a script).
+- Reason: right after the bypass change, the old auto sessions launched bypassed ones through the updated skills (0009, 0010 and 0002 on 2026-09-29), and every message across the two classes waited for Sebastian's approval; `prefix + R` could not fix it because it repeats the pane's old command.
+- Debt created: none.
+- Revisit when: a launch line changes class again.
+- Files: docs/usage-guide.md, docs/method-ard.md.
