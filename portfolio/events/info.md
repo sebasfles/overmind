@@ -19,4 +19,15 @@ Appended by the om-events session. Unchecked lines are open.
 - [ ] 2026-09-30T00:00:30Z diy task 0026 cleaned (PR #876 merged 2026-09-30)
 - [ ] 2026-09-30T00:00:30Z local-auctions task 0002 consolidated
 - [ ] 2026-09-30T00:00:30Z factored-ai task 0009 cleaned
+- [ ] 2026-09-29T00:00:30Z factored-ai 0010 phase 1 clean (round 2), phase 2 started
+- [ ] 2026-09-29T00:00:30Z local-auctions 0002 phase 1 done (lab applied and stopped, pocs branch pushed, no PR)
+- [ ] 2026-09-29T00:00:30Z factored-ai 0011 consolidated and delegated
+- [ ] 2026-09-30T00:00:30Z factored-ai 0011 merged (PR #9) and cleaned
+- [ ] 2026-09-30T00:00:30Z auvral 0050 cleaned
+- [ ] 2026-09-30T00:00:30Z local-auctions PR #958 approved
+- [ ] 2026-09-30T00:00:30Z local-auctions PR #385 approved
+- [ ] 2026-09-30T00:00:30Z local-auctions PR #954 changes requested, 1 comments
+- [ ] 2026-09-30T00:00:30Z local-auctions 0002 phase 2 done (extraction pseudonymized, pocs branch pushed, no PR); phase 3 started
+- [ ] 2026-10-01T00:00:30Z local-auctions 0002 phase 3 done (analysis report, table design, lab_1x loaded; pocs branch pushed, no PR); phase 4 started
+- [ ] 2026-10-01T00:00:30Z local-auctions PR reviews #384, #385, #958 cleaned
 
