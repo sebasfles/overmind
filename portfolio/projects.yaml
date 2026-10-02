@@ -84,3 +84,8 @@ projects:
     repos:
       - name: hackathon
         base_branch: main
+  - name: cuentas-departamento
+    root: /home/fless/dev/personal/projects/cuentas-departamento
+    tmux: cuentas-departamento
+    status: active
+    repos: []
