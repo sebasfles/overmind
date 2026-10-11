@@ -89,3 +89,10 @@ projects:
     tmux: cuentas-departamento
     status: active
     repos: []
+  - name: foundation
+    root: /home/fless/dev/personal/projects/foundation
+    tmux: foundation
+    status: active
+    repos:
+      - name: .
+        base_branch: main
