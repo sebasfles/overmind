@@ -96,3 +96,17 @@ projects:
     repos:
       - name: .
         base_branch: main
+  - name: auction-camera
+    root: /home/fless/dev/designli/projects/auction-camera
+    tmux: auction-camera
+    status: active
+    repos:
+      - name: .
+        base_branch: main
+  - name: auction-crew
+    root: /home/fless/dev/designli/projects/auction-crew
+    tmux: auction-crew
+    status: active
+    repos:
+      - name: .
+        base_branch: main
