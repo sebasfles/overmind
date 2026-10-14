@@ -117,3 +117,10 @@ projects:
     repos:
       - name: .
         base_branch: main
+  - name: portafolio
+    root: /home/fless/dev/personal/projects/portafolio
+    tmux: portafolio
+    status: active
+    repos:
+      - name: .
+        base_branch: main
