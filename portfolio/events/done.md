@@ -650,3 +650,6 @@ Resolved events, moved here from the hot files.
 - 2026-10-13T23:33:02-05:00 [info] foundation task 0001 delegated (done 2026-10-14)
 - 2026-10-13T23:33:02-05:00 [info] foundation task 0004 delegated (done 2026-10-14)
 - 2026-10-13T23:33:16-05:00 [info] my-napkin tasks 0020 and 0021 cleaned (done 2026-10-14)
+- 2026-10-14T00:04:59-05:00 [action] my-napkin 0022 PRs ready (https://github.com/sebasfles/my-napkin/pull/36) (done 2026-10-14)
+- 2026-10-14T10:10:47-05:00 [info] my-napkin 0022 merged (PR #36) (done 2026-10-14)
+- 2026-10-14T10:41:30-05:00 [info] my-napkin 0022 cleaned (done 2026-10-14)
