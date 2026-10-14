@@ -110,3 +110,10 @@ projects:
     repos:
       - name: .
         base_branch: main
+  - name: career-coach
+    root: /home/fless/dev/personal/projects/career-coach
+    tmux: career-coach
+    status: active
+    repos:
+      - name: .
+        base_branch: main
