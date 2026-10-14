@@ -40,3 +40,7 @@ Completed todos, moved here from todos.md.
 - [x] 2026-09-02 organization shows the plan @auvral (done 2026-09-07)
 - [x] 2026-09-07 when pushing to develop in dashboard-backend, and a migration was run, pull in auvral-backend @auvral (done 2026-09-07)
 - [x] 2026-09-08 change preview images on steps config @auvral (done 2026-09-08)
+- 2026-09-02 suggest Jose for the english bootcamp @drive-now  (done 2026-10-14)
+- 2026-09-02 jorge fix PTO request @bseen  (done 2026-10-14)
+- 2026-09-20 after task 0012 ships, import one exported .excalidrawlib by hand in excalidraw.com and confirm items match @my-napkin  (done 2026-10-14)
+- 2026-09-20 after task 0012 phase 3, drag a .excalidrawlib from the file manager onto a canvas and confirm it imports @my-napkin  (done 2026-10-14)

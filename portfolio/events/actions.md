@@ -11,3 +11,4 @@ Appended by the om-events session. Unchecked lines are open.
 - [ ] 2026-10-13T23:37:43-05:00 foundation 0004 PRs ready (https://github.com/sebasfles/foundation/pull/1)
 - [ ] 2026-10-13T23:38:30-05:00 foundation 0001 PRs ready (https://github.com/sebasfles/foundation/pull/2)
 - [ ] 2026-10-14T00:04:59-05:00 my-napkin 0022 PRs ready (https://github.com/sebasfles/my-napkin/pull/36)
+- 2026-10-14T10:41:30-05:00 my-napkin PR #33 promotion develop→main green (e2e-dev pass), ready to merge (https://github.com/sebasfles/my-napkin/pull/33)
