@@ -641,3 +641,4 @@ Resolved events, moved here from the hot files.
 - 2026-10-13T09:44:18-05:00 [info] local-auctions PR #1001 approved (done 2026-10-13)
 - 2026-10-13T09:45:17-05:00 [info] local-auctions PR #1011 changes requested, 1 comments (done 2026-10-13)
 - 2026-10-13T19:53:27-05:00 [info] local-auctions task 0004 cleaned (PR local-auctions-pocs #5 merged) (done 2026-10-13)
+- 2026-09-21T00:00:44Z [action] my-napkin 0020 PRs ready (https://github.com/sebasfles/my-napkin/pull/34); fixes empty-scene overwrite live in prd, promotion is its own decision (done 2026-10-14)
