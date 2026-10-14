@@ -654,3 +654,7 @@ Resolved events, moved here from the hot files.
 - 2026-10-14T10:10:47-05:00 [info] my-napkin 0022 merged (PR #36) (done 2026-10-14)
 - 2026-10-14T10:41:30-05:00 [info] my-napkin 0022 cleaned (done 2026-10-14)
 - 2026-10-13T23:29:57-05:00 [action] my-napkin 0021 PRs ready (https://github.com/sebasfles/my-napkin/pull/35) (done 2026-10-14)
+- 2026-09-21T00:00:42Z [action] my-napkin 0020 root cause also empties diagrams on a slow scene load (one real diagram on dev already lost, 5027bda7); the defect is live in prd. 0020 jumps 0021 in merge order; promotion to prd is Sebastian's decision once it merges. (done 2026-10-14)
+- 2026-10-13T23:37:43-05:00 [action] foundation 0004 PRs ready (https://github.com/sebasfles/foundation/pull/1) (done 2026-10-14)
+- 2026-10-13T23:38:30-05:00 [action] foundation 0001 PRs ready (https://github.com/sebasfles/foundation/pull/2) (done 2026-10-14)
+- 2026-10-14T10:41:30-05:00 [action] my-napkin PR #33 promotion develop→main green (e2e-dev pass), ready to merge (https://github.com/sebasfles/my-napkin/pull/33) (done 2026-10-14)
