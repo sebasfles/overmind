@@ -124,3 +124,10 @@ projects:
     repos:
       - name: .
         base_branch: main
+  - name: family-night
+    root: /home/fless/dev/personal/projects/family-night
+    tmux: family-night
+    status: active
+    repos:
+      - name: .
+        base_branch: main
