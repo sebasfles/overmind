@@ -131,9 +131,9 @@ projects:
     repos:
       - name: .
         base_branch: main
-  - name: wispr-vibe
-    root: /home/fless/dev/personal/projects/wispr-vibe
-    tmux: wispr-vibe
+  - name: take-my-word
+    root: /home/fless/dev/personal/projects/take-my-word
+    tmux: take-my-word
     status: active
     repos:
       - name: .
