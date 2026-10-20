@@ -29,3 +29,12 @@ Appended by the om-events session. Unchecked lines are open.
 - 2026-10-19T13:36:37-05:00 foundation 0019 merged and cleaned (PR #19); organization-monthly budget 20 USD live, aws/organization merge window closed
 - 2026-10-19T14:13:29-05:00 auction-camera task 0001 cleaned
 - 2026-10-19T17:03:52-05:00 auction-crew task 0006 merged (#10), promoted to main (#11), cleaned
+- 2026-10-20T08:30:13-05:00 auction-camera 0003 consolidated
+- 2026-10-20T08:30:13-05:00 auction-camera 0003 delegated
+- 2026-10-20T08:49:41-05:00 local-auctions PR #120 approved
+- 2026-10-20T08:50:02-05:00 local-auctions PR #1025 approved
+- 2026-10-20T08:50:05-05:00 local-auctions PR #1026 approved
+- 2026-10-20T08:50:11-05:00 local-auctions PR #1023 approved
+- 2026-10-20T08:56:02-05:00 auction-camera task 0003 merged (PR #2, squash 0b7c209)
+- 2026-10-20T08:56:06-05:00 auction-camera 0002 consolidated
+- 2026-10-20T08:56:06-05:00 auction-camera 0002 delegated

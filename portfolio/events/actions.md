@@ -15,3 +15,8 @@ Appended by the om-events session. Unchecked lines are open.
 - 2026-10-19T13:06:39-05:00 auction-camera task 0001 PRs ready after retake 1 (https://github.com/designli/auction-camera/pull/1)
 - 2026-10-19T13:28:58-05:00 foundation 0019 PRs ready (https://github.com/sebasfles/foundation/pull/19); applied, merge window open until merged
 - 2026-10-19T15:15:16-05:00 auction-crew task 0006 PRs ready (https://github.com/designli/auction-crew/pull/10)
+- 2026-10-20T08:46:51-05:00 local-auctions PR #120 review ready, 0 required, 0 optional, window pr-120
+- 2026-10-20T08:46:54-05:00 local-auctions PR #1025 review ready, 1 required, 2 optional, window pr-1025
+- 2026-10-20T08:47:27-05:00 local-auctions PR #1026 review ready, 1 required, 1 optional, window pr-1026
+- 2026-10-20T08:48:41-05:00 local-auctions PR #1023 review ready, 1 required, 1 optional, window pr-1023
+- 2026-10-20T08:54:53-05:00 auction-camera task 0003 PRs ready (https://github.com/designli/auction-camera/pull/2)
