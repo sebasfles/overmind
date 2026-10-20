@@ -7,7 +7,8 @@
 - [cache TTL behavior](reference_cache-ttl-behavior.md) — 5m TTL and re-caches only happen on usage credits; --bg sessions are main conversation, no setting to fix
 - [commit own memory](feedback_commit-own-memory.md) — commit .claude/agent-memory/om-config yourself at the end of update-method, no asking
 - [commit scope](feedback_commit-scope.md) — stage the files of the change explicitly, never git add -A; the tree carries other sessions edits
-- [tmux over herdr](project_tmux-over-herdr.md) — 2026-09-09: keep tmux as substrate, agents operate it; herdr rejected, revisit at 1.0 + WSL
+- [tmux over herdr](project_tmux-over-herdr.md) — tmux stays as host under om-session; herdr, t3code, custom host rejected; UI is a client
 - [review calibration](feedback_review-calibration.md) — strict on defects, max three optional comments, risk Low unless production users are hit
 - [check skills disk only](feedback_check-skills-disk-only.md) — check-* derive from disk and gh, never list sessions; board lines minimal
 - [allow rules exact prefix](reference_allow-rules-exact-prefix.md) — every session bypassed since 09-29; frontmatter mode never applies; mixed classes hold messages; auto-era history
+- [overmind UI direction](project_overmind-ui-direction.md) — 2026-10-19: Sebastian wants a UI for the whole flow; order hooks → om-session → fleet → UI as client
