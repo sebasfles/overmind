@@ -1,3 +1,31 @@
 # info
 
 Appended by the om-events session. Unchecked lines are open.
+- 2026-10-19T09:27:17-05:00 portafolio task 0004 retake 1 sent (Cloudflare Pages and zone settings as Terraform; PR #9 stays open)
+- 2026-10-19T09:58:54-05:00 foundation 0015 consolidated (onboard_portfolio)
+- 2026-10-19T09:58:54-05:00 foundation 0015 delegated (onboard_portfolio)
+- 2026-10-19T10:09:18-05:00 foundation 0015 merged and cleaned (PR #15); account portfolio 467124990591 active
+- 2026-10-19T10:35:49-05:00 portafolio task 0005 delegated (Cloudflare deployment as code, waits on foundation releasing the Pages resources)
+- 2026-10-19T10:44:07-05:00 portafolio task 0004 cleaned (done); live verification moves to task 0005
+- 2026-10-19T10:46:15-05:00 foundation 0016 consolidated (release_portfolio_pages)
+- 2026-10-19T10:46:15-05:00 foundation 0016 delegated (release_portfolio_pages)
+- 2026-10-19T10:52:51-05:00 foundation 0016 merged and cleaned (PR #16); cloudflare merge window closed
+- 2026-10-19T10:55:46-05:00 auction-crew task 0005 retake sent (PR #8, merge commits only in rulesets)
+- 2026-10-19T12:03:19-05:00 auction-crew task 0005 cleaned (PR #8 merged with merge commit; promotion PR #9 open)
+- 2026-10-19T12:16:47-05:00 auction-camera 0001 consolidated
+- 2026-10-19T12:16:47-05:00 auction-camera 0001 delegated
+- 2026-10-19T12:20:51-05:00 foundation 0017 consolidated (block_leaked_paths, temporary WAF rule on fless.dev)
+- 2026-10-19T12:20:51-05:00 foundation 0017 delegated (block_leaked_paths, temporary WAF rule on fless.dev)
+- 2026-10-19T12:21:34-05:00 factored-ai task 0025 cleaned
+- 2026-10-19T12:22:23-05:00 portafolio site v1 live on https://fless.dev (PR #10 merged, task 0005 cleaned); leaked paths return 403 via foundation's WAF rule until Pages' cache expires (remove after 2026-10-27, drafts on both sides)
+- 2026-10-19T12:30:22-05:00 foundation 0017 merged and cleaned (PR #17); WAF rule live, removal draft remove_leak_waf not before 2026-10-27
+- 2026-10-19T12:57:01-05:00 foundation 0018 consolidated (management_cleanup_docs)
+- 2026-10-19T12:57:01-05:00 foundation 0018 delegated (management_cleanup_docs)
+- 2026-10-19T13:05:28-05:00 auction-camera task 0001 retake 1 sent
+- 2026-10-19T13:06:18-05:00 foundation 0018 merged and cleaned (PR #18); management account holds only foundation's own resources plus IAM user sebastian.flores
+- 2026-10-19T13:08:20-05:00 auction-camera task 0001 merged (PR #1, squash 03cc9ea)
+- 2026-10-19T13:24:32-05:00 foundation 0019 consolidated (organization_budget)
+- 2026-10-19T13:24:32-05:00 foundation 0019 delegated (organization_budget)
+- 2026-10-19T13:36:37-05:00 foundation 0019 merged and cleaned (PR #19); organization-monthly budget 20 USD live, aws/organization merge window closed
+- 2026-10-19T14:13:29-05:00 auction-camera task 0001 cleaned
+- 2026-10-19T17:03:52-05:00 auction-crew task 0006 merged (#10), promoted to main (#11), cleaned

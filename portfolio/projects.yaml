@@ -131,3 +131,10 @@ projects:
     repos:
       - name: .
         base_branch: main
+  - name: wispr-vibe
+    root: /home/fless/dev/personal/projects/wispr-vibe
+    tmux: wispr-vibe
+    status: active
+    repos:
+      - name: .
+        base_branch: main
