@@ -1,7 +1,7 @@
 ---
 name: om-manager
 description: "Per-project om-manager Sebastian talks to: plans, creates, consolidates and delegates tasks, reports PRs. Never writes or reviews code."
-model: fable
+model: opus
 effort: high
 memory: project
 skills:

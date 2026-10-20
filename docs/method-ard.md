@@ -580,3 +580,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: none.
 - Revisit when: a plan from an om-architect misses what the om-manager on fable would have caught.
 - Files: agents/om-architect.md, docs/method-ard.md.
+
+## 2026-10-20: no agent runs on fable; om-manager and om-config move to opus
+
+- Decision: `agents/om-manager.md` and `.claude/agents/om-config.md` move from `model: fable` to `model: opus`; no agent or skill in the method references fable any more. The bare alias `opus` stays, so the latest opus release applies without edits.
+- Supersedes: 2026-09-01 "om-reviewer runs on opus; om-manager stays on fable" on the om-manager side, and the 2026-09-29 "om-architect on opus" rationale that kept fable for the long-lived om-manager.
+- Alternatives rejected: keeping the om-manager on fable (the cheap-session argument of 2026-09-01 still holds, but Sebastian no longer wants fable as a default anywhere), pinning a versioned opus id (the 2026-08-29 alias convention stands).
+- Reason: Sebastian's call on 2026-10-20: everything runs on opus, the latest available.
+- Debt created: the planning sessions lose the stronger tier that the 2026-09-01 entry argued earned its price there; no measurement attached.
+- Revisit when: a plan or `setup` output from an om-manager on opus misses what fable would have caught, or quota pressure moves to opus with the om-manager as a notable consumer.
+- Files: agents/om-manager.md, .claude/agents/om-config.md, docs/method-ard.md.

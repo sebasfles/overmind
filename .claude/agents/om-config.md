@@ -1,7 +1,7 @@
 ---
 name: om-config
 description: "Maintainer of the method: changes agents, skills and docs through update-method. Long-lived session om-config."
-model: fable
+model: opus
 effort: high
 memory: project
 tools: Read, Glob, Grep, Bash, Write, Edit, Skill, ListAgents, SendMessage, WebFetch, WebSearch
