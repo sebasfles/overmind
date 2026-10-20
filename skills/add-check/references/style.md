@@ -3,7 +3,7 @@
 ```markdown
 ---
 name: style
-model: sonnet
+model: opus
 paths:
   - apps/backend/src/**/*.ts
 reference: docs/conventions/style.md

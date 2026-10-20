@@ -1,6 +1,6 @@
 ---
 name: {{name}}
-model: {{sonnet}}
+model: {{opus}}
 paths:
   - {{apps/web/src/**/*.tsx}}
 reference: {{docs/conventions/topic.md}}

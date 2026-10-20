@@ -39,8 +39,6 @@ CLEARANCE = task.md clearance: repo | full   (missing is repo)
 
 ## 2. Launch
 
-Model by task type: read `type` from `task.md`; for `docs` and `chore` add `--model sonnet` to the `claude` launch command; `feature`, `bug` and `refactor` keep the agent's default.
-
 Primary form (`--bg` + `attach`):
 
 ```

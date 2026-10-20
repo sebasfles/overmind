@@ -590,3 +590,13 @@ The original design decisions are in `01` through `05`; here go the later change
 - Debt created: the planning sessions lose the stronger tier that the 2026-09-01 entry argued earned its price there; no measurement attached.
 - Revisit when: a plan or `setup` output from an om-manager on opus misses what fable would have caught, or quota pressure moves to opus with the om-manager as a notable consumer.
 - Files: agents/om-manager.md, .claude/agents/om-config.md, docs/method-ard.md.
+
+## 2026-10-20: everything runs on opus; sonnet and haiku leave the method
+
+- Decision: every model reference in the method is `opus`. `agents/om-setup-worker.md` moves from `sonnet`, `.claude/agents/om-events.md` from `haiku`; `start-task` drops the `--model sonnet` launch for `docs` and `chore` tasks; the `setup` Workflow steps, the `add-check` default, its template and reference checks declare `opus`; `update-method`'s convention now reads "everything on `opus`, bare alias".
+- Supersedes: 2026-09-01 "token economy" items (5) and (6), the 2026-08-29 note on `om-setup-worker` discover mode, and the model part of the 2026-08-29 alias convention.
+- Alternatives rejected: keeping sonnet for the inventory and check roles (the 2026-09-01 data showed om-setup-worker at 25 percent of usage, and checks are many small `claude -p` calls per round; Sebastian prefers one model everywhere over per-role savings), keeping haiku for om-events (an inbox that only archives lines; same reason).
+- Reason: Sebastian's call on 2026-10-20, extending the morning decision that dropped fable: absolutely everything on opus, no trace of other models.
+- Debt created: the om-setup-worker and the project checks were the two measured savings of the 2026-09-01 drive; cost per `setup` and per review round will rise, no measurement attached. Project repos that already carry `docs/checks/*.md` with `model: sonnet` are state, not method, and keep running on sonnet until their om-manager edits them.
+- Revisit when: a `setup` run or a review round shows the checks or the inventory as the main consumer of the opus quota; measure before splitting models again.
+- Files: agents/om-setup-worker.md, .claude/agents/om-events.md, skills/start-task/SKILL.md, skills/setup/SKILL.md, skills/add-check/SKILL.md, skills/add-check/templates/check.md, skills/add-check/references/patterns.md, skills/add-check/references/style.md, skills/add-check/references/i18n.md, skills/review-task/SKILL.md, docs/01-documentation.md, docs/04-operation.md, .claude/skills/update-method/SKILL.md, docs/method-ard.md.

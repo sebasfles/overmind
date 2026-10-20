@@ -3,7 +3,7 @@
 ```markdown
 ---
 name: billing-patterns
-model: sonnet
+model: opus
 paths:
   - apps/backend/src/billing/**/*.ts
 reference: docs/modules/billing/trd.md

@@ -12,7 +12,7 @@ It's a tmux session `overmind` in the root of the `~/dev/personal/projects/overm
 | Session | Agent | Where | For what |
 |---|---|---|---|
 | `overmind` | `overmind` | `overmind` window, left pane | cockpit: project status, todos, events; opens projects |
-| `om-events` | `om-events` (haiku) | `overmind` window, right pane | inbox: receives events from the om-managers, archives them in `portfolio/events/`, prints the stacked counters |
+| `om-events` | `om-events` | `overmind` window, right pane | inbox: receives events from the om-managers, archives them in `portfolio/events/`, prints the stacked counters |
 | `om-config` | `om-config` | `config` window | maintain the method with `update-method` |
 
 `bin/resume-overmind` opens the complete session; if `overmind` starts and `om-events` is not running, it opens or resumes it in the right pane.

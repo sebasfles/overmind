@@ -11,7 +11,7 @@ disable-model-invocation: false
 ## Purpose
 
 Add one review check to the project: a small, single-purpose review the om-reviewer runs in the background on
-every round with a cheap model (i18n coverage, a code style the linter cannot express, a module's patterns).
+every round in a separate process (i18n coverage, a code style the linter cannot express, a module's patterns).
 Makes sure the rule is written down in a project document first, writes `docs/checks/{{name}}.md` from the
 template, dry-runs it against the current code to calibrate, and commits. om-manager; on Sebastian's ask.
 
@@ -28,7 +28,7 @@ Settle with Sebastian, in one batch of questions:
 - `name`: kebab-case, the file name (`i18n`, `style`, `billing-patterns`).
 - The rule: what is a finding and, as important, what is not (intentionally untranslated strings, generated files).
 - `paths`: globs relative to the project root that select the files the check looks at; in multirepo prefix them with the repo folder, like `Verification targets`.
-- `model`: `sonnet` unless Sebastian asks otherwise; `opus` only for rules that need to follow logic across files.
+- `model`: `opus`, like every agent in the method.
 - `reference`: the document that defines the rule.
 
 ## 2. Reference document

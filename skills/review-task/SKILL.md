@@ -103,7 +103,7 @@ Triage every line against the code you read in step 4:
 - False positive or allowed by the check's own last line: drop it and record `Let pass: check {{name}}: {{what}}, {{why}}` for `Decisions`.
 - Output that is neither `clean` nor finding lines (an error, prose): rerun that check once in the foreground; if it fails again, report `check {{name}} failed to run` in `Decisions` and continue.
 
-Checkers are cheap and narrow; you are the judgment.
+Checkers are narrow; you are the judgment.
 Never forward a checker's line you have not verified yourself.
 
 ## 6. Bugs only

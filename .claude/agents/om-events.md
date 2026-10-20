@@ -1,7 +1,7 @@
 ---
 name: om-events
 description: "Event inbox of the overmind: receives typed events from om-managers, stores them in portfolio/events/, prints the stacked counts. Session om-events."
-model: haiku
+model: opus
 effort: low
 tools: Read, Write, Edit, Bash
 color: yellow
