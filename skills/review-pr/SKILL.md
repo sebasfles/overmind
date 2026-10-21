@@ -70,11 +70,14 @@ A PR above roughly 800 changed lines that could have been split gets one `scope`
 ## 4. Review the code
 
 Same order and same bar as `review-task` step 4: correctness, security and data, tests, architecture, performance.
-Two additions for a PR from someone else:
+Three additions for a PR from someone else:
 
 - Documentation: if the project follows the overmind convention, the module docs the diff affects (`prd.md`, `trd.md`, `ard.md`, `database.md`, `flows.md`) must be updated; if it does not, whatever the repo treats as documentation of the touched behavior (README, API docs, comments the code cannot replace) must be.
 - Conventions: judge against the patterns the codebase already has and the rules `CLAUDE.md`, `docs/conventions/` or the linter config write down; do not import Sebastian's personal conventions into a codebase that never adopted them, except the ones that hide defects.
-  What the linter or a project check already flags on the PR is not repeated here.
+  What the linter already flags on the PR is not repeated here.
+- Project checks: every `{{ROOT}}/docs/checks/*.md` (read from the root checkout, on its base branch) whose `paths` match a changed file (in multirepo, the path prefixed with the repo folder) is a rule the PR had to respect; read its body and its `reference` document, and judge the diff against each statement yourself, with the check's own let-pass line.
+  You read checks, you never run them; they only run in the om-reviewer's rounds, so nothing on the PR has applied them.
+  A violation is a finding of the type its effect calls for (`issue` when behavior breaks, `refactor` for a pattern, `docs` for a missing translation or doc), and its comment names the check: `{{type}}: {{file}}:{{line}}: [{{check}}] {{what}} -> {{expected}}`.
 
 Each finding is one comment: `{{type}}{{ (blocking | non-blocking)}}: {{file}}:{{line}}: {{what}} -> {{expected}}`, with why it matters when it is not obvious.
 

@@ -119,6 +119,7 @@ Frontmatter: `name`, `model` (bare alias, `opus`), `paths` (globs relative to th
 Body: verifiable statements in the present tense, one per line, and a closing line saying what to report as clean.
 No reference document, no check: the rule must be written in `TRD.md` Conventions, a module's `trd.md` or `docs/conventions/{{topic}}.md` before the check exists.
 Checks are added with `add-check` by the om-manager on Sebastian's ask; the om-reviewer triages their output and only verified lines reach the om-developer.
+The om-pr-reviewer never runs them: it reads the ones matching a colleague's PR and judges the diff against them in `review-pr`.
 
 ## Versioning
 
